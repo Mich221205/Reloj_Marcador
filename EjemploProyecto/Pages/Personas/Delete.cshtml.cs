@@ -1,0 +1,40 @@
+using EjemploCoreWeb.Entities;
+using EjemploCoreWeb.Services.Abstract;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+
+namespace EjemploProyecto.Pages.Personas
+{
+    public class DeleteModel : PageModel
+    {
+        private readonly IPersonaService _personaService;
+
+        public DeleteModel(IPersonaService personaService)
+        {
+            _personaService = personaService;
+            //Persona = new Persona();
+        }
+
+        [BindProperty]
+        public Persona? Persona { get; set; }
+
+        public async Task<IActionResult> OnGetAsync(string id)
+        {
+            Persona = await _personaService.GetByIdAsync(id);
+
+            if (Persona == null)
+            {
+                return NotFound();
+            }
+
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostAsync(string id)
+        {
+            await _personaService.DeleteAsync(id);
+
+            return RedirectToPage("Index");
+        }
+    }
+}
