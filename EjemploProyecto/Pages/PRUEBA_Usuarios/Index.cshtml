@@ -1,0 +1,37 @@
+﻿@page
+@model EjemploProyecto.Pages.PRUEBA_Usuarios.IndexModel
+@{
+}
+
+<h1>Usuarios</h1>
+
+<p>
+    <a class="btn btn-primary" asp-page="Create">Nuevo Usuario</a>
+</p>
+
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Identificacion</th>
+            <th>Nombre</th>
+            <th>Apellido1</th>
+            <th>Apellido2</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Usuarios)
+        {
+            <tr>
+                <td>@item.Identificacion</td>
+                <td>@item.Nombre</td>
+                <td>@item.Apellido1</td>
+                <td>@item.Apellido2</td>
+                <td>
+                    <a asp-page="Edit" asp-route-id="@item.Identificacion">Editar</a> |
+                    <a asp-page="Delete" asp-route-id="@item.Identificacion">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

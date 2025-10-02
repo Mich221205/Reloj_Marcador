@@ -1,4 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using MySql.Data.MySqlClient;
 using Microsoft.Extensions.Configuration;
 using System.Data;
 
@@ -19,7 +19,7 @@ namespace EjemploCoreWeb.Repository
         public IDbConnection CreateConnection()
         {
 
-            return new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            return new MySqlConnection(_configuration.GetConnectionString("DefaultConnection"));
 
         }
     

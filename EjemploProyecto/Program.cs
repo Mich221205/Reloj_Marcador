@@ -9,8 +9,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 
 builder.Services.AddSingleton<IDbConnectionFactory, DbConnectionFactory>();
-builder.Services.AddScoped<PersonaRepository>(); //cada solicitud crea un personaRepository
-builder.Services.AddScoped<IPersonaService, PersonaService>();
+
+//Ejemplo del profe
+//builder.Services.AddScoped<PersonaRepository>(); //cada solicitud crea un personaRepository
+//builder.Services.AddScoped<IPersonaService, PersonaService>();
+
+builder.Services.AddScoped<UsuarioRepository>();
+builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 
 //SE LLAMA INYECCION DE DEPENDENCIAS BROTHER
 
