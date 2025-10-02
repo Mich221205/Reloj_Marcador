@@ -1,0 +1,15 @@
+﻿@page "{id:int}"
+@model EjemploProyecto.Pages.Roles.DeleteModel
+
+<h2>Eliminar Rol</h2>
+
+<div class="alert alert-danger">
+    <p>¿Estás seguro que deseas eliminar el rol <strong>@Model.Rol.Nombre_Rol</strong>?</p>
+</div>
+
+<form method="post">
+    <input type="hidden" asp-for="Rol.ID_Rol_Usuario" />
+    <button type="submit" class="btn btn-danger">🗑 Eliminar</button>
+    <a asp-page="Index" class="btn btn-secondary">⬅ Cancelar</a>
+</form>
+

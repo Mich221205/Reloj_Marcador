@@ -1,0 +1,16 @@
+﻿@page
+@model EjemploProyecto.Pages.Roles.CreateModel
+
+
+
+<h2>Crear Rol</h2>
+
+<form method="post">
+    <div class="mb-3">
+        <label class="form-label">Nombre del Rol</label>
+        <input asp-for="Rol.Nombre_Rol" class="form-control" />
+        <span asp-validation-for="Rol.Nombre_Rol" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-success"> Guardar</button>
+    <a asp-page="Index" class="btn btn-secondary">⬅ Volver</a>
+</form>

@@ -1,0 +1,15 @@
+﻿@page "{id:int}"
+@model EjemploProyecto.Pages.Roles.EditModel
+
+<h2>Editar Rol</h2>
+
+<form method="post">
+    <input type="hidden" asp-for="Rol.ID_Rol_Usuario" />
+    <div class="mb-3">
+        <label class="form-label">Nombre del Rol</label>
+        <input asp-for="Rol.Nombre_Rol" class="form-control" />
+        <span asp-validation-for="Rol.Nombre_Rol" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">💾 Guardar Cambios</button>
+    <a asp-page="Index" class="btn btn-secondary">⬅ Volver</a>
+</form>

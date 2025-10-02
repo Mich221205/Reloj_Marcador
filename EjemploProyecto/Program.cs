@@ -19,6 +19,10 @@ builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 
 //SE LLAMA INYECCION DE DEPENDENCIAS BROTHER
 
+//inyecciones para roles
+builder.Services.AddScoped<RolRepository>();
+builder.Services.AddScoped<IRolService, RolService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
