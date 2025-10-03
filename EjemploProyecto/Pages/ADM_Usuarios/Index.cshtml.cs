@@ -4,7 +4,7 @@ using EjemploCoreWeb.Services.Abstract;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace EjemploProyecto.Pages.PRUEBA_Usuarios
+namespace Reloj_Marcador.Pages.ADM_Usuarios
 {
     public class IndexModel : PageModel
     {

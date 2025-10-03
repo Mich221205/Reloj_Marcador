@@ -11,8 +11,8 @@ namespace EjemploCoreWeb.Entities
         public int Id_Usuario { get; set; }
         public string Identificacion { get; set; } = string.Empty;
         public string Nombre { get; set; } = string.Empty;
-        public string Apellido1 { get; set; } = string.Empty;
-        public string Apellido2 { get; set; } = string.Empty;
+        public string Apellido_1 { get; set; } = string.Empty;
+        public string Apellido_2 { get; set; } = string.Empty;
         public string Correo { get; set; } = string.Empty;
         public string Telefono { get; set; }
         public int IdRolUsuario { get; set; }
@@ -21,7 +21,7 @@ namespace EjemploCoreWeb.Entities
         public bool Estado { get; set; }
 
     }
-    public class Motivos_Ausencia
+    public class Motivos_Inconsistencias
     {
 
         public int ID_Motivo { get; set; }
@@ -29,5 +29,6 @@ namespace EjemploCoreWeb.Entities
         public string Nombre_Motivo { get; set; }
 
     }
+
 
 }

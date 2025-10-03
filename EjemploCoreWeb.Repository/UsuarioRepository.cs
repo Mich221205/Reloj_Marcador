@@ -22,10 +22,34 @@ namespace EjemploCoreWeb.Repository
         {
             using (var connection = _dbConnectionFactory.CreateConnection())
             {
-                return await connection.QueryAsync<Usuario>("SELECT Nombre, Identificacion FROM Funcionarios");
+                return await connection.QueryAsync<Usuario>("SELECT Nombre,Identificacion, Apellido_1 , Apellido_2 FROM Usuario");
             }
         }
 
+        //Seleccionar Usuario por ID
+        public async Task<Usuario> Obtener_Usuario_X_Identificacion(string id)
+        {
+            using (var connection = _dbConnectionFactory.CreateConnection())
+            {
+                return await connection.QuerySingleOrDefaultAsync<Usuario>("SELECT Identificacion, Nombre, Apellido_1, Apellido_2, Contrasena FROM Usuario WHERE Identificacion = @Identificacion", new { Identificacion = id });
+            }
+        }
+
+
+        //CAMBIO DE CONTRASEÑA DEL USUARIO
+
+        public async Task<int> Cambiar_Clave(Usuario usuario)
+        {
+            using (var connection = _dbConnectionFactory.CreateConnection())
+            {
+                var sql = "UPDATE Usuario SET Contrasena = @Contrasena WHERE Identificacion = @Identificacion";
+                
+                return await connection.ExecuteAsync(sql, usuario);
+            }
+        }
+
+
+        
 
 
     }

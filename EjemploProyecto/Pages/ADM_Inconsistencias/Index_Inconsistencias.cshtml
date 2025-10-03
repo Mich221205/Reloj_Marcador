@@ -1,0 +1,34 @@
+﻿@page
+@model EjemploProyecto.Pages.ADM_Inconsistencias.Index_InconsistenciasModel
+@{
+    ViewData["Title"] = "Motivos de inconsistencias";
+}
+
+<h1>Motivos de inconsistencias</h1>
+
+<p>
+    <a class="btn btn-primary" asp-page="Create">Nuevo</a>
+</p>
+
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>ID de motivo</th>
+            <th>Nombre del motivo</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Motivos)
+        {
+            <tr>
+                <td>@item.ID_Motivo</td>
+                <td>@item.Nombre_Motivo</td>
+                <td>
+                    <a asp-page="Edit" asp-route-id="@item.ID_Motivo">Editar</a> |
+                    <a asp-page="Delete" asp-route-id="@item.ID_Motivo">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

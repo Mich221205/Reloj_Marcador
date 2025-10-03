@@ -17,6 +17,9 @@ builder.Services.AddSingleton<IDbConnectionFactory, DbConnectionFactory>();
 builder.Services.AddScoped<UsuarioRepository>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 
+builder.Services.AddScoped<MotivosRepository>();
+builder.Services.AddScoped<IMotivos_Inconsistencia, Motivos_Services>();
+
 //SE LLAMA INYECCION DE DEPENDENCIAS BROTHER
 
 var app = builder.Build();

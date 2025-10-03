@@ -1,0 +1,69 @@
+﻿@page "{id}"
+@model EjemploProyecto.Pages.ADM_Usuarios.Cambio_ClaveModel
+@{
+    ViewData["Title"] = "Cambio de Clave";
+}
+
+<h1>Cambiar Clave</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-5">
+        <form method="post">
+            <!-- Campos ocultos para mantener los datos -->
+            <input type="hidden" asp-for="Usuario.Identificacion" />
+
+            <!-- Identificación (solo para visualización) -->
+            <div class="mb-3">
+                <label class="form-label">Identificación</label>
+                <input value="@Model.Usuario.Identificacion" class="form-control" readonly />
+            </div>
+
+            <!-- Nombre (solo para visualización) -->
+            <div class="mb-3">
+                <label class="form-label">Nombre</label>
+                <input value="@Model.Usuario.Nombre" class="form-control" readonly />
+            </div>
+
+            <!-- Campo de contraseña -->
+            <div class="mb-3">
+                <label asp-for="Usuario.Contrasena" class="form-label"></label>
+                <input asp-for="Usuario.Contrasena"
+                       id="txtPassword"
+                       class="form-control"
+                       type="@(ViewData["ClaveGenerada"] != null ? "text" : "password")"
+                       autocomplete="new-password" />
+                <span class="form-text">Debe iniciar con letra, contener números y al menos un símbolo (+-*$.).</span>
+                <span asp-validation-for="Usuario.Contrasena" class="text-danger"></span>
+            </div>
+
+            <!-- Botones -->
+            <div class="d-flex gap-2">
+                <button type="submit"
+                        asp-page-handler="GuardarClave"
+                        class="btn btn-primary"
+                        id="btnAceptar">
+                    Aceptar
+                </button>
+                <button type="submit"
+                        asp-page-handler="Autogenerar"
+                        class="btn btn-secondary"
+                        id="btnAutogenerar"
+                        formnovalidate>
+                    Autogenerar
+                </button>
+                <a asp-page="Index" class="btn btn-outline-secondary">Volver</a>
+            </div>
+
+            <div class="mt-3">
+                <span class="text-danger">@TempData["ErrorMessage"]</span>
+                <span class="text-success">@TempData["SuccessMessage"]</span>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+

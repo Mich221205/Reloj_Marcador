@@ -1,0 +1,50 @@
+﻿using EjemploCoreWeb.Entities;
+using EjemploCoreWeb.Repository;
+using EjemploCoreWeb.Services.Abstract;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace EjemploCoreWeb.Services
+{
+    public class Motivos_Services : IMotivos_Inconsistencia
+    {
+        private readonly MotivosRepository _motivosRepository;
+
+        public Motivos_Services(MotivosRepository motivosRepository)
+        {
+            _motivosRepository = motivosRepository;
+        }
+
+        public Task<IEnumerable<Motivos_Inconsistencias>> CargarMotivosAsync()
+        {
+            return _motivosRepository.CargarMotivosAsync();
+        }
+
+        public Task<Motivos_Inconsistencias?> Cargar_Motivo_X_IDAsync(int idMotivo)
+        {
+            return _motivosRepository.Cargar_Motivo_X_IDAsync(idMotivo);
+        }
+
+        public Task<int> InsertAsync(Motivos_Inconsistencias motivo)
+        {
+
+            return _motivosRepository.InsertMotivoAsync(motivo);
+        }
+
+        public Task<int> UpdateAsync(Motivos_Inconsistencias motivo)
+        {
+            return _motivosRepository.UpdateMotivoAsync(motivo);
+        }
+
+        public Task<int> DeleteAsync(int idMotivo)
+        {
+
+            return _motivosRepository.DeleteMotivoAsync(idMotivo);
+        }
+
+
+    }
+}

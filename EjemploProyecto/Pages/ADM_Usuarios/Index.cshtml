@@ -1,5 +1,5 @@
 ﻿@page
-@model EjemploProyecto.Pages.PRUEBA_Usuarios.IndexModel
+@model Reloj_Marcador.Pages.ADM_Usuarios.IndexModel
 @{
 }
 
@@ -25,10 +25,10 @@
             <tr>
                 <td>@item.Identificacion</td>
                 <td>@item.Nombre</td>
-                <td>@item.Apellido1</td>
-                <td>@item.Apellido2</td>
+                <td>@item.Apellido_1</td>
+                <td>@item.Apellido_2</td>
                 <td>
-                    <a asp-page="Edit" asp-route-id="@item.Identificacion">Editar</a> |
+                    <a asp-page="Cambio_Clave" asp-route-id="@item.Identificacion">Cambio de clave</a> |
                     <a asp-page="Delete" asp-route-id="@item.Identificacion">Eliminar</a>
                 </td>
             </tr>
