@@ -1,90 +1,94 @@
-﻿using System.Collections.Generic;
+﻿using EjemploCoreWeb.Entities;
 using MySql.Data.MySqlClient;
-using EjemploCoreWeb.Entities;
-using System.Data;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace EjemploCoreWeb.Repository
 {
-    public class RolRepository
+    public class IdentificacionRepository
     {
+
         private readonly IDbConnectionFactory _connectionFactory;
 
-        public RolRepository(IDbConnectionFactory connectionFactory)
+        public IdentificacionRepository(IDbConnectionFactory connectionFactory)
         {
             _connectionFactory = connectionFactory;
         }
 
-        public IEnumerable<Rol> GetAll()
+        public IEnumerable<TipoIdentificacion> GetAll()
         {
-            var roles = new List<Rol>();
+            var lista = new List<TipoIdentificacion>();
             using (var connection = _connectionFactory.CreateConnection())
             {
                 connection.Open();
                 var command = connection.CreateCommand();
-                command.CommandText = "SELECT ID_Rol_Usuario, Nombre_Rol FROM Roles";
+                command.CommandText = "SELECT ID_Tipo_Identificacion, Tipo_Identificacion FROM Tipos_Identificacion";
                 using (var reader = command.ExecuteReader())
                 {
                     while (reader.Read())
                     {
-                        roles.Add(new Rol
+                        lista.Add(new TipoIdentificacion
                         {
-                            ID_Rol_Usuario = Convert.ToInt32(reader["ID_Rol_Usuario"]),
-                            Nombre_Rol = reader["Nombre_Rol"].ToString()
+                            ID_Tipo_Identificacion = reader.GetInt32(0),
+                            Tipo_Identificacion = reader.GetString(1)
                         });
                     }
                 }
             }
-            return roles;
+            return lista;
         }
 
-        public void Insert(Rol rol)
+        public void Insert(TipoIdentificacion tipo)
         {
             using (var connection = _connectionFactory.CreateConnection())
             {
                 connection.Open();
                 var command = connection.CreateCommand();
-                command.CommandText = "INSERT INTO Roles (Nombre_Rol) VALUES (@NombreRol)";
+                command.CommandText = "INSERT INTO Tipos_Identificacion (Tipo_Identificacion) VALUES (@nombre)";
                 var param = command.CreateParameter();
-                param.ParameterName = "@NombreRol";
-                param.Value = rol.Nombre_Rol;
+                param.ParameterName = "@nombre";
+                param.Value = tipo.Tipo_Identificacion;
                 command.Parameters.Add(param);
                 command.ExecuteNonQuery();
             }
         }
 
-        public void Update(Rol rol)
+        public void Update(TipoIdentificacion tipo)
         {
             using (var connection = _connectionFactory.CreateConnection())
             {
                 connection.Open();
                 var command = connection.CreateCommand();
-                command.CommandText = "UPDATE Roles SET Nombre_Rol=@NombreRol WHERE ID_Rol_Usuario=@IdRol";
-
-                var paramId = command.CreateParameter();
-                paramId.ParameterName = "@IdRol";
-                paramId.Value = rol.ID_Rol_Usuario;
-                command.Parameters.Add(paramId);
+                command.CommandText = "UPDATE Tipos_Identificacion SET Tipo_Identificacion=@nombre WHERE ID_Tipo_Identificacion=@id";
 
                 var paramNombre = command.CreateParameter();
-                paramNombre.ParameterName = "@NombreRol";
-                paramNombre.Value = rol.Nombre_Rol;
+                paramNombre.ParameterName = "@nombre";
+                paramNombre.Value = tipo.Tipo_Identificacion;
                 command.Parameters.Add(paramNombre);
+
+                var paramId = command.CreateParameter();
+                paramId.ParameterName = "@id";
+                paramId.Value = tipo.ID_Tipo_Identificacion;
+                command.Parameters.Add(paramId);
 
                 command.ExecuteNonQuery();
             }
         }
 
-        public void Delete(int idRol)
+        public void Delete(int idTipo)
         {
             using (var connection = _connectionFactory.CreateConnection())
             {
                 connection.Open();
                 var command = connection.CreateCommand();
-                command.CommandText = "DELETE FROM Roles WHERE ID_Rol_Usuario=@IdRol";
+                command.CommandText = "DELETE FROM Tipos_Identificacion WHERE ID_Tipo_Identificacion=@id";
 
                 var param = command.CreateParameter();
-                param.ParameterName = "@IdRol";
-                param.Value = idRol;
+                param.ParameterName = "@id";
+                param.Value = idTipo;
                 command.Parameters.Add(param);
 
                 try
@@ -93,18 +97,15 @@ namespace EjemploCoreWeb.Repository
                 }
                 catch (MySqlException ex)
                 {
-                    // Error (rol asignado a usuarios)
-                    if (ex.Number == 1451) // Código MySQL para FK constraint
-                    {
+                    if (ex.Number == 1451) // FK error
                         throw new InvalidOperationException("No se puede eliminar un registro con datos relacionados.");
-                    }
                     else
-                    {
                         throw;
-                    }
                 }
             }
         }
+
+
 
     }
 }
