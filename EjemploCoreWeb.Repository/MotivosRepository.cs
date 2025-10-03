@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using EjemploCoreWeb.Entities;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,7 +36,7 @@ namespace EjemploCoreWeb.Repository
         {
             using (var connection = _dbConnectionFactory.CreateConnection())
             {
-                var sql = "SELECT ID_Motivo, Nombre_Motivo FROM MOTIVOS_AUSENCIA WHERE ID_Motivo = @Id;";
+                var sql = "SELECT ID_Motivo, Nombre_Motivo FROM MOTIVOS_AUSENCIA WHERE ID_Motivo = @ID_Motivo;";
                 return await connection.QuerySingleOrDefaultAsync<Motivos_Inconsistencias>(sql, new { ID_Motivo = id });
             }
         }
@@ -45,8 +46,15 @@ namespace EjemploCoreWeb.Repository
         {
             using (var connection = _dbConnectionFactory.CreateConnection())
             {
-                var sql = "INSERT INTO MOTIVOS_AUSENCIA (Nombre_Motivo) VALUES (@Nombre_Motivo);";
-                return await connection.ExecuteAsync(sql, new { Nombre_Motivo = motivo });
+                var sql = "INSERT INTO MOTIVOS_AUSENCIA (Nombre_Motivo) VALUES (@Nombre_Motivo)";
+                try
+                {
+                    return await connection.ExecuteAsync(sql, motivo);
+                }
+                catch (MySqlException ex) when (ex.Number == 1062) // Duplicado
+                {
+                    throw new InvalidOperationException("Ya existe un motivo con ese nombre.");
+                }
             }
         }
 
@@ -55,8 +63,9 @@ namespace EjemploCoreWeb.Repository
         {
             using (var connection = _dbConnectionFactory.CreateConnection())
             {
-                var sql = "UPDATE MOTIVOS_AUSENCIA SET Nombre_Motivo = @Nombre WHERE ID_Motivo = @ID_Motivo;";
-                return await connection.ExecuteAsync(sql, new { Nombre = motivo });
+                var sql = "UPDATE MOTIVOS_AUSENCIA SET Nombre_Motivo = @Nombre_Motivo WHERE ID_Motivo = @ID_Motivo";
+                return await connection.ExecuteAsync(sql, new {ID_Motivo = motivo.ID_Motivo,Nombre_Motivo = motivo.Nombre_Motivo});
+
             }
         }
 

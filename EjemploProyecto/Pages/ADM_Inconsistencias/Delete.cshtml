@@ -1,4 +1,44 @@
 ﻿@page
 @model EjemploProyecto.Pages.ADM_Inconsistencias.DeleteModel
 @{
+    ViewData["Title"] = "Eliminar Motivo";
 }
+
+<h1>Eliminar Motivo</h1>
+<hr />
+
+<div>
+    <h5>Motivo seleccionado:</h5>
+    <div class="mb-3">
+        <h5 class="text-danger">@Model.Motivo!.Nombre_Motivo</h5>
+    </div>
+
+    <!-- Botón que abre el modal -->
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
+        Eliminar
+    </button>
+    <a asp-page="Index_Inconsistencias" class="btn btn-secondary">Cancelar</a>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar eliminación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                ¿Realmente desea eliminar el elemento seleccionado?
+                <strong>@Model.Motivo!.Nombre_Motivo</strong>
+            </div>
+            <div class="modal-footer">
+                <form method="post">
+                    <input type="hidden" asp-for="Motivo.ID_Motivo" />
+                    <button type="submit" class="btn btn-danger">Sí</button>
+                </form>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,4 +1,34 @@
 ﻿@page
 @model EjemploProyecto.Pages.ADM_Inconsistencias.EditModel
 @{
+    ViewData["Title"] = "Editar Motivo";
 }
+
+<h1>Editar Motivo</h1>
+
+<h4>Motivo</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div class="form-group">
+                <label asp-for="Motivo.ID_Motivo" class="control-label"></label>
+                <input asp-for="Motivo.ID_Motivo" class="form-control" readonly />
+                <span asp-validation-for="Motivo.ID_Motivo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Motivo.Nombre_Motivo" class="control-label"></label>
+                <input asp-for="Motivo.Nombre_Motivo" class="form-control" />
+                <span asp-validation-for="Motivo.Nombre_Motivo" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Guardar" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index_Inconsistencias">Volver a la lista</a>
+</div>
