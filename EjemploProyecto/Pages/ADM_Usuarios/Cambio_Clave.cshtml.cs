@@ -28,17 +28,36 @@ namespace EjemploProyecto.Pages.ADM_Usuarios
 
 
 
-        //public async Task<IActionResult> OnGetAsync(string id)
-        //{
-        //}
-            
+        public async Task<IActionResult> OnGetAsync(string id)
+        {
+
+            Usuario = await _usuarioService.Obtener_Usuario_X_Identificacion(id);
+            if (Usuario == null)
+            {
+                return NotFound();
+            }
+           
+            return Page();
+
+        }
 
 
-        //public async Task<IActionResult> OnPostAsync()
-        //{
+        public async Task<IActionResult> OnPostAsync(string id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
 
+            Usuario.Identificacion = id;
+            await _usuarioService.Cambiar_Clave(Usuario);
 
-        //}
+            TempData["SuccessMessage"] = "La clave se cambió exitosamente.";
+            return RedirectToPage("Index");
+
+        }
+
+        
 
 
 
