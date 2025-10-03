@@ -4,21 +4,20 @@ using EjemploCoreWeb.Services.Abstract;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace EjemploProyecto.Pages.ADM_Inconsistencias
+namespace EjemploProyecto.Pages.ADM_Ausencias
 {
-    public class DeleteModel : PageModel
+    public class EditModel : PageModel
     {
+        private readonly IMotivos_Ausencia _motivoService;
 
-        private readonly IMotivos_Inconsistencia _motivoService;
-
-        public DeleteModel(IMotivos_Inconsistencia motivoService)
+        public EditModel(IMotivos_Ausencia motivoService)
         {
             _motivoService = motivoService;
-            Motivo = new Motivos_Inconsistencias();
+            Motivo = new Motivos_Ausencia();
         }
 
         [BindProperty]
-        public Motivos_Inconsistencias? Motivo { get; set; }
+        public Motivos_Ausencia Motivo { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
@@ -32,14 +31,18 @@ namespace EjemploProyecto.Pages.ADM_Inconsistencias
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(int id)
+        public async Task<IActionResult> OnPostAsync()
         {
-            if (Motivo != null)
+            if (!ModelState.IsValid)
             {
-                await _motivoService.DeleteAsync(Motivo.ID_Motivo);
+                return Page();
             }
+
+            await _motivoService.UpdateAsync(Motivo);
+
             return RedirectToPage("Index_Inconsistencias");
         }
+
 
     }
 }

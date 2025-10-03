@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EjemploCoreWeb.Services
 {
-    public class Motivos_Services : IMotivos_Inconsistencia
+    public class Motivos_Services : IMotivos_Ausencia
     {
         private readonly MotivosRepository _motivosRepository;
 
@@ -18,17 +18,17 @@ namespace EjemploCoreWeb.Services
             _motivosRepository = motivosRepository;
         }
 
-        public Task<IEnumerable<Motivos_Inconsistencias>> CargarMotivosAsync()
+        public Task<IEnumerable<Motivos_Ausencia>> CargarMotivosAsync()
         {
             return _motivosRepository.CargarMotivosAsync();
         }
 
-        public Task<Motivos_Inconsistencias?> Cargar_Motivo_X_IDAsync(int idMotivo)
+        public Task<Motivos_Ausencia?> Cargar_Motivo_X_IDAsync(int idMotivo)
         {
             return _motivosRepository.Cargar_Motivo_X_IDAsync(idMotivo);
         }
 
-        public Task<int> InsertAsync(Motivos_Inconsistencias motivo)
+        public Task<int> InsertAsync(Motivos_Ausencia motivo)
         {
 
             if (motivo == null)
@@ -52,7 +52,7 @@ namespace EjemploCoreWeb.Services
             return _motivosRepository.InsertMotivoAsync(motivo);
         }
 
-        public Task<int> UpdateAsync(Motivos_Inconsistencias motivo)
+        public Task<int> UpdateAsync(Motivos_Ausencia motivo)
         {
             return _motivosRepository.UpdateMotivoAsync(motivo);
         }

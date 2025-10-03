@@ -4,21 +4,21 @@ using EjemploCoreWeb.Services.Abstract;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace EjemploProyecto.Pages.ADM_Inconsistencias
+namespace EjemploProyecto.Pages.ADM_Ausencias
 {
     public class CreateModel : PageModel
     {
 
-        private readonly IMotivos_Inconsistencia _motivoService;
+        private readonly IMotivos_Ausencia _motivoService;
 
-        public CreateModel(IMotivos_Inconsistencia motivoService)
+        public CreateModel(IMotivos_Ausencia motivoService)
         {
             _motivoService = motivoService;
-            Motivos = new Motivos_Inconsistencias();
+            Motivos = new Motivos_Ausencia();
         }
 
         [BindProperty]
-        public Motivos_Inconsistencias Motivos { get; set; }
+        public Motivos_Ausencia Motivos { get; set; }
 
         public IActionResult OnGet()
         {

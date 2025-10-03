@@ -22,27 +22,27 @@ namespace EjemploCoreWeb.Repository
 
         //MOTIVOS DE INCONSISTENCIAS
         // GET ALL
-        public async Task<IEnumerable<Motivos_Inconsistencias>> CargarMotivosAsync()
+        public async Task<IEnumerable<Motivos_Ausencia>> CargarMotivosAsync()
         {
             using (var connection = _dbConnectionFactory.CreateConnection())
             {
                 var sql = "SELECT ID_Motivo, Nombre_Motivo FROM MOTIVOS_AUSENCIA;";
-                return await connection.QueryAsync<Motivos_Inconsistencias>(sql);
+                return await connection.QueryAsync<Motivos_Ausencia>(sql);
             }
         }
 
         // GET BY ID
-        public async Task<Motivos_Inconsistencias?> Cargar_Motivo_X_IDAsync(int id)
+        public async Task<Motivos_Ausencia?> Cargar_Motivo_X_IDAsync(int id)
         {
             using (var connection = _dbConnectionFactory.CreateConnection())
             {
                 var sql = "SELECT ID_Motivo, Nombre_Motivo FROM MOTIVOS_AUSENCIA WHERE ID_Motivo = @ID_Motivo;";
-                return await connection.QuerySingleOrDefaultAsync<Motivos_Inconsistencias>(sql, new { ID_Motivo = id });
+                return await connection.QuerySingleOrDefaultAsync<Motivos_Ausencia>(sql, new { ID_Motivo = id });
             }
         }
 
         // INSERT
-        public async Task<int> InsertMotivoAsync(Motivos_Inconsistencias motivo)
+        public async Task<int> InsertMotivoAsync(Motivos_Ausencia motivo)
         {
             using (var connection = _dbConnectionFactory.CreateConnection())
             {
@@ -59,7 +59,7 @@ namespace EjemploCoreWeb.Repository
         }
 
         // UPDATE
-        public async Task<int> UpdateMotivoAsync(Motivos_Inconsistencias motivo)
+        public async Task<int> UpdateMotivoAsync(Motivos_Ausencia motivo)
         {
             using (var connection = _dbConnectionFactory.CreateConnection())
             {

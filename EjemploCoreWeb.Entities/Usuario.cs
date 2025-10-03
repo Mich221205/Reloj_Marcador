@@ -21,7 +21,7 @@ namespace EjemploCoreWeb.Entities
         public bool Estado { get; set; }
 
     }
-    public class Motivos_Inconsistencias
+    public class Motivos_Ausencia
     {
 
         public int ID_Motivo { get; set; }
