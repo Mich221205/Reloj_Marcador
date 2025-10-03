@@ -1,0 +1,22 @@
+﻿@page
+@model EjemploProyecto.Pages.Inconsistencias.CreateModel
+
+<div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow-lg p-4" style="width: 30rem;">
+        <h3 class="text-center mb-4">Nueva Inconsistencia</h3>
+
+        <form method="post">
+            <div class="mb-3">
+                <label class="form-label">Nombre</label>
+                <input asp-for="Inconsistencia.Nombre_Inconsistencia" class="form-control" maxlength="40" required pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]+" />
+                <span asp-validation-for="Inconsistencia.Nombre_Inconsistencia" class="text-danger"></span>
+            </div>
+
+            <div class="d-flex justify-content-between">
+                <a asp-page="Index" class="btn btn-secondary">Cancelar</a>
+                <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>
+

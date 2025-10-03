@@ -1,0 +1,37 @@
+﻿@page
+@model EjemploProyecto.Pages.Inconsistencias.IndexModel
+
+<h2>Tipos de Inconsistencia</h2>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+<a asp-page="Create" class="btn btn-primary">Nuevo</a>
+<table class="table table-striped mt-3">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Inconsistencias)
+        {
+            <tr>
+                <td>@item.ID_Inconsistencia</td>
+                <td>@item.Nombre_Inconsistencia</td>
+                <td>
+                    <a asp-page="Edit" asp-route-id="@item.ID_Inconsistencia" class="btn btn-warning btn-sm">Editar</a>
+                    <a asp-page="Delete" asp-route-id="@item.ID_Inconsistencia" class="btn btn-danger btn-sm">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
