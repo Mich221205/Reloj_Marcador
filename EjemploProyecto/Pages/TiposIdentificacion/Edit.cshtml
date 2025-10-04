@@ -1,0 +1,15 @@
+﻿@page "{id:int}"
+@model EjemploProyecto.Pages.ADM_Identificacion.EditModel
+
+<h2>Editar Tipo de Identificación</h2>
+
+<form method="post">
+    <input type="hidden" asp-for="Tipo.ID_Tipo_Identificacion" />
+    <div class="mb-3">
+        <label class="form-label">Nombre del Tipo</label>
+        <input asp-for="Tipo.Tipo_Identificacion" class="form-control" />
+        <span asp-validation-for="Tipo.Tipo_Identificacion" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+    <a asp-page="Index" class="btn btn-secondary">⬅ Volver</a>
+</form>

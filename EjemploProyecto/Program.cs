@@ -1,4 +1,4 @@
-using EjemploCoreWeb.Repository;
+﻿using EjemploCoreWeb.Repository;
 using EjemploCoreWeb.Services;
 using EjemploCoreWeb.Services.Abstract;
 using System.Data;
@@ -23,7 +23,24 @@ builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<RolRepository>();
 builder.Services.AddScoped<IRolService, RolService>();
 
+//inyecciones para tipos de identificacion
+builder.Services.AddScoped<IdentificacionRepository>();
+builder.Services.AddScoped<ITipoIdentificacionService, TipoIdentificacionService>();
+
+//método de vfenci mmiento d sesion 
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(5); // ⏱ 5 minutos
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
+
+
 var app = builder.Build();
+
+app.UseSession();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -33,6 +50,7 @@ if (!app.Environment.IsDevelopment())
 app.UseStaticFiles();
 
 app.UseRouting();
+
 
 app.UseAuthorization();
 
