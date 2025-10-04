@@ -1,0 +1,34 @@
+﻿@model EjemploProyecto.Pages.ADM_Horarios.Detalle_HorariosModel
+
+@if (Model.Horarios.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID Horario</th>
+                <th>Código Área</th>
+                <th>Área</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var h in Model.Horarios)
+            {
+                <tr>
+                    <td>@h.ID_Horario</td>
+                    <td>@h.Codigo_Area</td>
+                    <td>@h.Nombre_Area</td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" onclick="seleccionarHorario(@h.ID_Horario)">
+                            Seleccionar
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No se encontraron horarios para este usuario.</p>
+}

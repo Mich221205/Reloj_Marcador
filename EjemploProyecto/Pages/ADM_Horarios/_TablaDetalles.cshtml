@@ -1,0 +1,43 @@
+﻿@model EjemploProyecto.Pages.ADM_Horarios.Detalle_HorariosModel
+
+@if (Model.Detalles != null && Model.Detalles.Any())
+{
+    <hr class="mt-4" />
+    <h5>Detalles del horario seleccionado</h5>
+
+    <table class="table table-bordered table-sm mt-3">
+        <thead class="table-light">
+            <tr>
+                <th>Día</th>
+                <th>Hora Ingreso</th>
+                <th>Minuto Ingreso</th>
+                <th>Hora Salida</th>
+                <th>Minuto Salida</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var d in Model.Detalles)
+            {
+                <tr>
+                    <td>@d.Dia</td>
+                    <td>@d.Hora_Ingreso</td>
+                    <td>@d.Minuto_Ingreso</td>
+                    <td>@d.Hora_Salida</td>
+                    <td>@d.Minuto_Salida</td>
+                    <td>
+                        <button type="button"
+                                class="btn btn-danger btn-sm"
+                                onclick="confirmarEliminar(@d.ID_Detalle)">
+                            Eliminar
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p class="text-muted">No hay detalles registrados para este horario.</p>
+}

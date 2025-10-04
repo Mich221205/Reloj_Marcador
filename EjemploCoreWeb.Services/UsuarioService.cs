@@ -16,8 +16,8 @@ namespace EjemploCoreWeb.Services
         private readonly UsuarioRepository _usuarioRepository;
 
         private static readonly Regex _Contra_Regex = new Regex(
-            @"^(?=[A-Za-z][A-Za-z0-9+\-\*\$\.]*$)(?=.*\d)(?=.*[+\-\*\$\.])",
-            RegexOptions.Compiled);
+        @"^(?=[A-Za-z])(?=.*\d)(?=.*[+\-\*\$\.])[A-Za-z0-9+\-\*\$\.]{12,}$",
+        RegexOptions.Compiled);
 
 
         public UsuarioService(UsuarioRepository usuarioRepository)
@@ -39,17 +39,21 @@ namespace EjemploCoreWeb.Services
 
         public Task<int> Cambiar_Clave(Usuario usuario)
         {
-            //if (usuario is null) throw new ArgumentNullException(nameof(usuario));
+            if (usuario is null)
+                throw new ArgumentNullException(nameof(usuario));
 
-            //var contra = usuario.Contrasena ?? usuario.Contrasena;
+            var contra = usuario.Contrasena;
 
-            //if (string.IsNullOrWhiteSpace(contra))
-            //    throw new ArgumentException("La contraseña es obligatoria.", nameof(usuario));
+            if (string.IsNullOrWhiteSpace(contra))
+                throw new ArgumentException("La contraseña es obligatoria.");
 
-            //if (!_Contra_Regex.IsMatch(contra))
-            //    throw new ArgumentException(
-            //        "La contraseña debe iniciar con letra, contener números y al menos un símbolo (+-*$.)"
-            //    );
+            if (contra.Length < 12)
+                throw new ArgumentException("La contraseña debe tener al menos 12 caracteres.");
+
+            if (!_Contra_Regex.IsMatch(contra))
+                throw new ArgumentException(
+                    "La contraseña debe iniciar con letra, contener números y al menos un símbolo (+-*$.)"
+                );
 
             return _usuarioRepository.Cambiar_Clave(usuario);
         }
@@ -60,23 +64,33 @@ namespace EjemploCoreWeb.Services
             const string Letras = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
             const string Nums = "0123456789";
             const string Simbolos = "+-*$.";
-            int longitud = 16;
             const string Clave_Nueva = Letras + Nums + Simbolos;
+            int longitud = 12;
 
             char PrimerLetra() => Letras[RandomNumberGenerator.GetInt32(Letras.Length)];
             char Rnd(string set) => set[RandomNumberGenerator.GetInt32(set.Length)];
 
-            // Primer carácter siempre letra
-            var Contra = PrimerLetra().ToString();
+            // Construir la clave con los requisitos mínimos
+            var chars = new List<char>
+            {
+                PrimerLetra(),     // primera siempre letra
+                Rnd(Nums),         // al menos un número
+                Rnd(Simbolos)      // al menos un símbolo
+            };
 
-            // Garantizar al menos un número y un símbolo
-            Contra += Rnd(Nums) + Rnd(Simbolos);
+            // Rellenar hasta la longitud deseada
+            while (chars.Count < longitud)
+                chars.Add(Rnd(Clave_Nueva));
 
-            // Rellenar el resto
-            while (Contra.Length < longitud)
-                Contra += Rnd(Clave_Nueva);
+            //Mezclar excepto la primera letra (para que siempre arranque con letra)
+            var middle = chars.Skip(1).OrderBy(_ => RandomNumberGenerator.GetInt32(int.MaxValue)).ToList();
+            var contra = chars[0] + string.Concat(middle);
 
-                return Contra;
+            // Validar con el regex por seguridad
+            if (!_Contra_Regex.IsMatch(contra))
+                return Autogenerar_Clave(); // reintenta si algo salió raro
+
+            return contra;
         }
 
     }

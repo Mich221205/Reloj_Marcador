@@ -1,16 +1,15 @@
 using EjemploCoreWeb.Entities;
-using EjemploCoreWeb.Services;
 using EjemploCoreWeb.Services.Abstract;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace EjemploProyecto.Pages.ADM_Usuarios
 {
-    public class Cambio_ClaveModel : PageModel
+    public class Autogenerar_ClaveModel : PageModel
     {
         private readonly IUsuarioService _usuarioService;
 
-        public Cambio_ClaveModel(IUsuarioService usuarioService)
+        public Autogenerar_ClaveModel(IUsuarioService usuarioService)
         {
             _usuarioService = usuarioService;
             Usuario = new Usuario();
@@ -24,12 +23,14 @@ namespace EjemploProyecto.Pages.ADM_Usuarios
             Usuario = await _usuarioService.Obtener_Usuario_X_Identificacion(id);
 
             if (Usuario == null)
-            {
                 return NotFound();
-            }
+
+            // Autogenerar la clave apenas se carga la página
+            Usuario.Contrasena = _usuarioService.Autogenerar_Clave();
 
             return Page();
         }
+
         public async Task<IActionResult> OnPostAsync()
         {
             try
@@ -58,7 +59,5 @@ namespace EjemploProyecto.Pages.ADM_Usuarios
 
             return Page();
         }
-
-
     }
 }

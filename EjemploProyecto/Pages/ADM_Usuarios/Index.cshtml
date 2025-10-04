@@ -3,7 +3,7 @@
 @{
 }
 
-<h1>Usuarios</h1>
+<h1>SIMULACIÓN ADM7</h1>
 
 <p>
     <a class="btn btn-primary" asp-page="Create">Nuevo Usuario</a>
@@ -30,6 +30,7 @@
                 <td>
                     <a asp-page="Cambio_Clave" asp-route-id="@item.Identificacion">Cambio de clave</a> |
                     <a asp-page="Delete" asp-route-id="@item.Identificacion">Eliminar</a>
+                    <a asp-page="/ADM_Horarios/Detalle_Horarios" asp-route-id="@item.Identificacion">Administración de horarios</a>
                 </td>
             </tr>
         }

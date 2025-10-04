@@ -1,0 +1,49 @@
+﻿@model EjemploProyecto.Pages.ADM_Horarios.Detalle_HorariosModel
+
+<hr />
+<h4>Agregar detalle al horario @Model.HorarioSeleccionadoId</h4>
+
+<form id="formAgregarDetalle">
+    <input type="hidden" name="HorarioSeleccionadoId" value="@Model.HorarioSeleccionadoId" />
+
+    <div class="row g-3">
+        <div class="col-md-3">
+            <label class="form-label">Día</label>
+            <select name="Dia" class="form-select">
+                <option value="">Seleccione un día</option>
+                <option>Lunes</option>
+                <option>Martes</option>
+                <option>Miércoles</option>
+                <option>Jueves</option>
+                <option>Viernes</option>
+                <option>Sábado</option>
+                <option>Domingo</option>
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <label class="form-label">Hora ingreso</label>
+            <input name="Hora_Ingreso" class="form-control" type="number" min="0" max="23" />
+        </div>
+
+        <div class="col-md-2">
+            <label class="form-label">Minuto ingreso</label>
+            <input name="Minuto_Ingreso" class="form-control" type="number" min="0" max="59" />
+        </div>
+
+        <div class="col-md-2">
+            <label class="form-label">Hora salida</label>
+            <input name="Hora_Salida" class="form-control" type="number" min="0" max="23" />
+        </div>
+
+        <div class="col-md-2">
+            <label class="form-label">Minuto salida</label>
+            <input name="Minuto_Salida" class="form-control" type="number" min="0" max="59" />
+        </div>
+
+        <div class="col-md-12 mt-3">
+            <button type="button" class="btn btn-success" onclick="agregarDetalle()">Agregar</button>
+            <a asp-page="/ADM_Usuario/Index" class="btn btn-secondary">Volver</a>
+        </div>
+    </div>
+</form>

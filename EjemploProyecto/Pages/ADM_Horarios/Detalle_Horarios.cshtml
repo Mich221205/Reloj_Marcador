@@ -1,4 +1,141 @@
 ﻿@page
 @model EjemploProyecto.Pages.ADM_Horarios.Detalle_HorariosModel
 @{
+    ViewData["Title"] = "Administración de Horarios";
+}
+
+<h1>Horarios del usuario</h1>
+
+<form id="__af" method="post" style="display:none">
+    @Html.AntiForgeryToken()
+</form>
+
+<!-- Contenedor dinámico para la lista de horarios -->
+<div id="contenedorHorarios">
+    @await Html.PartialAsync("_HorariosLista", Model)
+</div>
+
+<!-- Contenedor dinámico para formulario + tabla -->
+<div id="contenedorDetalles">
+    @if (Model.MostrarFormulario)
+    {
+        @await Html.PartialAsync("_FormularioDetalle", Model)
+        @await Html.PartialAsync("_TablaDetalles", Model)
+    }
+</div>
+
+<!-- Modales globales -->
+@await Html.PartialAsync("_ModalesGenerales")
+
+<!-- Modal de Confirmación para Eliminar -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content border-danger">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="confirmDeleteLabel">
+                    <i class="bi bi-exclamation-triangle-fill"></i> Confirmar eliminación
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body text-center">
+                ¿Realmente desea eliminar el elemento seleccionado?
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                <button id="btnConfirmDelete" type="button" class="btn btn-danger">Sí</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Obtener token antiforgery
+        function getToken() {
+            return document.querySelector('input[name="__RequestVerificationToken"]')?.value || '';
+        }
+
+        // Mostrar modal si viene desde el servidor
+        function mostrarModalDesdeServidor(html) {
+            document.getElementById('contenedorDetalles').innerHTML = html;
+
+            // Buscar y mostrar el modal del servidor
+            const modalMsg = document.getElementById('messageModal');
+            if (modalMsg) {
+                const modal = new bootstrap.Modal(modalMsg);
+                modal.show();
+            }
+        }
+
+        // --- 1) Seleccionar horario ---
+        async function seleccionarHorario(idHorario) {
+            const data = new FormData();
+            data.append('id', idHorario);
+            data.append('__RequestVerificationToken', getToken());
+
+            const res = await fetch('?handler=Seleccionar', {
+                method: 'POST',
+                body: data,
+                credentials: 'same-origin'
+            });
+
+            const html = await res.text();
+            document.getElementById('contenedorDetalles').innerHTML = html;
+        }
+
+        // --- 2) Agregar detalle ---
+        async function agregarDetalle() {
+            const form = document.getElementById('formAgregarDetalle');
+            const data = new FormData(form);
+            data.append('__RequestVerificationToken', getToken());
+
+            const res = await fetch('?handler=AgregarDetalle', {
+                method: 'POST',
+                body: data,
+                credentials: 'same-origin'
+            });
+
+            const html = await res.text();
+            mostrarModalDesdeServidor(html); // Muestra modal de éxito o error
+        }
+
+        // --- 3) Eliminar detalle ---
+        async function eliminarDetalle(id) {
+            const data = new FormData();
+            data.append('idDetalle', id);
+
+            const horarioId = document.querySelector('input[name="HorarioSeleccionadoId"]')?.value || '0';
+            data.append('HorarioSeleccionadoId', horarioId);
+            data.append('__RequestVerificationToken', getToken());
+
+            const res = await fetch('?handler=EliminarDetalle', {
+                method: 'POST',
+                body: data,
+                credentials: 'same-origin'
+            });
+
+            const html = await res.text();
+            mostrarModalDesdeServidor(html); // También muestra modal de éxito/error
+        }
+
+                let idAEliminar = null;
+
+        // Abre el modal de confirmación
+        function confirmarEliminar(id) {
+            idAEliminar = id;
+            const modal = new bootstrap.Modal(document.getElementById("confirmDeleteModal"));
+            modal.show();
+        }
+
+        // Si confirma, llama a la función de eliminación
+              document.querySelector("#confirmDeleteModal #btnConfirmDelete")
+        .addEventListener("click", async function () {
+            if (idAEliminar) {
+                const modal = bootstrap.Modal.getInstance(document.getElementById("confirmDeleteModal"));
+                modal.hide();
+                await eliminarDetalle(idAEliminar);
+                idAEliminar = null;
+            }
+        });
+    </script>
 }

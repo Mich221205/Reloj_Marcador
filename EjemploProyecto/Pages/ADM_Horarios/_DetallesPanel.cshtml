@@ -1,0 +1,27 @@
+﻿@model EjemploProyecto.Pages.ADM_Horarios.Detalle_HorariosModel
+
+@await Html.PartialAsync("_FormularioDetalle", Model)
+@await Html.PartialAsync("_TablaDetalles", Model)
+
+@if (!string.IsNullOrWhiteSpace(Model.ModalMessage))
+{
+    <div class="modal fade show" id="messageModal" tabindex="-1" style="display:block;" aria-modal="true" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header
+                        @(Model.ModalType == "success" ? "bg-success text-white" :
+                                           Model.ModalType == "error" ? "bg-danger text-white" :
+                                           Model.ModalType == "warning" ? "bg-warning text-dark" : "bg-info text-white")">
+                <h5 class="modal-title">@Model.ModalTitle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                @Model.ModalMessage
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+}
