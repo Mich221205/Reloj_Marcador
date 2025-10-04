@@ -38,7 +38,7 @@ namespace EjemploProyecto.Pages.ADM_Ausencias
             {
                 await _motivoService.DeleteAsync(Motivo.ID_Motivo);
             }
-            return RedirectToPage("Index_Inconsistencias");
+            return RedirectToPage("Index");
         }
 
     }

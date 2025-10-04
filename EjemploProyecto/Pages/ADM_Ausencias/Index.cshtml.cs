@@ -6,12 +6,12 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace EjemploProyecto.Pages.ADM_Ausencias
 {
-    public class Index_InconsistenciasModel : PageModel
+    public class IndexModel : PageModel
     {
 
         private readonly IMotivos_Ausencia _motivos_Inconsistencia;
 
-        public Index_InconsistenciasModel(IMotivos_Ausencia MotivosService)
+        public IndexModel(IMotivos_Ausencia MotivosService)
         {
             _motivos_Inconsistencia = MotivosService;
             Motivos = new List<Motivos_Ausencia>();

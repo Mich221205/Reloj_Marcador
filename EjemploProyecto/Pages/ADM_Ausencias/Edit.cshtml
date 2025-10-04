@@ -30,5 +30,35 @@
 </div>
 
 <div>
-    <a asp-page="Index_Inconsistencias">Volver a la lista</a>
+    <a asp-page="Index">Volver a la lista</a>
 </div>
+
+<!-- Modal de éxito -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="successModalLabel">Éxito</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                @ViewData["SuccessMessage"]
+            </div>
+            <div class="modal-footer">
+                <a asp-page="Index" class="btn btn-success">Aceptar</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var msg = '@ViewData["SuccessMessage"]';
+            if (msg && msg !== '') {
+                var successModal = new bootstrap.Modal(document.getElementById('successModal'));
+                successModal.show();
+            }
+        });
+    </script>
+}

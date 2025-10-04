@@ -40,7 +40,11 @@ namespace EjemploProyecto.Pages.ADM_Ausencias
 
             await _motivoService.UpdateAsync(Motivo);
 
-            return RedirectToPage("Index_Inconsistencias");
+            // Seteamos mensaje para el modal
+            ViewData["SuccessMessage"] = "El motivo se actualizó correctamente.";
+
+            // Nos quedamos en la misma página para mostrar el modal
+            return Page();
         }
 
 

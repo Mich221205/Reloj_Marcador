@@ -37,9 +37,22 @@ namespace EjemploProyecto.Pages.Personas
                 return Page();
             }
 
-            await _personaService.UpdateAsync(Persona);
+            try
+            {
+                await _personaService.UpdateAsync(Persona);
 
-            return RedirectToPage("Index");
+                ViewData["ModalType"] = "success";
+                ViewData["ModalTitle"] = "Éxito";
+                ViewData["ModalMessage"] = "La persona se actualizó correctamente.";
+            }
+            catch (Exception ex)
+            {
+                ViewData["ModalType"] = "error";
+                ViewData["ModalTitle"] = "Error";
+                ViewData["ModalMessage"] = $"No se pudo actualizar la persona: {ex.Message}";
+            }
+
+            return Page();
         }
     }
 }
