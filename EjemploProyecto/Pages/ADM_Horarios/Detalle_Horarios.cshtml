@@ -58,8 +58,6 @@
         // Mostrar modal si viene desde el servidor
         function mostrarModalDesdeServidor(html) {
             document.getElementById('contenedorDetalles').innerHTML = html;
-
-            // Buscar y mostrar el modal del servidor
             const modalMsg = document.getElementById('messageModal');
             if (modalMsg) {
                 const modal = new bootstrap.Modal(modalMsg);
@@ -96,14 +94,13 @@
             });
 
             const html = await res.text();
-            mostrarModalDesdeServidor(html); // Muestra modal de éxito o error
+            mostrarModalDesdeServidor(html);
         }
 
         // --- 3) Eliminar detalle ---
         async function eliminarDetalle(id) {
             const data = new FormData();
             data.append('idDetalle', id);
-
             const horarioId = document.querySelector('input[name="HorarioSeleccionadoId"]')?.value || '0';
             data.append('HorarioSeleccionadoId', horarioId);
             data.append('__RequestVerificationToken', getToken());
@@ -115,25 +112,52 @@
             });
 
             const html = await res.text();
-            mostrarModalDesdeServidor(html); // También muestra modal de éxito/error
+            mostrarModalDesdeServidor(html);
         }
 
-                let idAEliminar = null;
+        // --- 4) Eliminar horario ---
+        let idHorarioAEliminar = null;
 
-        // Abre el modal de confirmación
-        function confirmarEliminar(id) {
+        function confirmarEliminarHorario(idHorario) {
+            idHorarioAEliminar = idHorario;
+            const modal = new bootstrap.Modal(document.getElementById("confirmDeleteModal"));
+            modal.show();
+        }
+
+                async function eliminarHorario(id_Horario) {
+            const data = new FormData();
+            data.append('id_Horario', id_Horario);
+            data.append('__RequestVerificationToken', getToken());
+
+            const res = await fetch('?handler=EliminarHorario', {
+                method: 'POST',
+                body: data,
+                credentials: 'same-origin'
+            });
+
+            const html = await res.text();
+            document.getElementById('contenedorHorarios').innerHTML = html;
+
+            const modalMsg = document.getElementById('messageModal');
+            if (modalMsg) {
+                const modal = new bootstrap.Modal(modalMsg);
+                modal.show();
+            }
+        }
+
+
+
+                function confirmarEliminarHorario(id) {
             idAEliminar = id;
             const modal = new bootstrap.Modal(document.getElementById("confirmDeleteModal"));
             modal.show();
         }
 
-        // Si confirma, llama a la función de eliminación
-              document.querySelector("#confirmDeleteModal #btnConfirmDelete")
-        .addEventListener("click", async function () {
+        document.querySelector("#btnConfirmDelete").addEventListener("click", async function () {
             if (idAEliminar) {
                 const modal = bootstrap.Modal.getInstance(document.getElementById("confirmDeleteModal"));
                 modal.hide();
-                await eliminarDetalle(idAEliminar);
+                await eliminarHorario(idAEliminar);
                 idAEliminar = null;
             }
         });

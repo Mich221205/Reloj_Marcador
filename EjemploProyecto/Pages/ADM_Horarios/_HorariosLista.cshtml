@@ -2,6 +2,10 @@
 
 @if (Model.Horarios.Any())
 {
+    <p>
+        <a class="btn btn-primary" asp-page="Create_Horario">Nuevo</a>
+    </p>
+
     <table class="table table-striped">
         <thead>
             <tr>
@@ -21,6 +25,9 @@
                     <td>
                         <button class="btn btn-primary btn-sm" onclick="seleccionarHorario(@h.ID_Horario)">
                             Seleccionar
+                        </button>
+                        <button class="btn btn-danger btn-sm" onclick="confirmarEliminarHorario(@h.ID_Horario)">
+                            Eliminar
                         </button>
                     </td>
                 </tr>

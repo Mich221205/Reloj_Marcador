@@ -96,10 +96,49 @@ namespace EjemploProyecto.Pages.ADM_Horarios
                 ModalType = "error";
                 ModalTitle = "Error inesperado";
                 ModalMessage = $"Se produjo un error: {ex.Message}";
+
+                Detalles = (await _horariosService.Obtener_Detalles_HorarioAsync(HorarioSeleccionadoId)).ToList();
             }
 
             return Partial("_DetallesPanel", this);
         }
+
+        public async Task<PartialViewResult> OnPostEliminarHorarioAsync(int id_Horario)
+        {
+            try
+            {
+                // Validar el ID del horario recibido
+                if (id_Horario <= 0)
+                {
+                    ModalType = "warning";
+                    ModalTitle = "Advertencia";
+                    ModalMessage = "Debe seleccionar un horario válido para eliminar.";
+                    return Partial("_DetallesPanel", this);
+                }
+
+                // Eliminar horario en BD
+                await _horariosService.DeleteHorarioAsync(id_Horario);
+
+                // Actualizar la lista de horarios después de eliminar
+                var idUsuario = Request.Query["id"].ToString();
+                Horarios = (await _horariosService.Obtener_Horario_UsuarioAsync(idUsuario))?.ToList() ?? new List<Horarios>();
+
+                ModalType = "success";
+                ModalTitle = "Éxito";
+                ModalMessage = "El horario fue eliminado correctamente.";
+            }
+            catch (Exception ex)
+            {
+                ModalType = "error";
+                ModalTitle = "Error";
+                ModalMessage = $"No se pudo eliminar el horario: {ex.Message}";
+            }
+
+            // Devuelve el panel de detalles para mantener la vista actual
+            return Partial("_DetallesPanel", this);
+        }
+
+
 
         public async Task<PartialViewResult> OnPostEliminarDetalleAsync(int idDetalle)
         {
