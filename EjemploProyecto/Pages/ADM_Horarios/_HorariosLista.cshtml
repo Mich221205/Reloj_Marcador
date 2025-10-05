@@ -3,7 +3,15 @@
 @if (Model.Horarios.Any())
 {
     <p>
-        <a class="btn btn-primary" asp-page="Create_Horario">Nuevo</a>
+    <p>
+        <a class="btn btn-primary"
+           asp-page="Create_Horario"
+           asp-route-id="@Model.IdentificacionUsuario">
+            Nuevo
+        </a>
+    </p>
+
+
     </p>
 
     <table class="table table-striped">

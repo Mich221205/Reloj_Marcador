@@ -107,12 +107,20 @@ namespace EjemploCoreWeb.Repository
 
         public async Task<int> DeleteHorarioAsync(int IDHorario)
         {
-            using (var connection = _dbConnectionFactory.CreateConnection())
-            {
-                var sql = "DELETE FROM Horario WHERE ID_Horario = @ID_Horario;";
-                return await connection.ExecuteAsync(sql, new { ID_Horario = IDHorario });
-            }
+            using var connection = _dbConnectionFactory.CreateConnection();
+
+            // Primero verificamos si hay detalles asociados
+            const string checkSql = "SELECT COUNT(*) FROM Detalle_Horarios WHERE ID_Horario = @ID_Horario;";
+            int detallesAsociados = await connection.ExecuteScalarAsync<int>(checkSql, new { ID_Horario = IDHorario });
+
+            if (detallesAsociados > 0)
+                throw new InvalidOperationException("No se puede eliminar el horario porque tiene detalles asociados.");
+
+            // Si no tiene detalles, eliminar normalmente
+            const string sql = "DELETE FROM Horario WHERE ID_Horario = @ID_Horario;";
+            return await connection.ExecuteAsync(sql, new { ID_Horario = IDHorario });
         }
+
 
         public async Task<int> DeleteDetalleHorarioAsync(int IDDetalle)
         {
@@ -120,6 +128,23 @@ namespace EjemploCoreWeb.Repository
             {
                 var sql = "DELETE FROM Detalle_Horarios WHERE ID_Detalle = @ID_Detalle;";
                 return await connection.ExecuteAsync(sql, new { ID_Detalle = IDDetalle });
+            }
+        }
+
+        // Obtener las áreas en las que trabaja un usuario (por Identificación)
+        public async Task<IEnumerable<Horarios>> Obtener_Areas_UsuarioAsync()
+        {
+            using (var connection = _dbConnectionFactory.CreateConnection())
+            {
+                const string sql = @"
+            SELECT 
+                ID_Area, 
+                Nombre_Area, 
+                Codigo_Area
+            FROM Areas;
+        ";
+
+                return await connection.QueryAsync<Horarios>(sql);
             }
         }
 

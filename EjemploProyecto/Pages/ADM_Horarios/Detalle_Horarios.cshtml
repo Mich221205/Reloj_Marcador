@@ -145,6 +145,26 @@
             }
         }
 
+                let idDetalleAEliminar = null;
+
+        function confirmarEliminar(idDetalle) {
+            idDetalleAEliminar = idDetalle;
+            const modal = new bootstrap.Modal(document.getElementById("confirmDeleteModal"));
+            modal.show();
+
+            // Cambiar la acción del botón de confirmación para eliminar detalle
+            const btnConfirm = document.getElementById("btnConfirmDelete");
+            btnConfirm.onclick = async function () {
+                const modalInstance = bootstrap.Modal.getInstance(document.getElementById("confirmDeleteModal"));
+                modalInstance.hide();
+
+                if (idDetalleAEliminar) {
+                    await eliminarDetalle(idDetalleAEliminar);
+                    idDetalleAEliminar = null;
+                }
+            };
+        }
+
 
 
                 function confirmarEliminarHorario(id) {
@@ -161,5 +181,7 @@
                 idAEliminar = null;
             }
         });
+
+
     </script>
 }

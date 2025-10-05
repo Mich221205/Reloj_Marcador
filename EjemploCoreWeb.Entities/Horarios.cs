@@ -14,6 +14,8 @@ namespace EjemploCoreWeb.Entities
 
         public string Nombre_Area { get; set; }
 
+        public int ID_Area { get; set; }
+
         public string Codigo_Area { get; set; } = string.Empty;
 
 

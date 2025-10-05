@@ -1,4 +1,4 @@
-using EjemploCoreWeb.Entities;
+﻿using EjemploCoreWeb.Entities;
 using EjemploCoreWeb.Services.Abstract;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -35,11 +35,16 @@ namespace EjemploProyecto.Pages.ADM_Horarios
         public string ModalTitle { get; set; }
         public string ModalMessage { get; set; }
 
+        [BindProperty(SupportsGet = true)]
+        public string IdentificacionUsuario { get; set; }
+
         public async Task<IActionResult> OnGetAsync(string id)
         {
+            IdentificacionUsuario = id; // guarda la identificación del usuario actual
+
             var horarios = await _horariosService.Obtener_Horario_UsuarioAsync(id);
             if (horarios == null || !horarios.Any())
-                return NotFound();
+                return Page(); // sigue mostrando la vista vacía, pero mantiene la identificación
 
             Horarios = horarios.ToList();
             return Page();
@@ -79,7 +84,7 @@ namespace EjemploProyecto.Pages.ADM_Horarios
                     Detalles = (await _horariosService.Obtener_Detalles_HorarioAsync(HorarioSeleccionadoId)).ToList();
 
                     ModalType = "success";
-                    ModalTitle = "�xito";
+                    ModalTitle = "Éxito";
                     ModalMessage = "Detalle agregado correctamente.";
                 }
             }
@@ -112,19 +117,19 @@ namespace EjemploProyecto.Pages.ADM_Horarios
                 {
                     ModalType = "warning";
                     ModalTitle = "Advertencia";
-                    ModalMessage = "Debe seleccionar un horario v�lido para eliminar.";
+                    ModalMessage = "Debe seleccionar un horario válido para eliminar.";
                     return Partial("_DetallesPanel", this);
                 }
 
                 // Eliminar horario en BD
                 await _horariosService.DeleteHorarioAsync(id_Horario);
 
-                // Actualizar la lista de horarios despu�s de eliminar
+                // Actualizar la lista de horarios después de eliminar
                 var idUsuario = Request.Query["id"].ToString();
                 Horarios = (await _horariosService.Obtener_Horario_UsuarioAsync(idUsuario))?.ToList() ?? new List<Horarios>();
 
                 ModalType = "success";
-                ModalTitle = "�xito";
+                ModalTitle = "Éxito";
                 ModalMessage = "El horario fue eliminado correctamente.";
             }
             catch (Exception ex)
@@ -154,7 +159,7 @@ namespace EjemploProyecto.Pages.ADM_Horarios
                 Detalles = (await _horariosService.Obtener_Detalles_HorarioAsync(HorarioSeleccionadoId)).ToList();
 
                 ModalType = "success";
-                ModalTitle = "�xito";
+                ModalTitle = "Éxito";
                 ModalMessage = "El detalle fue eliminado correctamente.";
             }
             catch (Exception ex)
@@ -165,6 +170,29 @@ namespace EjemploProyecto.Pages.ADM_Horarios
             }
 
             return Partial("_DetallesPanel", this);
+        }
+
+
+        public async Task<PartialViewResult> OnPostCrearHorarioAsync(Horarios horario)
+        {
+            try
+            {
+                await _horariosService.InsertHorarioAsync(horario);
+                ModalType = "success";
+                ModalTitle = "Éxito";
+                ModalMessage = "Horario creado correctamente.";
+
+                // Refrescamos la lista
+                Horarios = (await _horariosService.Obtener_Horario_UsuarioAsync(horario.Identificacion)).ToList();
+            }
+            catch (Exception ex)
+            {
+                ModalType = "error";
+                ModalTitle = "Error";
+                ModalMessage = ex.Message;
+            }
+
+            return Partial("_HorariosLista", this);
         }
     }
 }
