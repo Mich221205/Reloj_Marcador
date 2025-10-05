@@ -10,9 +10,14 @@ namespace EjemploProyecto.Pages.ADM_Identificacion
     {
         private readonly ITipoIdentificacionService _service;
 
-        public CreateModel(ITipoIdentificacionService service)
+        private readonly IBitacoraService _bitacoraService;
+
+
+
+        public CreateModel(ITipoIdentificacionService service, IBitacoraService bitacoraService)
         {
             _service = service;
+            _bitacoraService = bitacoraService;
         }
 
         [BindProperty]

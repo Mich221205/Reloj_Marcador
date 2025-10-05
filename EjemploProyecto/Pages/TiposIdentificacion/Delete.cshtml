@@ -1,27 +1,20 @@
 ﻿@page "{id:int}"
 @model EjemploProyecto.Pages.ADM_Identificacion.DeleteModel
 
-
 <h2>Eliminar Tipo de Identificación</h2>
 
-@if (!string.IsNullOrEmpty(Model.ErrorMessage))
-{
-    <div class="alert alert-danger">
-        @Model.ErrorMessage
-    </div>
-}
-
-<div class="alert alert-warning">
-    <p>¿Estás seguro que deseas eliminar el tipo <strong>@Model.Tipo.Tipo_Identificacion</strong>?</p>
-</div>
+<p>
+    ¿Estás seguro de que deseas eliminar el tipo de identificación
+    <strong>@Model.Tipo?.Tipo_Identificacion</strong>?
+</p>
 
 <form method="post">
     <input type="hidden" asp-for="Tipo.ID_Tipo_Identificacion" />
-    <button type="submit" class="btn btn-danger">Eliminar</button>
-    <a asp-page="Index" class="btn btn-secondary">Cancelar</a>
+    <button type="submit" class="btn btn-danger">🗑 Eliminar</button>
+    <a asp-page="Index" class="btn btn-secondary">⬅ Cancelar</a>
 </form>
 
-<!-- 🔹 Modal general para mostrar mensajes -->
+<!-- 🔹 Modal general -->
 <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">

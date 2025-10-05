@@ -1,51 +1,83 @@
-using EjemploCoreWeb.Entities;
+锘縰sing EjemploCoreWeb.Entities;
 using EjemploCoreWeb.Services.Abstract;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace EjemploProyecto.Pages.ADM_Identificacion
 {
     public class DeleteModel : PageModel
     {
         private readonly ITipoIdentificacionService _service;
+        private readonly IBitacoraService _bitacoraService;
 
-        public DeleteModel(ITipoIdentificacionService service)
+        public DeleteModel(ITipoIdentificacionService service, IBitacoraService bitacoraService)
         {
             _service = service;
+            _bitacoraService = bitacoraService;
         }
 
+        // 馃敼 Se permite null para evitar advertencias de referencia nula (CS8600)
         [BindProperty]
-        public TipoIdentificacion Tipo { get; set; }
-
-        [TempData]
-        public string ErrorMessage { get; set; }
+        public TipoIdentificacion? Tipo { get; set; }
 
         public void OnGet(int id)
         {
             Tipo = _service.ObtenerTodos().FirstOrDefault(t => t.ID_Tipo_Identificacion == id);
         }
 
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPostAsync()
         {
             try
             {
-                _service.Eliminar(Tipo.ID_Tipo_Identificacion);
+                // 馃敼 Validar que el tipo exista antes de eliminar
+                var eliminado = _service.ObtenerTodos()
+                    .FirstOrDefault(t => t.ID_Tipo_Identificacion == Tipo?.ID_Tipo_Identificacion);
 
+                if (eliminado == null)
+                {
+                    ViewData["ModalType"] = "error";
+                    ViewData["ModalTitle"] = "Error";
+                    ViewData["ModalMessage"] = "No se encontr贸 el registro a eliminar.";
+                    return Page();
+                }
+
+                // 馃敼 Eliminar el registro
+                _service.Eliminar(eliminado.ID_Tipo_Identificacion);
+
+                // 馃敼 Registrar la acci贸n en bit谩cora (acci贸n 3 = eliminaci贸n)
+                int idUsuario = 1; // 鈿狅笍 temporal, luego vendr谩 del login real
+                await _bitacoraService.Registrar(
+                    idUsuario,
+                    idAccion: 3,
+                    detalle: eliminado,
+                    nombreAccion: "Eliminaci贸n de Tipo de Identificaci贸n"
+                );
+
+                // 馃敼 Modal de 茅xito
                 ViewData["ModalType"] = "success";
-                ViewData["ModalTitle"] = "Eliminaci髇 exitosa";
-                ViewData["ModalMessage"] = "El tipo de identificaci髇 fue eliminado correctamente.";
-                ViewData["RedirectPage"] = "Index"; // redirige
+                ViewData["ModalTitle"] = "Eliminaci贸n exitosa";
+                ViewData["ModalMessage"] = "El tipo de identificaci贸n fue eliminado correctamente.";
+                ViewData["RedirectPage"] = "Index";
             }
             catch (InvalidOperationException ex)
             {
+                // 馃敼 Registrar error t茅cnico en bit谩cora
+                int idUsuario = 1;
+                await _bitacoraService.Registrar(
+                    idUsuario,
+                    idAccion: 99, // 99 = error t茅cnico
+                    detalle: new { Error = ex.Message },
+                    nombreAccion: "Error al eliminar Tipo de Identificaci贸n"
+                );
+
                 ViewData["ModalType"] = "error";
                 ViewData["ModalTitle"] = "Error";
                 ViewData["ModalMessage"] = ex.Message;
             }
 
-            // Vuelve a la p醙ina actual 
             return Page();
         }
     }
 }
-

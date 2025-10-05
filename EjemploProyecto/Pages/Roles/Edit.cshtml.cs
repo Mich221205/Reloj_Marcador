@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using EjemploCoreWeb.Entities;
 using EjemploCoreWeb.Services;
@@ -10,21 +10,24 @@ namespace EjemploProyecto.Pages.Roles
     public class EditModel : PageModel
     {
         private readonly IRolService _rolService;
-
-        public EditModel(IRolService rolService)
-        {
-            _rolService = rolService;
-        }
+        private readonly IBitacoraService _bitacoraService;
 
         [BindProperty]
         public Rol Rol { get; set; }
+
+
+        public EditModel(IRolService rolService, IBitacoraService bitacoraService)
+        {
+            _rolService = rolService;
+            _bitacoraService = bitacoraService;
+        }
 
         public void OnGet(int id)
         {
             Rol = _rolService.ObtenerRoles().FirstOrDefault(r => r.ID_Rol_Usuario == id);
         }
 
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
@@ -33,7 +36,7 @@ namespace EjemploProyecto.Pages.Roles
                                      .Select(e => e.ErrorMessage));
 
                 ViewData["ModalType"] = "error";
-                ViewData["ModalTitle"] = "Error de validaci�n";
+                ViewData["ModalTitle"] = "Error de validación";
                 ViewData["ModalMessage"] = errores;
 
                 return Page();
@@ -41,15 +44,39 @@ namespace EjemploProyecto.Pages.Roles
 
             try
             {
+                
+                var anterior = _rolService.ObtenerRoles()
+                    .FirstOrDefault(r => r.ID_Rol_Usuario == Rol.ID_Rol_Usuario);
+
+             
                 _rolService.ActualizarRol(Rol);
 
+                
+                int idUsuario = 1; // temporal — luego se obtiene del usuario logueado
+                await _bitacoraService.Registrar(
+                    idUsuario,
+                    idAccion: 2,
+                    detalle: new { Antes = anterior, Despues = Rol },
+                    nombreAccion: "EL rol ha sido actualizado"
+                );
+
+           
                 ViewData["ModalType"] = "success";
-                ViewData["ModalTitle"] = "Actualizaci�n exitosa";
+                ViewData["ModalTitle"] = "Actualización exitosa";
                 ViewData["ModalMessage"] = "El rol fue actualizado correctamente.";
                 ViewData["RedirectPage"] = "Index";
             }
             catch (InvalidOperationException ex)
             {
+             
+                int idUsuario = 1;
+                await _bitacoraService.Registrar(
+                    idUsuario,
+                    idAccion: 99,
+                    detalle: new { Error = ex.Message },
+                    nombreAccion: "Error al actualizar Rol"
+                );
+
                 ViewData["ModalType"] = "error";
                 ViewData["ModalTitle"] = "Error";
                 ViewData["ModalMessage"] = ex.Message;

@@ -9,10 +9,13 @@ namespace EjemploProyecto.Pages.Roles
     public class CreateModel : PageModel
     {
         private readonly IRolService _rolService;
+        private readonly IBitacoraService _bitacoraService;
 
-        public CreateModel(IRolService rolService)
+
+        public CreateModel(IRolService rolService, IBitacoraService bitacoraService)
         {
             _rolService = rolService;
+            _bitacoraService = bitacoraService;
         }
 
         [BindProperty]
@@ -38,6 +41,15 @@ namespace EjemploProyecto.Pages.Roles
             try
             {
                 _rolService.CrearRol(Rol);
+                
+                int idUsuario = 1; // Temporal, luego vendrá del login
+                await _bitacoraService.Registrar(
+                    idUsuario,
+                    idAccion: 1, // INSERT
+                    detalle: Rol,
+                    nombreAccion: "Creación de Rol"
+                );
+
 
                 ViewData["ModalType"] = "success";
                 ViewData["ModalTitle"] = "Éxito";
@@ -46,6 +58,16 @@ namespace EjemploProyecto.Pages.Roles
             }
             catch (InvalidOperationException ex)
             {
+                // Registrar error técnico
+                int idUsuario = 1;
+                await _bitacoraService.Registrar(
+                    idUsuario,
+                    idAccion: 99, // 99 = error técnico (puedes usar otro id)
+                    detalle: new { Error = ex.Message },
+                    nombreAccion: "Error al crear Rol"
+                );
+
+
                 ViewData["ModalType"] = "error";
                 ViewData["ModalTitle"] = "Error";
                 ViewData["ModalMessage"] = ex.Message;

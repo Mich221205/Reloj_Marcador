@@ -33,7 +33,7 @@ builder.Services.AddScoped<ITipoIdentificacionService, TipoIdentificacionService
 
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(5); //la cuenta
+    options.IdleTimeout = TimeSpan.FromMinutes(5); //la cuenta jiji
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
