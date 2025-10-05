@@ -1,4 +1,5 @@
-using EjemploCoreWeb.Entities;
+﻿using EjemploCoreWeb.Entities;
+using EjemploCoreWeb.Services;
 using EjemploCoreWeb.Services.Abstract;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -19,13 +20,40 @@ namespace EjemploProyecto.Pages.ADM_Identificacion
 
         public void OnGet() { }
 
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPostAsync()
         {
+            //Si el modelo no es válido (más de 40 caracteres, símbolos, etc.)
             if (!ModelState.IsValid)
-                return Page();
+            {
+                var errores = string.Join("<br>",
+                    ModelState.Values.SelectMany(v => v.Errors)
+                                     .Select(e => e.ErrorMessage));
 
-            _service.Crear(Tipo);
-            return RedirectToPage("Index");
+                ViewData["ModalType"] = "error";
+                ViewData["ModalTitle"] = "Error de validación";
+                ViewData["ModalMessage"] = errores;
+
+                return Page();
+            }
+
+            try
+            {
+               
+                _service.Crear(Tipo);
+
+                ViewData["ModalType"] = "success";
+                ViewData["ModalTitle"] = "Éxito";
+                ViewData["ModalMessage"] = "Tipo de identificación creado correctamente.";
+                ViewData["RedirectPage"] = "Index"; // redirige 
+            }
+            catch (InvalidOperationException ex)
+            {
+                ViewData["ModalType"] = "error";
+                ViewData["ModalTitle"] = "Error";
+                ViewData["ModalMessage"] = ex.Message;
+            }
+
+            return Page(); // recarga y muestra el modal
         }
     }
 }

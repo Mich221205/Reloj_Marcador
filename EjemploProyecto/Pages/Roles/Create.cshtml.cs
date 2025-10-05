@@ -20,13 +20,38 @@ namespace EjemploProyecto.Pages.Roles
 
         public void OnGet() { }
 
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
-                return Page();
+            {
+                var errores = string.Join("<br>",
+                    ModelState.Values.SelectMany(v => v.Errors)
+                                     .Select(e => e.ErrorMessage));
 
-            _rolService.CrearRol(Rol);
-            return RedirectToPage("Index");
+                ViewData["ModalType"] = "error";
+                ViewData["ModalTitle"] = "Error de validación";
+                ViewData["ModalMessage"] = errores;
+
+                return Page();
+            }
+
+            try
+            {
+                _rolService.CrearRol(Rol);
+
+                ViewData["ModalType"] = "success";
+                ViewData["ModalTitle"] = "Éxito";
+                ViewData["ModalMessage"] = "Rol creado correctamente.";
+                ViewData["RedirectPage"] = "Index";
+            }
+            catch (InvalidOperationException ex)
+            {
+                ViewData["ModalType"] = "error";
+                ViewData["ModalTitle"] = "Error";
+                ViewData["ModalMessage"] = ex.Message;
+            }
+
+            return Page();
         }
     }
 }

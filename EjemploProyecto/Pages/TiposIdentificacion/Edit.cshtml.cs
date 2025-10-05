@@ -1,4 +1,4 @@
-using EjemploCoreWeb.Entities;
+﻿using EjemploCoreWeb.Entities;
 using EjemploCoreWeb.Services.Abstract;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -24,11 +24,37 @@ namespace EjemploProyecto.Pages.ADM_Identificacion
 
         public IActionResult OnPost()
         {
+    
             if (!ModelState.IsValid)
-                return Page();
+            {
+                var errores = string.Join("<br>",
+                    ModelState.Values.SelectMany(v => v.Errors)
+                                     .Select(e => e.ErrorMessage));
 
-            _service.Actualizar(Tipo);
-            return RedirectToPage("Index");
+                ViewData["ModalType"] = "error";
+                ViewData["ModalTitle"] = "Error de validación";
+                ViewData["ModalMessage"] = errores;
+
+                return Page();
+            }
+
+            try
+            {
+                _service.Actualizar(Tipo);
+
+                ViewData["ModalType"] = "success";
+                ViewData["ModalTitle"] = "Actualización exitosa";
+                ViewData["ModalMessage"] = "El tipo de identificación fue actualizado correctamente.";
+                ViewData["RedirectPage"] = "Index"; // redirige al cerrar modal
+            }
+            catch (InvalidOperationException ex)
+            {
+                ViewData["ModalType"] = "error";
+                ViewData["ModalTitle"] = "Error";
+                ViewData["ModalMessage"] = ex.Message;
+            }
+
+            return Page();
         }
     }
 }

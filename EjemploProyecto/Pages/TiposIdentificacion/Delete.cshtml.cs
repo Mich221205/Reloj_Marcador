@@ -30,13 +30,22 @@ namespace EjemploProyecto.Pages.ADM_Identificacion
             try
             {
                 _service.Eliminar(Tipo.ID_Tipo_Identificacion);
-                return RedirectToPage("Index");
+
+                ViewData["ModalType"] = "success";
+                ViewData["ModalTitle"] = "Eliminación exitosa";
+                ViewData["ModalMessage"] = "El tipo de identificación fue eliminado correctamente.";
+                ViewData["RedirectPage"] = "Index"; // redirige
             }
             catch (InvalidOperationException ex)
             {
-                ErrorMessage = ex.Message;
-                return Page();
+                ViewData["ModalType"] = "error";
+                ViewData["ModalTitle"] = "Error";
+                ViewData["ModalMessage"] = ex.Message;
             }
+
+            // Vuelve a la página actual 
+            return Page();
         }
     }
 }
+

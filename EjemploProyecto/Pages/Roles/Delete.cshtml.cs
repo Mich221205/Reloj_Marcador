@@ -26,8 +26,23 @@ namespace EjemploProyecto.Pages.Roles
 
         public IActionResult OnPost()
         {
-            _rolService.EliminarRol(Rol.ID_Rol_Usuario);
-            return RedirectToPage("Index");
+            try
+            {
+                _rolService.EliminarRol(Rol.ID_Rol_Usuario);
+
+                ViewData["ModalType"] = "success";
+                ViewData["ModalTitle"] = "Eliminación exitosa";
+                ViewData["ModalMessage"] = "El rol fue eliminado correctamente.";
+                ViewData["RedirectPage"] = "Index";
+            }
+            catch (InvalidOperationException ex)
+            {
+                ViewData["ModalType"] = "error";
+                ViewData["ModalTitle"] = "Error";
+                ViewData["ModalMessage"] = ex.Message;
+            }
+
+            return Page();
         }
     }
 }

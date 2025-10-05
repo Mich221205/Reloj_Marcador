@@ -27,11 +27,11 @@ builder.Services.AddScoped<IRolService, RolService>();
 builder.Services.AddScoped<IdentificacionRepository>();
 builder.Services.AddScoped<ITipoIdentificacionService, TipoIdentificacionService>();
 
-//método de vfenci mmiento d sesion 
+// de vencimiento se session (5 minutos)
 
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(5); // ⏱ 5 minutos
+    options.IdleTimeout = TimeSpan.FromMinutes(5); //la cuenta
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
@@ -50,7 +50,6 @@ if (!app.Environment.IsDevelopment())
 app.UseStaticFiles();
 
 app.UseRouting();
-
 
 app.UseAuthorization();
 

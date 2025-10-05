@@ -27,10 +27,35 @@ namespace EjemploProyecto.Pages.Roles
         public IActionResult OnPost()
         {
             if (!ModelState.IsValid)
-                return Page();
+            {
+                var errores = string.Join("<br>",
+                    ModelState.Values.SelectMany(v => v.Errors)
+                                     .Select(e => e.ErrorMessage));
 
-            _rolService.ActualizarRol(Rol);
-            return RedirectToPage("Index");
+                ViewData["ModalType"] = "error";
+                ViewData["ModalTitle"] = "Error de validación";
+                ViewData["ModalMessage"] = errores;
+
+                return Page();
+            }
+
+            try
+            {
+                _rolService.ActualizarRol(Rol);
+
+                ViewData["ModalType"] = "success";
+                ViewData["ModalTitle"] = "Actualización exitosa";
+                ViewData["ModalMessage"] = "El rol fue actualizado correctamente.";
+                ViewData["RedirectPage"] = "Index";
+            }
+            catch (InvalidOperationException ex)
+            {
+                ViewData["ModalType"] = "error";
+                ViewData["ModalTitle"] = "Error";
+                ViewData["ModalMessage"] = ex.Message;
+            }
+
+            return Page();
         }
     }
 }
