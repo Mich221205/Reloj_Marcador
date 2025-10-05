@@ -11,11 +11,13 @@ namespace EjemploProyecto.Pages.ADM_Ausencias
 
         private readonly IMotivos_Ausencia _motivos_Inconsistencia;
 
-        public IndexModel(IMotivos_Ausencia MotivosService)
+        private readonly IBitacoraService _bitacoraService;
+
+        public IndexModel(IMotivos_Ausencia MotivosService, IBitacoraService bitacoraService)
         {
             _motivos_Inconsistencia = MotivosService;
             Motivos = new List<Motivos_Ausencia>();
-        
+            _bitacoraService = bitacoraService;
         }
 
         public IEnumerable<Motivos_Ausencia> Motivos { get; set; }
@@ -23,6 +25,8 @@ namespace EjemploProyecto.Pages.ADM_Ausencias
         public async Task OnGetAsync()
         {
             Motivos = await _motivos_Inconsistencia.CargarMotivosAsync();
+
+            await _bitacoraService.Registrar(1, 4, "El usuario consulta motivos ausencias", "CONSULTA");
         }
 
     }

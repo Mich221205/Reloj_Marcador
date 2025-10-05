@@ -10,11 +10,13 @@ namespace EjemploProyecto.Pages.ADM_Ausencias
     {
 
         private readonly IMotivos_Ausencia _motivoService;
+        private readonly IBitacoraService _bitacoraService;
 
-        public CreateModel(IMotivos_Ausencia motivoService)
+        public CreateModel(IMotivos_Ausencia motivoService, IBitacoraService bitacoraService)
         {
             _motivoService = motivoService;
             Motivos = new Motivos_Ausencia();
+            _bitacoraService = bitacoraService;
         }
 
         [BindProperty]
@@ -35,6 +37,9 @@ namespace EjemploProyecto.Pages.ADM_Ausencias
             try
             {
                 await _motivoService.InsertAsync(Motivos);
+
+                await _bitacoraService.Registrar(1, 1, Motivos, "INSERT");
+                
                 ViewData["ModalType"] = "success";
                 ViewData["ModalTitle"] = "Éxito";
                 ViewData["ModalMessage"] = "Motivo creado exitosamente.";

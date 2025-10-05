@@ -10,11 +10,13 @@ namespace EjemploProyecto.Pages.ADM_Ausencias
     {
 
         private readonly IMotivos_Ausencia _motivoService;
+        private readonly IBitacoraService _bitacoraService;
 
-        public DeleteModel(IMotivos_Ausencia motivoService)
+        public DeleteModel(IMotivos_Ausencia motivoService, IBitacoraService bitacoraService)
         {
             _motivoService = motivoService;
             Motivo = new Motivos_Ausencia();
+            _bitacoraService = bitacoraService;
         }
 
         [BindProperty]
@@ -36,7 +38,12 @@ namespace EjemploProyecto.Pages.ADM_Ausencias
         {
             if (Motivo != null)
             {
+
+                var eliminado = await _motivoService.Cargar_Motivo_X_IDAsync(Motivo.ID_Motivo);
+
                 await _motivoService.DeleteAsync(Motivo.ID_Motivo);
+
+                await _bitacoraService.Registrar(1, 3, eliminado, "DELETE");
             }
             return RedirectToPage("Index");
         }
