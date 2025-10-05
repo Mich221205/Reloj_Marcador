@@ -1,5 +1,6 @@
 using EjemploCoreWeb.Entities;
 using EjemploCoreWeb.Services.Abstract;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -30,7 +31,19 @@ namespace EjemploProyecto.Pages.Inconsistencias
 
             await _bitacoraService.Registrar(1, 4, "El usuario consultó Inconsistencias", "CONSULTA");
 
+            // Si existen mensajes pasados desde Create/Edit/Delete
+            if (TempData.ContainsKey("SuccessMessage"))
+            {
+                TempData["ModalType"] = "success";
+                TempData["ModalTitle"] = "Éxito";
+                TempData["ModalMessage"] = TempData["SuccessMessage"];
+            }
+            else if (TempData.ContainsKey("ErrorMessage"))
+            {
+                TempData["ModalType"] = "error";
+                TempData["ModalTitle"] = "Error";
+                TempData["ModalMessage"] = TempData["ErrorMessage"];
+            }
         }
     }
 }
-
