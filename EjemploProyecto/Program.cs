@@ -14,6 +14,8 @@ builder.Services.AddSingleton<IDbConnectionFactory, DbConnectionFactory>();
 //builder.Services.AddScoped<PersonaRepository>(); //cada solicitud crea un personaRepository
 //builder.Services.AddScoped<IPersonaService, PersonaService>();
 
+builder.Services.AddScoped<IInconsistenciaRepository, InconsistenciaRepository>();
+builder.Services.AddScoped<IInconsistenciaService, InconsistenciaService>();
 builder.Services.AddScoped<UsuarioRepository>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 
@@ -37,6 +39,8 @@ builder.Services.AddSession(options =>
 });
 
 
+// servicio de bit�cora
+builder.Services.AddScoped<IBitacoraService, BitacoraService>();
 
 var app = builder.Build();
 
@@ -52,6 +56,15 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+
+//LEVANTAMIENTO DE PAGINA INDEX PARA PRUEBAS
+app.MapGet("/", context =>
+{
+    context.Response.Redirect("/InconsistenciasM/Index");
+    return Task.CompletedTask;
+});
+
 
 app.MapRazorPages();
 
