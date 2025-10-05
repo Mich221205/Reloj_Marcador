@@ -18,7 +18,6 @@ namespace EjemploProyecto.Pages.ADM_Identificacion
             _bitacoraService = bitacoraService;
         }
 
-        // Se permite null para evitar advertencias de referencia nula (CS8600)
         [BindProperty]
         public TipoIdentificacion? Tipo { get; set; }
 
@@ -31,9 +30,8 @@ namespace EjemploProyecto.Pages.ADM_Identificacion
         {
             try
             {
-                //  Validar que el tipo exista antes de eliminar
                 var eliminado = _service.ObtenerTodos()
-                    .FirstOrDefault(t => t.ID_Tipo_Identificacion == Tipo?.ID_Tipo_Identificacion);
+                    .FirstOrDefault(t => t.ID_Tipo_Identificacion == Tipo.ID_Tipo_Identificacion);
 
                 if (eliminado == null)
                 {
@@ -43,19 +41,11 @@ namespace EjemploProyecto.Pages.ADM_Identificacion
                     return Page();
                 }
 
-                // Intentar eliminar el registro
                 _service.Eliminar(eliminado.ID_Tipo_Identificacion);
 
-                //  Registrar en bitácora (acción 3 = eliminación)
-                int idUsuario = 1; // ⚠️ temporal, luego vendrá del login real
-                await _bitacoraService.Registrar(
-                    idUsuario,
-                    idAccion: 3,
-                    detalle: eliminado,
-                    nombreAccion: "Eliminación de Tipo de Identificación"
-                );
+                //Registrar en bitácora 
+                await _bitacoraService.Registrar(1, 3, eliminado, "DELETE");
 
-                //  Modal de éxito
                 ViewData["ModalType"] = "success";
                 ViewData["ModalTitle"] = "Eliminación exitosa";
                 ViewData["ModalMessage"] = "El tipo de identificación fue eliminado correctamente.";
@@ -63,34 +53,9 @@ namespace EjemploProyecto.Pages.ADM_Identificacion
             }
             catch (InvalidOperationException ex)
             {
-                //  Este catch captura el mensaje del repositorio ("No se puede eliminar un registro con datos relacionados.")
-                int idUsuario = 1;
-                await _bitacoraService.Registrar(
-                    idUsuario,
-                    idAccion: 99, // 99 = error técnico
-                    detalle: new { Error = ex.Message },
-                    nombreAccion: "Error al eliminar Tipo de Identificación"
-                );
-
                 ViewData["ModalType"] = "error";
                 ViewData["ModalTitle"] = "Error";
                 ViewData["ModalMessage"] = ex.Message;
-            }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
-            {
-                //  Si algo no fue lanzado como InvalidOperationException
-                if (ex.Number == 1451)
-                {
-                    ViewData["ModalType"] = "error";
-                    ViewData["ModalTitle"] = "Error";
-                    ViewData["ModalMessage"] = "No se puede eliminar un registro con datos relacionados.";
-                }
-                else
-                {
-                    ViewData["ModalType"] = "error";
-                    ViewData["ModalTitle"] = "Error de base de datos";
-                    ViewData["ModalMessage"] = "Ocurrió un error inesperado al intentar eliminar el registro.";
-                }
             }
 
             return Page();

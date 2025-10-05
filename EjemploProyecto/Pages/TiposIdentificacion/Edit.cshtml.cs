@@ -43,30 +43,14 @@ namespace EjemploProyecto.Pages.ADM_Identificacion
 
             try
             {
-             
                 var anterior = _service.ObtenerTodos()
                     .FirstOrDefault(t => t.ID_Tipo_Identificacion == Tipo.ID_Tipo_Identificacion);
 
-             
                 _service.Actualizar(Tipo);
 
-           
-                var cambios = new
-                {
-                    Antes = anterior,
-                    Despues = Tipo
-                };
+                // Registrar en bitácora (formato original)
+                await _bitacoraService.Registrar(1, 2, new { Antes = anterior, Despues = Tipo }, "UPDATE");
 
-               
-                int idUsuario = 1; // Temporal, luego se obtiene del login
-                await _bitacoraService.Registrar(
-                    idUsuario,
-                    idAccion: 2,
-                    detalle: cambios,
-                    nombreAccion: "Actualización de Tipo de Identificación"
-                );
-
-            
                 ViewData["ModalType"] = "success";
                 ViewData["ModalTitle"] = "Actualización exitosa";
                 ViewData["ModalMessage"] = "El tipo de identificación fue actualizado correctamente.";
@@ -74,15 +58,6 @@ namespace EjemploProyecto.Pages.ADM_Identificacion
             }
             catch (InvalidOperationException ex)
             {
-                
-                int idUsuario = 1;
-                await _bitacoraService.Registrar(
-                    idUsuario,
-                    idAccion: 99, // 99 = error técnico
-                    detalle: new { Error = ex.Message },
-                    nombreAccion: "Error al actualizar Tipo de Identificación"
-                );
-
                 ViewData["ModalType"] = "error";
                 ViewData["ModalTitle"] = "Error";
                 ViewData["ModalMessage"] = ex.Message;

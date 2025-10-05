@@ -36,37 +36,13 @@ namespace EjemploProyecto.Pages.Roles
 
                 _rolService.EliminarRol(Rol.ID_Rol_Usuario);
 
-                int idUsuario = 1;
-                await _bitacoraService.Registrar(
-                    idUsuario,
-                    idAccion: 3,
-                    detalle: eliminado,
-                    nombreAccion: "Eliminación de Rol"
-                );
+                // Registrar en bitácora (versión original)
+                await _bitacoraService.Registrar(1, 3, eliminado, "DELETE");
 
                 ViewData["ModalType"] = "success";
                 ViewData["ModalTitle"] = "Eliminación exitosa";
                 ViewData["ModalMessage"] = "El rol fue eliminado correctamente.";
                 ViewData["RedirectPage"] = "Index";
-            }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
-            {
-                // ⚠️ Si el error es por restricción FK (rol asignado a usuarios)
-                if (ex.Number == 1451)
-                {
-                    ViewData["ModalType"] = "error";
-                    ViewData["ModalTitle"] = "Error";
-                    ViewData["ModalMessage"] = "No se puede eliminar un registro con datos relacionados.";
-                }
-                
-                // Registrar el error técnico en bitácora
-                int idUsuario = 1;
-                await _bitacoraService.Registrar(
-                    idUsuario,
-                    idAccion: 99,
-                    detalle: new { Error = ex.Message },
-                    nombreAccion: "Error al eliminar Rol"
-                );
             }
             catch (InvalidOperationException ex)
             {
@@ -77,6 +53,5 @@ namespace EjemploProyecto.Pages.Roles
 
             return Page();
         }
-
     }
 }
