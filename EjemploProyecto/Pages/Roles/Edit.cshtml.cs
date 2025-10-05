@@ -44,23 +44,14 @@ namespace EjemploProyecto.Pages.Roles
 
             try
             {
-                
                 var anterior = _rolService.ObtenerRoles()
                     .FirstOrDefault(r => r.ID_Rol_Usuario == Rol.ID_Rol_Usuario);
 
-             
                 _rolService.ActualizarRol(Rol);
 
-                
-                int idUsuario = 1; // temporal — luego se obtiene del usuario logueado
-                await _bitacoraService.Registrar(
-                    idUsuario,
-                    idAccion: 2,
-                    detalle: new { Antes = anterior, Despues = Rol },
-                    nombreAccion: "EL rol ha sido actualizado"
-                );
+              
+                await _bitacoraService.Registrar(1, 2, new { Antes = anterior, Despues = Rol }, "UPDATE");
 
-           
                 ViewData["ModalType"] = "success";
                 ViewData["ModalTitle"] = "Actualización exitosa";
                 ViewData["ModalMessage"] = "El rol fue actualizado correctamente.";
@@ -68,15 +59,6 @@ namespace EjemploProyecto.Pages.Roles
             }
             catch (InvalidOperationException ex)
             {
-             
-                int idUsuario = 1;
-                await _bitacoraService.Registrar(
-                    idUsuario,
-                    idAccion: 99,
-                    detalle: new { Error = ex.Message },
-                    nombreAccion: "Error al actualizar Rol"
-                );
-
                 ViewData["ModalType"] = "error";
                 ViewData["ModalTitle"] = "Error";
                 ViewData["ModalMessage"] = ex.Message;
@@ -86,3 +68,5 @@ namespace EjemploProyecto.Pages.Roles
         }
     }
 }
+    
+

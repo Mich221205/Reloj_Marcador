@@ -31,15 +31,12 @@ namespace EjemploProyecto.Pages.Roles
         {
             try
             {
-                // 🔹 Primero obtenemos el registro antes de eliminarlo
                 var eliminado = _rolService.ObtenerRoles()
                     .FirstOrDefault(r => r.ID_Rol_Usuario == Rol.ID_Rol_Usuario);
 
-                // 🔹 Eliminamos el registro
                 _rolService.EliminarRol(Rol.ID_Rol_Usuario);
 
-               
-                int idUsuario = 1; // ⚠️ temporal, luego vendrá del login
+                int idUsuario = 1;
                 await _bitacoraService.Registrar(
                     idUsuario,
                     idAccion: 3,
@@ -47,23 +44,32 @@ namespace EjemploProyecto.Pages.Roles
                     nombreAccion: "Eliminación de Rol"
                 );
 
-        
                 ViewData["ModalType"] = "success";
                 ViewData["ModalTitle"] = "Eliminación exitosa";
                 ViewData["ModalMessage"] = "El rol fue eliminado correctamente.";
                 ViewData["RedirectPage"] = "Index";
             }
-            catch (InvalidOperationException ex)
+            catch (MySql.Data.MySqlClient.MySqlException ex)
             {
+                // ⚠️ Si el error es por restricción FK (rol asignado a usuarios)
+                if (ex.Number == 1451)
+                {
+                    ViewData["ModalType"] = "error";
+                    ViewData["ModalTitle"] = "Error";
+                    ViewData["ModalMessage"] = "No se puede eliminar un registro con datos relacionados.";
+                }
                 
+                // Registrar el error técnico en bitácora
                 int idUsuario = 1;
                 await _bitacoraService.Registrar(
                     idUsuario,
-                    idAccion: 99, // Error técnico
+                    idAccion: 99,
                     detalle: new { Error = ex.Message },
                     nombreAccion: "Error al eliminar Rol"
                 );
-
+            }
+            catch (InvalidOperationException ex)
+            {
                 ViewData["ModalType"] = "error";
                 ViewData["ModalTitle"] = "Error";
                 ViewData["ModalMessage"] = ex.Message;
@@ -71,5 +77,6 @@ namespace EjemploProyecto.Pages.Roles
 
             return Page();
         }
+
     }
 }
