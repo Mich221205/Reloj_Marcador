@@ -22,7 +22,7 @@ namespace EjemploCoreWeb.Repository
         {
             using (var connection = _dbConnectionFactory.CreateConnection())
             {
-                return await connection.QueryAsync<Usuario>("SELECT Nombre,Identificacion, Apellido_1 , Apellido_2 FROM Usuario");
+                return await connection.QueryAsync<Usuario>("SELECT Nombre,Identificacion, Apellido_1 , Apellido_2 FROM Usuario WHERE ID_ROL_USUARIO = 2");
             }
         }
 
