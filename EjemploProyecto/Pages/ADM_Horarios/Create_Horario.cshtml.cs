@@ -24,27 +24,42 @@ namespace EjemploProyecto.Pages.ADM_Horarios
 
         public List<Horarios> AreasDisponibles { get; set; }
 
-        // Cargar todas las áreas (o las del usuario si se quisiera)
+        // 🔹 Cargar las áreas del usuario según su identificación
         public async Task OnGetAsync(string id)
         {
-            // Cargar todas las áreas del sistema
-            AreasDisponibles = (await _horarioService.Obtener_Todas_AreasAsync()).ToList();
-
-            // Si viene la identificación del usuario, se precarga
             if (!string.IsNullOrWhiteSpace(id))
             {
-                Horario.Identificacion = id;
+                // Aquí sí: el método devuelve una lista
+                AreasDisponibles = (await _horarioService.Obtener_Areas_UsuarioAsync(id)).ToList();
+                Horario.Identificacion = id; // precargar la identificación en el form
             }
         }
 
-        // Crear nuevo horario
+        // 🔹 Crear nuevo horario
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
                 return Page();
 
-            await _horarioService.InsertHorarioAsync(Horario);
-            return RedirectToPage("Detalle_Horarios");
+            try
+            {
+                // Buscar ID_Usuario real en base a la Identificación
+                var horarios = await _horarioService.Obtener_Horario_UsuarioAsync(Horario.Identificacion);
+                var usuario = horarios.FirstOrDefault(); // si ya tienes el usuario cargado
+                if (usuario == null)
+                    throw new InvalidOperationException("No se encontró el usuario asociado.");
+
+                // Insertar horario nuevo
+                await _horarioService.InsertHorarioAsync(Horario);
+
+                TempData["SuccessMessage"] = "Horario creado correctamente.";
+                return RedirectToPage("Detalle_Horarios", new { id = Horario.Identificacion });
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Error al crear horario: {ex.Message}";
+                return Page();
+            }
         }
     }
 }

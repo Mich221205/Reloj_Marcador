@@ -173,26 +173,27 @@ namespace EjemploProyecto.Pages.ADM_Horarios
         }
 
 
-        public async Task<PartialViewResult> OnPostCrearHorarioAsync(Horarios horario)
-        {
-            try
-            {
-                await _horariosService.InsertHorarioAsync(horario);
-                ModalType = "success";
-                ModalTitle = "Éxito";
-                ModalMessage = "Horario creado correctamente.";
+        //public async Task<PartialViewResult> OnPostCrearHorarioAsync(Horarios horario)
+        //{
+        //    try
+        //    {
+        //        await _horariosService.InsertHorarioAsync(horario);
+                
+        //        ModalType = "success";
+        //        ModalTitle = "Éxito";
+        //        ModalMessage = "Horario creado correctamente.";
 
-                // Refrescamos la lista
-                Horarios = (await _horariosService.Obtener_Horario_UsuarioAsync(horario.Identificacion)).ToList();
-            }
-            catch (Exception ex)
-            {
-                ModalType = "error";
-                ModalTitle = "Error";
-                ModalMessage = ex.Message;
-            }
+        //        // Refrescamos la lista
+        //        Horarios = (await _horariosService.Obtener_Horario_UsuarioAsync(horario.Identificacion)).ToList();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        ModalType = "error";
+        //        ModalTitle = "Error";
+        //        ModalMessage = ex.Message;
+        //    }
 
-            return Partial("_HorariosLista", this);
-        }
+        //    return Partial("_HorariosLista", this);
+        //}
     }
 }

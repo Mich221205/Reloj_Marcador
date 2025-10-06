@@ -63,22 +63,31 @@ namespace EjemploCoreWeb.Repository
 
 
         //INSERT Horario
-        public async Task<int> InsertHorarioAsync(Horarios Horario)
+        public async Task<int> InsertHorarioAsync(Horarios horario)
         {
             using (var connection = _dbConnectionFactory.CreateConnection())
             {
-                var sql = @"INSERT INTO Horario 
-                    (ID_Usuario, ID_Area, Codigo_Area)
-                    VALUES (@ID_Usuario, @ID_Area, @Codigo_Area)";
+                // Buscar el ID_Usuario usando la Identificación
+                const string getUserSql = "SELECT ID_Usuario FROM Usuario WHERE Identificacion = @Identificacion";
+                var idUsuario = await connection.ExecuteScalarAsync<int?>(getUserSql, new { horario.Identificacion });
 
-                try
+                if (idUsuario == null)
+                    throw new InvalidOperationException("No se encontró un usuario con esa identificación.");
+
+                horario.ID_Area = horario.ID_Area; // ya viene del formulario
+                horario.Codigo_Area = horario.Codigo_Area; // ya viene del combo
+                horario.Identificacion = horario.Identificacion;
+
+                const string insertSql = @"
+            INSERT INTO Horario (ID_Usuario, ID_Area, Codigo_Area)
+            VALUES (@ID_Usuario, @ID_Area, @Codigo_Area)";
+
+                return await connection.ExecuteAsync(insertSql, new
                 {
-                    return await connection.ExecuteAsync(sql, Horario);
-                }
-                catch (MySqlException ex) when (ex.Number == 1062) // Error de clave duplicada
-                {
-                    throw new InvalidOperationException("Horario ya existente");
-                }
+                    ID_Usuario = idUsuario,
+                    horario.ID_Area,
+                    horario.Codigo_Area
+                });
             }
         }
 
@@ -131,20 +140,24 @@ namespace EjemploCoreWeb.Repository
             }
         }
 
-        // Obtener las áreas en las que trabaja un usuario (por Identificación)
-        public async Task<IEnumerable<Horarios>> Obtener_Areas_UsuarioAsync()
+        //Obtener las áreas en las que trabaja un usuario(por Identificación)
+        public async Task<IEnumerable<Horarios>> Obtener_Areas_UsuarioAsync(string identificacion)
         {
             using (var connection = _dbConnectionFactory.CreateConnection())
             {
                 const string sql = @"
             SELECT 
-                ID_Area, 
-                Nombre_Area, 
-                Codigo_Area
-            FROM Areas;
+                a.ID_Area, 
+                a.Nombre_Area, 
+                a.Codigo_Area
+            FROM Usuario_Area ua
+            INNER JOIN Areas a ON ua.ID_Area = a.ID_Area
+            INNER JOIN Usuario u ON ua.ID_Usuario = u.ID_Usuario
+            WHERE u.Identificacion = @Identificacion;
         ";
 
-                return await connection.QueryAsync<Horarios>(sql);
+                var parameters = new { Identificacion = identificacion };
+                return await connection.QueryAsync<Horarios>(sql, parameters);
             }
         }
 

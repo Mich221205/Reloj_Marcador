@@ -8,19 +8,19 @@
 <hr />
 
 <div class="row">
-    <div class="col-md-4">
-        <form method="post">
+    <div class="col-md-5">
+        <form method="post" onsubmit="sincronizarCodigo()">
             <!-- 🔹 Identificación del usuario -->
             <div class="form-group mb-3">
                 <label asp-for="Horario.Identificacion" class="control-label">Identificación del Usuario</label>
-                <input asp-for="Horario.Identificacion" class="form-control" id="identificacionUsuario" />
+                <input asp-for="Horario.Identificacion" class="form-control" readonly />
                 <span asp-validation-for="Horario.Identificacion" class="text-danger"></span>
             </div>
 
             <!-- 🔹 Combo de áreas -->
             <div class="form-group mb-3">
                 <label class="control-label">Área en la que trabaja</label>
-                <select id="selectArea" asp-for="Horario.ID_Area" class="form-select">
+                <select id="selectArea" asp-for="Horario.ID_Area" class="form-select" onchange="actualizarCodigoArea()">
                     <option value="">Seleccione un área</option>
                     @if (Model.AreasDisponibles != null && Model.AreasDisponibles.Any())
                     {
@@ -33,15 +33,42 @@
                 <span asp-validation-for="Horario.ID_Area" class="text-danger"></span>
             </div>
 
+            <!-- 🔹 Código de área -->
+            <div class="form-group mb-3">
+                <label asp-for="Horario.Codigo_Area" class="control-label">Código del Área</label>
+                <input asp-for="Horario.Codigo_Area" class="form-control" id="codigoArea" readonly />
+                <span asp-validation-for="Horario.Codigo_Area" class="text-danger"></span>
+            </div>
 
-            <!--  Botón crear -->
+            <!-- 🔹 Botón crear -->
             <div class="form-group mt-4">
-                <input type="submit" value="Nuevo" class="btn btn-primary" />
+                <input type="submit" value="Crear Horario" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div class="mt-3">
-    <a asp-page="Detalle_Horarios">Volver a la lista</a>
+    <a asp-page="/ADM_Horarios/Detalle_Horarios" asp-route-id="@Model.Horario.Identificacion">Volver a la lista</a>
 </div>
+
+@section Scripts {
+    <script>
+        // 🔸 Actualiza el código cuando cambia el área
+        function actualizarCodigoArea() {
+            const select = document.getElementById("selectArea");
+            const codigo = select.options[select.selectedIndex]?.getAttribute("data-codigo") || "";
+            document.getElementById("codigoArea").value = codigo;
+        }
+
+        // 🔸 Antes de enviar, sincroniza el código para que se envíe en el POST
+        function sincronizarCodigo() {
+            const codigo = document.getElementById("codigoArea").value;
+            const hidden = document.createElement("input");
+            hidden.type = "hidden";
+            hidden.name = "Horario.Codigo_Area";
+            hidden.value = codigo;
+            document.forms[0].appendChild(hidden);
+        }
+    </script>
+}

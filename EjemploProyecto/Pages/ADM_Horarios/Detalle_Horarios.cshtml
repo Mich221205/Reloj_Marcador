@@ -6,6 +6,18 @@
 
 <h1>Horarios del usuario</h1>
 
+<p>
+<p>
+    <a class="btn btn-primary"
+       asp-page="Create_Horario"
+       asp-route-id="@Model.IdentificacionUsuario">
+        Nuevo
+    </a>
+</p>
+
+
+    </p>
+
 <form id="__af" method="post" style="display:none">
     @Html.AntiForgeryToken()
 </form>

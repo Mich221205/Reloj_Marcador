@@ -76,9 +76,10 @@ namespace EjemploCoreWeb.Services
             return _admHorariosRepository.DeleteDetalleHorarioAsync(idDetalle);
         }
 
-        public Task<IEnumerable<Horarios>> Obtener_Todas_AreasAsync()
+
+        public Task<IEnumerable<Horarios>> Obtener_Areas_UsuarioAsync(string identificacion)
         {
-            return _admHorariosRepository.Obtener_Areas_UsuarioAsync();
+            return _admHorariosRepository.Obtener_Areas_UsuarioAsync(identificacion);
         }
 
 
