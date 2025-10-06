@@ -31,6 +31,8 @@
 
 <form id="__af" method="post" style="display:none">
     @Html.AntiForgeryToken()
+    <!-- 🔹 AGREGAR ESTO: Campo hidden para mantener la identificación -->
+    <input type="hidden" name="IdentificacionUsuario" value="@Model.IdentificacionUsuario" />
 </form>
 
 <!-- Contenedor dinámico para la lista de horarios -->
@@ -160,31 +162,46 @@
             mostrarModalDesdeServidor(html);
         }
 
-        // --- 4) Eliminar horario ---
-        async function eliminarHorario(id_Horario) {
+                // --- 4) Eliminar horario ---
+                async function eliminarHorario(id_Horario) {
             const data = new FormData();
             data.append('id_Horario', id_Horario);
             data.append('__RequestVerificationToken', getToken());
 
-            const res = await fetch('?handler=EliminarHorario', {
-                method: 'POST',
-                body: data,
-                credentials: 'same-origin'
-            });
+            // Enviar la identificación del usuario
+            const identificacionUsuario = document.querySelector('input[name="IdentificacionUsuario"]')?.value;
+            if (identificacionUsuario) {
+                data.append('IdentificacionUsuario', identificacionUsuario);
+            }
 
-            const html = await res.text();
+            try {
+                const res = await fetch('?handler=EliminarHorario', {
+                    method: 'POST',
+                    body: data,
+                    credentials: 'same-origin'
+                });
 
-            // 🔹 ACTUALIZAR: Solo la lista de horarios
-            document.getElementById('contenedorHorarios').innerHTML = html;
+                const html = await res.text();
 
-            // 🔹 LIMPIAR el panel de detalles
-            document.getElementById('contenedorDetalles').innerHTML = '';
+                // 🔹 **ACTUALIZAR**: Solo la lista de horarios
+                document.getElementById('contenedorHorarios').innerHTML = html;
 
-            // Mostrar modal de éxito/error
-            const modalMsg = document.getElementById('messageModal');
-            if (modalMsg) {
-                const modal = new bootstrap.Modal(modalMsg);
-                modal.show();
+                // 🔹 **LIMPIAR** el panel de detalles
+                document.getElementById('contenedorDetalles').innerHTML = '';
+
+                // 🔹 **CORRECCIÓN**: Buscar y mostrar el modal dentro del HTML actualizado
+                const modalElement = document.getElementById('messageModal');
+                if (modalElement) {
+                    const modal = new bootstrap.Modal(modalElement);
+                    modal.show();
+                } else {
+                    console.log('✅ Horario eliminado correctamente');
+                }
+
+            } catch (error) {
+                console.error('❌ Error al eliminar horario:', error);
+                // 🔹 **Mostrar alerta si falla el fetch**
+                alert('Error al eliminar el horario: ' + error.message);
             }
         }
 

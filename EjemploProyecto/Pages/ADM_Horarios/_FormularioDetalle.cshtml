@@ -9,7 +9,7 @@
     <div class="row g-3">
         <div class="col-md-3">
             <label class="form-label">Día</label>
-            <select name="Dia" class="form-select">
+            <select name="Dia" class="form-select" id="selectDia">
                 <option value="">Seleccione un día</option>
                 <option>Lunes</option>
                 <option>Martes</option>
@@ -23,27 +23,53 @@
 
         <div class="col-md-2">
             <label class="form-label">Hora ingreso</label>
-            <input name="Hora_Ingreso" class="form-control" type="number" min="0" max="23" />
+            <input name="Hora_Ingreso" class="form-control" type="number" min="0" max="23" id="horaIngreso" />
         </div>
 
         <div class="col-md-2">
             <label class="form-label">Minuto ingreso</label>
-            <input name="Minuto_Ingreso" class="form-control" type="number" min="0" max="59" />
+            <input name="Minuto_Ingreso" class="form-control" type="number" min="0" max="59" id="minutoIngreso" />
         </div>
 
         <div class="col-md-2">
             <label class="form-label">Hora salida</label>
-            <input name="Hora_Salida" class="form-control" type="number" min="0" max="23" />
+            <input name="Hora_Salida" class="form-control" type="number" min="0" max="23" id="horaSalida" />
         </div>
 
         <div class="col-md-2">
             <label class="form-label">Minuto salida</label>
-            <input name="Minuto_Salida" class="form-control" type="number" min="0" max="59" />
+            <input name="Minuto_Salida" class="form-control" type="number" min="0" max="59" id="minutoSalida" />
         </div>
 
         <div class="col-md-12 mt-3">
-            <button type="button" class="btn btn-success" onclick="agregarDetalle()">Agregar</button>
+            <button type="button" class="btn btn-success" onclick="agregarDetalle()" id="btnAgregarDetalle">Agregar</button>
             <a asp-page="/ADM_Usuario/Index" class="btn btn-secondary">Volver</a>
         </div>
     </div>
 </form>
+
+<script>
+    // Validación del formulario de detalles
+    document.addEventListener('DOMContentLoaded', function() {
+        const btnAgregar = document.getElementById('btnAgregarDetalle');
+        if (btnAgregar) {
+            btnAgregar.addEventListener('click', function() {
+                const dia = document.getElementById('selectDia').value;
+                const horaIngreso = document.getElementById('horaIngreso').value;
+                const horaSalida = document.getElementById('horaSalida').value;
+
+                if (!dia) {
+                    alert('Por favor seleccione un día');
+                    return;
+                }
+
+                if (!horaIngreso || !horaSalida) {
+                    alert('Por favor complete las horas de ingreso y salida');
+                    return;
+                }
+
+                console.log('Agregando detalle para horario:', @Model.HorarioSeleccionadoId);
+            });
+        }
+    });
+</script>

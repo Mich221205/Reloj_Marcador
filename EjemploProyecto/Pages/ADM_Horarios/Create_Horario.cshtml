@@ -7,7 +7,7 @@
 <h1>Crear Nuevo Horario</h1>
 <hr />
 
-<!-- 🔹 AGREGAR: Mostrar mensajes -->
+<!-- 🔹 Mostrar mensajes -->
 @if (TempData["SuccessMessage"] != null)
 {
     <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -59,12 +59,12 @@
                 <span asp-validation-for="Horario.Codigo_Area" class="text-danger"></span>
             </div>
 
-            <!-- 🔹 AGREGAR ESTO: Campo hidden para Nombre_Area -->
+            <!-- 🔹 Campo hidden para Nombre_Area -->
             <input type="hidden" asp-for="Horario.Nombre_Area" id="nombreArea" />
 
             <!-- 🔹 Botón crear -->
             <div class="form-group mt-4">
-                <input type="submit" value="Crear Horario" class="btn btn-primary" />
+                <input type="submit" value="Crear Horario" class="btn btn-primary" id="btnSubmit" />
             </div>
         </form>
     </div>
@@ -116,7 +116,7 @@
 
         // Inicializar al cargar la página
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('Página cargada correctamente');
+            console.log('Página de crear horario cargada correctamente');
             // Si hay un área seleccionada por defecto, actualizar los campos
             actualizarCodigoArea();
         });

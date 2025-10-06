@@ -42,11 +42,10 @@ namespace EjemploProyecto.Pages.ADM_Horarios
         {
             IdentificacionUsuario = id; // guarda la identificación del usuario actual
 
+            // 🔹 **Siempre cargar horarios, incluso si está vacío**
             var horarios = await _horariosService.Obtener_Horario_UsuarioAsync(id);
-            if (horarios == null || !horarios.Any())
-                return Page(); // sigue mostrando la vista vacía, pero mantiene la identificación
+            Horarios = horarios?.ToList() ?? new List<Horarios>();
 
-            Horarios = horarios.ToList();
             return Page();
         }
 
@@ -54,9 +53,7 @@ namespace EjemploProyecto.Pages.ADM_Horarios
         {
             HorarioSeleccionadoId = id;
             MostrarFormulario = true;
-
             Detalles = (await _horariosService.Obtener_Detalles_HorarioAsync(id)).ToList();
-
             return Partial("_DetallesPanel", this);
         }
 
@@ -78,11 +75,8 @@ namespace EjemploProyecto.Pages.ADM_Horarios
                 else
                 {
                     DetalleHorario.ID_Horario = HorarioSeleccionadoId;
-
                     await _horariosService.InsertDetalleHorarioAsync(DetalleHorario);
-
                     Detalles = (await _horariosService.Obtener_Detalles_HorarioAsync(HorarioSeleccionadoId)).ToList();
-
                     ModalType = "success";
                     ModalTitle = "Éxito";
                     ModalMessage = "Detalle agregado correctamente.";
@@ -93,7 +87,6 @@ namespace EjemploProyecto.Pages.ADM_Horarios
                 ModalType = "error";
                 ModalTitle = "Error";
                 ModalMessage = ex.Message;
-
                 Detalles = (await _horariosService.Obtener_Detalles_HorarioAsync(HorarioSeleccionadoId)).ToList();
             }
             catch (Exception ex)
@@ -101,7 +94,6 @@ namespace EjemploProyecto.Pages.ADM_Horarios
                 ModalType = "error";
                 ModalTitle = "Error inesperado";
                 ModalMessage = $"Se produjo un error: {ex.Message}";
-
                 Detalles = (await _horariosService.Obtener_Detalles_HorarioAsync(HorarioSeleccionadoId)).ToList();
             }
 
@@ -112,23 +104,39 @@ namespace EjemploProyecto.Pages.ADM_Horarios
         {
             try
             {
-                // Validar el ID del horario recibido
+                Console.WriteLine($"🔹 Eliminando horario: {id_Horario}");
+
+                // 🔹 **CORRECCIÓN CRÍTICA**: Obtener la identificación del form
+                if (Request.Form.ContainsKey("IdentificacionUsuario"))
+                {
+                    IdentificacionUsuario = Request.Form["IdentificacionUsuario"].ToString();
+                }
+                else
+                {
+                    // Fallback: intentar obtener de Query
+                    IdentificacionUsuario = Request.Query["id"].ToString();
+                }
+
+                Console.WriteLine($"🔹 IdentificacionUsuario: {IdentificacionUsuario}");
+
                 if (id_Horario <= 0)
                 {
                     ModalType = "warning";
                     ModalTitle = "Advertencia";
                     ModalMessage = "Debe seleccionar un horario válido para eliminar.";
-                    return Partial("_HorariosLista", this); // 🔹 Cambiar a _HorariosLista
+                    return Partial("_HorariosLista", this);
                 }
 
                 // Eliminar horario en BD
                 await _horariosService.DeleteHorarioAsync(id_Horario);
 
-                // Actualizar la lista de horarios después de eliminar
-                var idUsuario = Request.Query["id"].ToString();
-                Horarios = (await _horariosService.Obtener_Horario_UsuarioAsync(idUsuario))?.ToList() ?? new List<Horarios>();
+                // 🔹 **Cargar horarios actualizados**
+                var horariosActualizados = await _horariosService.Obtener_Horario_UsuarioAsync(IdentificacionUsuario);
+                Horarios = horariosActualizados?.ToList() ?? new List<Horarios>();
 
-                // 🔹 LIMPIAR el panel de detalles si eliminamos el horario seleccionado
+                Console.WriteLine($"🔹 Horarios después de eliminar: {Horarios.Count}");
+
+                // Limpiar panel de detalles si eliminamos el horario seleccionado
                 if (HorarioSeleccionadoId == id_Horario)
                 {
                     MostrarFormulario = false;
@@ -140,21 +148,42 @@ namespace EjemploProyecto.Pages.ADM_Horarios
                 ModalTitle = "Éxito";
                 ModalMessage = "El horario fue eliminado correctamente.";
 
-                // 🔹 CAMBIO IMPORTANTE: Devolver _HorariosLista en lugar de _DetallesPanel
+                // 🔹 **AGREGAR ESTO**: Pasar los datos del modal al ViewData
+                ViewData["ModalType"] = ModalType;
+                ViewData["ModalTitle"] = ModalTitle;
+                ViewData["ModalMessage"] = ModalMessage;
+
                 return Partial("_HorariosLista", this);
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"❌ Error eliminando horario: {ex.Message}");
+
                 ModalType = "error";
                 ModalTitle = "Error";
                 ModalMessage = $"No se pudo eliminar el horario: {ex.Message}";
 
-                // 🔹 También devolver _HorariosLista en caso de error
+                // Intentar recargar horarios incluso en error
+                try
+                {
+                    var ident = Request.Form.ContainsKey("IdentificacionUsuario")
+                        ? Request.Form["IdentificacionUsuario"].ToString()
+                        : Request.Query["id"].ToString();
+
+                    Horarios = (await _horariosService.Obtener_Horario_UsuarioAsync(ident))?.ToList() ?? new List<Horarios>();
+                }
+                catch
+                {
+                    Horarios = new List<Horarios>();
+
+                    ViewData["ModalType"] = ModalType;
+                    ViewData["ModalTitle"] = ModalTitle;
+                    ViewData["ModalMessage"] = ModalMessage;
+                }
+
                 return Partial("_HorariosLista", this);
             }
-        }
-
-
+        } 
 
         public async Task<PartialViewResult> OnPostEliminarDetalleAsync(int idDetalle)
         {
@@ -166,9 +195,7 @@ namespace EjemploProyecto.Pages.ADM_Horarios
             try
             {
                 await _horariosService.DeleteDetalleHorarioAsync(idDetalle);
-
                 Detalles = (await _horariosService.Obtener_Detalles_HorarioAsync(HorarioSeleccionadoId)).ToList();
-
                 ModalType = "success";
                 ModalTitle = "Éxito";
                 ModalMessage = "El detalle fue eliminado correctamente.";
@@ -182,6 +209,5 @@ namespace EjemploProyecto.Pages.ADM_Horarios
 
             return Partial("_DetallesPanel", this);
         }
-
     }
 }
