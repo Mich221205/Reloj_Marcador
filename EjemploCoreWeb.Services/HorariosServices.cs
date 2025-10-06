@@ -29,9 +29,17 @@ namespace EjemploCoreWeb.Services
         }
 
         // INSERTS
-        public Task<int> InsertHorarioAsync(Horarios horario)
+        public async Task<int> InsertHorarioAsync(Horarios horario)
         {
-            return _admHorariosRepository.InsertHorarioAsync(horario);
+            Console.WriteLine($"🔹 Service: InsertHorarioAsync iniciado");
+            Console.WriteLine($"🔹 Service - Identificación: {horario.Identificacion}");
+            Console.WriteLine($"🔹 Service - ID_Area: {horario.ID_Area}");
+            Console.WriteLine($"🔹 Service - Codigo_Area: {horario.Codigo_Area}");
+
+            var result = await _admHorariosRepository.InsertHorarioAsync(horario);
+
+            Console.WriteLine($"🔹 Service: InsertHorarioAsync completado. Resultado: {result}");
+            return result;
         }
 
         public async Task<int> InsertDetalleHorarioAsync(Detalle_Horarios detalle)
@@ -82,6 +90,10 @@ namespace EjemploCoreWeb.Services
             return _admHorariosRepository.Obtener_Areas_UsuarioAsync(identificacion);
         }
 
+        public async Task<int> Obtener_IdUsuario_Por_IdentificacionAsync(string identificacion)
+        {
+            return await _admHorariosRepository.Obtener_IdUsuario_Por_IdentificacionAsync(identificacion);
+        }
 
     }
 }

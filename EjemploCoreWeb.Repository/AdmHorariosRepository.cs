@@ -67,27 +67,59 @@ namespace EjemploCoreWeb.Repository
         {
             using (var connection = _dbConnectionFactory.CreateConnection())
             {
-                // Buscar el ID_Usuario usando la Identificación
-                const string getUserSql = "SELECT ID_Usuario FROM Usuario WHERE Identificacion = @Identificacion";
-                var idUsuario = await connection.ExecuteScalarAsync<int?>(getUserSql, new { horario.Identificacion });
-
-                if (idUsuario == null)
-                    throw new InvalidOperationException("No se encontró un usuario con esa identificación.");
-
-                horario.ID_Area = horario.ID_Area; // ya viene del formulario
-                horario.Codigo_Area = horario.Codigo_Area; // ya viene del combo
-                horario.Identificacion = horario.Identificacion;
-
-                const string insertSql = @"
-            INSERT INTO Horario (ID_Usuario, ID_Area, Codigo_Area)
-            VALUES (@ID_Usuario, @ID_Area, @Codigo_Area)";
-
-                return await connection.ExecuteAsync(insertSql, new
+                try
                 {
-                    ID_Usuario = idUsuario,
-                    horario.ID_Area,
-                    horario.Codigo_Area
-                });
+                    Console.WriteLine($"🔹 Iniciando InsertHorarioAsync");
+                    Console.WriteLine($"🔹 Identificación recibida: {horario.Identificacion}");
+                    Console.WriteLine($"🔹 ID_Area recibido: {horario.ID_Area}");
+                    Console.WriteLine($"🔹 Codigo_Area recibido: {horario.Codigo_Area}");
+
+                    // Buscar el ID_Usuario usando la Identificación
+                    const string getUserSql = "SELECT ID_Usuario FROM Usuario WHERE Identificacion = @Identificacion";
+                    var idUsuario = await connection.ExecuteScalarAsync<int?>(getUserSql, new { horario.Identificacion });
+
+                    Console.WriteLine($"🔹 ID_Usuario encontrado: {idUsuario}");
+
+                    if (idUsuario == null)
+                    {
+                        Console.WriteLine($"❌ ERROR: No se encontró usuario con identificación: {horario.Identificacion}");
+                        throw new InvalidOperationException("No se encontró un usuario con esa identificación.");
+                    }
+
+                    const string insertSql = @"
+                INSERT INTO Horario (ID_Usuario, ID_Area, Codigo_Area)
+                VALUES (@ID_Usuario, @ID_Area, @Codigo_Area)";
+
+                    var parameters = new
+                    {
+                        ID_Usuario = idUsuario,
+                        ID_Area = horario.ID_Area,
+                        Codigo_Area = horario.Codigo_Area
+                    };
+
+                    Console.WriteLine($"🔹 Ejecutando INSERT con parámetros:");
+                    Console.WriteLine($"   - ID_Usuario: {idUsuario}");
+                    Console.WriteLine($"   - ID_Area: {horario.ID_Area}");
+                    Console.WriteLine($"   - Codigo_Area: {horario.Codigo_Area}");
+
+                    var result = await connection.ExecuteAsync(insertSql, parameters);
+
+                    Console.WriteLine($"✅ INSERT ejecutado. Filas afectadas: {result}");
+
+                    // Verificar si realmente se insertó
+                    const string verifySql = "SELECT COUNT(*) FROM Horario WHERE ID_Usuario = @ID_Usuario AND ID_Area = @ID_Area";
+                    var count = await connection.ExecuteScalarAsync<int>(verifySql, new { ID_Usuario = idUsuario, ID_Area = horario.ID_Area });
+
+                    Console.WriteLine($"🔹 Horarios existentes después del INSERT: {count}");
+
+                    return result;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"❌ ERROR CRÍTICO en InsertHorarioAsync: {ex.Message}");
+                    Console.WriteLine($"❌ StackTrace: {ex.StackTrace}");
+                    throw;
+                }
             }
         }
 
@@ -161,7 +193,15 @@ namespace EjemploCoreWeb.Repository
             }
         }
 
-
+        public async Task<int> Obtener_IdUsuario_Por_IdentificacionAsync(string identificacion)
+        {
+            using (var connection = _dbConnectionFactory.CreateConnection())
+            {
+                const string sql = "SELECT ID_Usuario FROM Usuario WHERE Identificacion = @Identificacion";
+                var result = await connection.ExecuteScalarAsync<int?>(sql, new { Identificacion = identificacion });
+                return result ?? 0;
+            }
+        }
 
 
     }

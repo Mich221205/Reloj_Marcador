@@ -118,7 +118,7 @@ namespace EjemploProyecto.Pages.ADM_Horarios
                     ModalType = "warning";
                     ModalTitle = "Advertencia";
                     ModalMessage = "Debe seleccionar un horario válido para eliminar.";
-                    return Partial("_DetallesPanel", this);
+                    return Partial("_HorariosLista", this); // 🔹 Cambiar a _HorariosLista
                 }
 
                 // Eliminar horario en BD
@@ -128,19 +128,30 @@ namespace EjemploProyecto.Pages.ADM_Horarios
                 var idUsuario = Request.Query["id"].ToString();
                 Horarios = (await _horariosService.Obtener_Horario_UsuarioAsync(idUsuario))?.ToList() ?? new List<Horarios>();
 
+                // 🔹 LIMPIAR el panel de detalles si eliminamos el horario seleccionado
+                if (HorarioSeleccionadoId == id_Horario)
+                {
+                    MostrarFormulario = false;
+                    Detalles = new List<Detalle_Horarios>();
+                    HorarioSeleccionadoId = 0;
+                }
+
                 ModalType = "success";
                 ModalTitle = "Éxito";
                 ModalMessage = "El horario fue eliminado correctamente.";
+
+                // 🔹 CAMBIO IMPORTANTE: Devolver _HorariosLista en lugar de _DetallesPanel
+                return Partial("_HorariosLista", this);
             }
             catch (Exception ex)
             {
                 ModalType = "error";
                 ModalTitle = "Error";
                 ModalMessage = $"No se pudo eliminar el horario: {ex.Message}";
-            }
 
-            // Devuelve el panel de detalles para mantener la vista actual
-            return Partial("_DetallesPanel", this);
+                // 🔹 También devolver _HorariosLista en caso de error
+                return Partial("_HorariosLista", this);
+            }
         }
 
 
@@ -172,28 +183,5 @@ namespace EjemploProyecto.Pages.ADM_Horarios
             return Partial("_DetallesPanel", this);
         }
 
-
-        //public async Task<PartialViewResult> OnPostCrearHorarioAsync(Horarios horario)
-        //{
-        //    try
-        //    {
-        //        await _horariosService.InsertHorarioAsync(horario);
-                
-        //        ModalType = "success";
-        //        ModalTitle = "Éxito";
-        //        ModalMessage = "Horario creado correctamente.";
-
-        //        // Refrescamos la lista
-        //        Horarios = (await _horariosService.Obtener_Horario_UsuarioAsync(horario.Identificacion)).ToList();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        ModalType = "error";
-        //        ModalTitle = "Error";
-        //        ModalMessage = ex.Message;
-        //    }
-
-        //    return Partial("_HorariosLista", this);
-        //}
     }
 }

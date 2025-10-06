@@ -7,9 +7,26 @@
 <h1>Crear Nuevo Horario</h1>
 <hr />
 
+<!-- 🔹 AGREGAR: Mostrar mensajes -->
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
 <div class="row">
     <div class="col-md-5">
-        <form method="post" onsubmit="sincronizarCodigo()">
+        <form method="post" id="horarioForm">
             <!-- 🔹 Identificación del usuario -->
             <div class="form-group mb-3">
                 <label asp-for="Horario.Identificacion" class="control-label">Identificación del Usuario</label>
@@ -26,7 +43,9 @@
                     {
                         foreach (var area in Model.AreasDisponibles)
                         {
-                            <option value="@area.ID_Area" data-codigo="@area.Codigo_Area">@area.Nombre_Area</option>
+                            <option value="@area.ID_Area" data-codigo="@area.Codigo_Area" data-nombre="@area.Nombre_Area">
+                                @area.Nombre_Area
+                            </option>
                         }
                     }
                 </select>
@@ -39,6 +58,9 @@
                 <input asp-for="Horario.Codigo_Area" class="form-control" id="codigoArea" readonly />
                 <span asp-validation-for="Horario.Codigo_Area" class="text-danger"></span>
             </div>
+
+            <!-- 🔹 AGREGAR ESTO: Campo hidden para Nombre_Area -->
+            <input type="hidden" asp-for="Horario.Nombre_Area" id="nombreArea" />
 
             <!-- 🔹 Botón crear -->
             <div class="form-group mt-4">
@@ -54,21 +76,49 @@
 
 @section Scripts {
     <script>
-        // 🔸 Actualiza el código cuando cambia el área
         function actualizarCodigoArea() {
             const select = document.getElementById("selectArea");
-            const codigo = select.options[select.selectedIndex]?.getAttribute("data-codigo") || "";
+            const selectedOption = select.options[select.selectedIndex];
+            const codigo = selectedOption?.getAttribute("data-codigo") || "";
+            const nombre = selectedOption?.getAttribute("data-nombre") || "";
+
             document.getElementById("codigoArea").value = codigo;
+            document.getElementById("nombreArea").value = nombre;
+
+            console.log('Área seleccionada:', nombre, 'Código:', codigo);
         }
 
-        // 🔸 Antes de enviar, sincroniza el código para que se envíe en el POST
-        function sincronizarCodigo() {
-            const codigo = document.getElementById("codigoArea").value;
-            const hidden = document.createElement("input");
-            hidden.type = "hidden";
-            hidden.name = "Horario.Codigo_Area";
-            hidden.value = codigo;
-            document.forms[0].appendChild(hidden);
-        }
+        // Validar antes de enviar
+        document.getElementById('horarioForm').addEventListener('submit', function(e) {
+            const idArea = document.querySelector('[name="Horario.ID_Area"]').value;
+            const nombreArea = document.getElementById('nombreArea').value;
+
+            console.log('Validando formulario...');
+            console.log('ID_Area:', idArea);
+            console.log('Nombre_Area:', nombreArea);
+
+            if (!idArea || idArea === '') {
+                console.log('❌ ERROR: Debe seleccionar un área');
+                alert('Por favor selecciona un área');
+                e.preventDefault();
+                return;
+            }
+
+            if (!nombreArea) {
+                console.log('❌ ERROR: Nombre_Area no se cargó correctamente');
+                alert('Error al cargar el nombre del área');
+                e.preventDefault();
+                return;
+            }
+
+            console.log('✅ Formulario válido, enviando...');
+        });
+
+        // Inicializar al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Página cargada correctamente');
+            // Si hay un área seleccionada por defecto, actualizar los campos
+            actualizarCodigoArea();
+        });
     </script>
 }

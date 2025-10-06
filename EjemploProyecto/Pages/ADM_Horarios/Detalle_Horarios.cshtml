@@ -6,17 +6,28 @@
 
 <h1>Horarios del usuario</h1>
 
+<!-- 🔹 Mostrar mensajes de éxito/error -->
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
 <p>
-<p>
-    <a class="btn btn-primary"
-       asp-page="Create_Horario"
-       asp-route-id="@Model.IdentificacionUsuario">
-        Nuevo
+    <a class="btn btn-primary" asp-page="Create_Horario" asp-route-id="@Model.IdentificacionUsuario">
+        Nuevo Horario
     </a>
 </p>
-
-
-    </p>
 
 <form id="__af" method="post" style="display:none">
     @Html.AntiForgeryToken()
@@ -62,10 +73,32 @@
 
 @section Scripts {
     <script>
+        // Variables globales para eliminar
+        let idAEliminar = null;
+        let tipoEliminacion = ''; // 'horario' o 'detalle'
+
         // Obtener token antiforgery
         function getToken() {
             return document.querySelector('input[name="__RequestVerificationToken"]')?.value || '';
         }
+
+        // Configurar el modal de confirmación una sola vez
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelector("#btnConfirmDelete").addEventListener("click", async function () {
+                const modal = bootstrap.Modal.getInstance(document.getElementById("confirmDeleteModal"));
+                modal.hide();
+
+                if (idAEliminar) {
+                    if (tipoEliminacion === 'horario') {
+                        await eliminarHorario(idAEliminar);
+                    } else if (tipoEliminacion === 'detalle') {
+                        await eliminarDetalle(idAEliminar);
+                    }
+                    idAEliminar = null;
+                    tipoEliminacion = '';
+                }
+            });
+        });
 
         // Mostrar modal si viene desde el servidor
         function mostrarModalDesdeServidor(html) {
@@ -128,15 +161,7 @@
         }
 
         // --- 4) Eliminar horario ---
-        let idHorarioAEliminar = null;
-
-        function confirmarEliminarHorario(idHorario) {
-            idHorarioAEliminar = idHorario;
-            const modal = new bootstrap.Modal(document.getElementById("confirmDeleteModal"));
-            modal.show();
-        }
-
-                async function eliminarHorario(id_Horario) {
+        async function eliminarHorario(id_Horario) {
             const data = new FormData();
             data.append('id_Horario', id_Horario);
             data.append('__RequestVerificationToken', getToken());
@@ -148,8 +173,14 @@
             });
 
             const html = await res.text();
+
+            // 🔹 ACTUALIZAR: Solo la lista de horarios
             document.getElementById('contenedorHorarios').innerHTML = html;
 
+            // 🔹 LIMPIAR el panel de detalles
+            document.getElementById('contenedorDetalles').innerHTML = '';
+
+            // Mostrar modal de éxito/error
             const modalMsg = document.getElementById('messageModal');
             if (modalMsg) {
                 const modal = new bootstrap.Modal(modalMsg);
@@ -157,43 +188,19 @@
             }
         }
 
-                let idDetalleAEliminar = null;
+        // --- Funciones de confirmación ---
+        function confirmarEliminarHorario(id) {
+            idAEliminar = id;
+            tipoEliminacion = 'horario';
+            const modal = new bootstrap.Modal(document.getElementById("confirmDeleteModal"));
+            modal.show();
+        }
 
         function confirmarEliminar(idDetalle) {
-            idDetalleAEliminar = idDetalle;
-            const modal = new bootstrap.Modal(document.getElementById("confirmDeleteModal"));
-            modal.show();
-
-            // Cambiar la acción del botón de confirmación para eliminar detalle
-            const btnConfirm = document.getElementById("btnConfirmDelete");
-            btnConfirm.onclick = async function () {
-                const modalInstance = bootstrap.Modal.getInstance(document.getElementById("confirmDeleteModal"));
-                modalInstance.hide();
-
-                if (idDetalleAEliminar) {
-                    await eliminarDetalle(idDetalleAEliminar);
-                    idDetalleAEliminar = null;
-                }
-            };
-        }
-
-
-
-                function confirmarEliminarHorario(id) {
-            idAEliminar = id;
+            idAEliminar = idDetalle;
+            tipoEliminacion = 'detalle';
             const modal = new bootstrap.Modal(document.getElementById("confirmDeleteModal"));
             modal.show();
         }
-
-        document.querySelector("#btnConfirmDelete").addEventListener("click", async function () {
-            if (idAEliminar) {
-                const modal = bootstrap.Modal.getInstance(document.getElementById("confirmDeleteModal"));
-                modal.hide();
-                await eliminarHorario(idAEliminar);
-                idAEliminar = null;
-            }
-        });
-
-
     </script>
 }

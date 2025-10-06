@@ -16,6 +16,8 @@ namespace EjemploCoreWeb.Services.Abstract
         //Task<IEnumerable<Horarios>> Obtener_Todas_AreasAsync();
         Task<IEnumerable<Horarios>> Obtener_Areas_UsuarioAsync(string identificacion);
 
+        Task<int> Obtener_IdUsuario_Por_IdentificacionAsync(string identificacion);
+
 
         // INSERTS
         Task<int> InsertHorarioAsync(Horarios horario);
