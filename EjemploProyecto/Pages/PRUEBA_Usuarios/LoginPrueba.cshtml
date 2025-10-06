@@ -1,0 +1,23 @@
+﻿@page
+@model EjemploProyecto.Pages.PRUEBA_Usuarios.LoginPruebaModel
+
+@{
+    Layout = "_Layout";
+}
+
+<div class="container mt-5" style="max-width:400px;">
+    <h3>Login temporal</h3>
+
+    @if ((bool)(ViewData["Expired"] ?? false))
+    {
+        <div class="alert alert-warning">Tu sesión ha expirado por inactividad.</div>
+    }
+
+    <form method="post">
+        <div class="mb-3">
+            <label>Usuario (cualquiera)</label>
+            <input asp-for="Username" class="form-control" />
+        </div>
+        <button class="btn btn-primary">Entrar</button>
+    </form>
+</div>
