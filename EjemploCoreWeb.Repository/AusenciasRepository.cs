@@ -9,18 +9,18 @@ using System.Threading.Tasks;
 
 namespace EjemploCoreWeb.Repository
 {
-    public class MotivosRepository
+    public class AusenciasRepository
     {
 
         private readonly IDbConnectionFactory _dbConnectionFactory;
 
-        public MotivosRepository(IDbConnectionFactory dbConnectionFactory)
+        public AusenciasRepository(IDbConnectionFactory dbConnectionFactory)
         {
             _dbConnectionFactory = dbConnectionFactory;
         }
 
 
-        //MOTIVOS DE INCONSISTENCIAS
+        //MOTIVOS DE AUSENCIA
         // GET ALL
         public async Task<IEnumerable<Motivos_Ausencia>> CargarMotivosAsync()
         {
@@ -78,9 +78,6 @@ namespace EjemploCoreWeb.Repository
                 return await connection.ExecuteAsync(sql, new { ID_Motivo = idMotivo });
             }
         }
-
-
-
 
 
 

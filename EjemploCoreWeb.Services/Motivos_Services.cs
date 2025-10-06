@@ -11,9 +11,9 @@ namespace EjemploCoreWeb.Services
 {
     public class Motivos_Services : IMotivos_Ausencia
     {
-        private readonly MotivosRepository _motivosRepository;
+        private readonly AusenciasRepository _motivosRepository;
 
-        public Motivos_Services(MotivosRepository motivosRepository)
+        public Motivos_Services(AusenciasRepository motivosRepository)
         {
             _motivosRepository = motivosRepository;
         }

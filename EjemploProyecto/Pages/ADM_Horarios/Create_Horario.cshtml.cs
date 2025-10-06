@@ -24,30 +24,23 @@ namespace EjemploProyecto.Pages.ADM_Horarios
 
         public List<Horarios> AreasDisponibles { get; set; }
 
-        // 🔹 Cargar las áreas del usuario según su identificación
+        // Cargar las áreas del usuario según su identificación
         public async Task OnGetAsync(string id)
         {
             if (!string.IsNullOrWhiteSpace(id))
             {
-                // Aquí sí: el método devuelve una lista
+                // Aquí el método devuelve una lista
                 AreasDisponibles = (await _horarioService.Obtener_Areas_UsuarioAsync(id)).ToList();
                 Horario.Identificacion = id; // precargar la identificación en el form
             }
         }
 
         // Crear nuevo horario
-        // Crear nuevo horario
         public async Task<IActionResult> OnPostAsync()
         {
-            Console.WriteLine($"🔹 OnPostAsync iniciado");
-
+        
             if (!ModelState.IsValid)
             {
-                Console.WriteLine($"❌ ModelState no es válido");
-                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
-                {
-                    Console.WriteLine($"❌ Error de validación: {error.ErrorMessage}");
-                }
 
                 // Recargar áreas si hay error
                 if (!string.IsNullOrWhiteSpace(Horario.Identificacion))
@@ -59,25 +52,15 @@ namespace EjemploProyecto.Pages.ADM_Horarios
 
             try
             {
-                Console.WriteLine($"🔹 ModelState válido, procediendo a insertar");
-                Console.WriteLine($"🔹 Datos del horario:");
-                Console.WriteLine($"   - Identificación: {Horario.Identificacion}");
-                Console.WriteLine($"   - ID_Area: {Horario.ID_Area}");
-                Console.WriteLine($"   - Codigo_Area: {Horario.Codigo_Area}");
-
                 // Insertar horario nuevo
                 var result = await _horarioService.InsertHorarioAsync(Horario);
 
-                Console.WriteLine($"✅ Horario insertado. Resultado: {result}");
-
-                TempData["SuccessMessage"] = "✅ Horario creado correctamente!";
+                //TempData["SuccessMessage"] = "✅ Horario creado correctamente!";
                 return RedirectToPage("Detalle_Horarios", new { id = Horario.Identificacion });
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ EXCEPCIÓN en OnPostAsync: {ex.Message}");
-                Console.WriteLine($"❌ StackTrace: {ex.StackTrace}");
-
+                
                 // Recargar áreas en caso de error
                 if (!string.IsNullOrWhiteSpace(Horario.Identificacion))
                 {

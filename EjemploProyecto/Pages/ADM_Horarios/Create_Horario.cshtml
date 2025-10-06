@@ -7,7 +7,7 @@
 <h1>Crear Nuevo Horario</h1>
 <hr />
 
-<!-- 🔹 Mostrar mensajes -->
+<!-- Mostrar mensajes -->
 @if (TempData["SuccessMessage"] != null)
 {
     <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -27,14 +27,15 @@
 <div class="row">
     <div class="col-md-5">
         <form method="post" id="horarioForm">
-            <!-- 🔹 Identificación del usuario -->
+            
+            <!-- Identificación del usuario -->
             <div class="form-group mb-3">
                 <label asp-for="Horario.Identificacion" class="control-label">Identificación del Usuario</label>
                 <input asp-for="Horario.Identificacion" class="form-control" readonly />
                 <span asp-validation-for="Horario.Identificacion" class="text-danger"></span>
             </div>
 
-            <!-- 🔹 Combo de áreas -->
+            <!-- áreas -->
             <div class="form-group mb-3">
                 <label class="control-label">Área en la que trabaja</label>
                 <select id="selectArea" asp-for="Horario.ID_Area" class="form-select" onchange="actualizarCodigoArea()">
@@ -52,17 +53,17 @@
                 <span asp-validation-for="Horario.ID_Area" class="text-danger"></span>
             </div>
 
-            <!-- 🔹 Código de área -->
+            <!-- Código de área -->
             <div class="form-group mb-3">
                 <label asp-for="Horario.Codigo_Area" class="control-label">Código del Área</label>
                 <input asp-for="Horario.Codigo_Area" class="form-control" id="codigoArea" readonly />
                 <span asp-validation-for="Horario.Codigo_Area" class="text-danger"></span>
             </div>
 
-            <!-- 🔹 Campo hidden para Nombre_Area -->
+            <!-- Campo hidden para Nombre_Area -->
             <input type="hidden" asp-for="Horario.Nombre_Area" id="nombreArea" />
 
-            <!-- 🔹 Botón crear -->
+            <!-- Botón crear -->
             <div class="form-group mt-4">
                 <input type="submit" value="Crear Horario" class="btn btn-primary" id="btnSubmit" />
             </div>
@@ -85,7 +86,6 @@
             document.getElementById("codigoArea").value = codigo;
             document.getElementById("nombreArea").value = nombre;
 
-            console.log('Área seleccionada:', nombre, 'Código:', codigo);
         }
 
         // Validar antes de enviar
@@ -93,30 +93,24 @@
             const idArea = document.querySelector('[name="Horario.ID_Area"]').value;
             const nombreArea = document.getElementById('nombreArea').value;
 
-            console.log('Validando formulario...');
-            console.log('ID_Area:', idArea);
-            console.log('Nombre_Area:', nombreArea);
 
             if (!idArea || idArea === '') {
-                console.log('❌ ERROR: Debe seleccionar un área');
                 alert('Por favor selecciona un área');
                 e.preventDefault();
                 return;
             }
 
             if (!nombreArea) {
-                console.log('❌ ERROR: Nombre_Area no se cargó correctamente');
                 alert('Error al cargar el nombre del área');
                 e.preventDefault();
                 return;
             }
 
-            console.log('✅ Formulario válido, enviando...');
         });
 
         // Inicializar al cargar la página
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('Página de crear horario cargada correctamente');
+           
             // Si hay un área seleccionada por defecto, actualizar los campos
             actualizarCodigoArea();
         });

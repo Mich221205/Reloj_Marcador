@@ -42,7 +42,7 @@ namespace EjemploProyecto.Pages.ADM_Horarios
         {
             IdentificacionUsuario = id; // guarda la identificación del usuario actual
 
-            // 🔹 **Siempre cargar horarios, incluso si está vacío**
+            // Siempre cargar horarios, incluso si está vacío***
             var horarios = await _horariosService.Obtener_Horario_UsuarioAsync(id);
             Horarios = horarios?.ToList() ?? new List<Horarios>();
 
@@ -104,9 +104,8 @@ namespace EjemploProyecto.Pages.ADM_Horarios
         {
             try
             {
-                Console.WriteLine($"🔹 Eliminando horario: {id_Horario}");
 
-                // 🔹 **CORRECCIÓN CRÍTICA**: Obtener la identificación del form
+                // Obtener la identificación del form
                 if (Request.Form.ContainsKey("IdentificacionUsuario"))
                 {
                     IdentificacionUsuario = Request.Form["IdentificacionUsuario"].ToString();
@@ -117,7 +116,6 @@ namespace EjemploProyecto.Pages.ADM_Horarios
                     IdentificacionUsuario = Request.Query["id"].ToString();
                 }
 
-                Console.WriteLine($"🔹 IdentificacionUsuario: {IdentificacionUsuario}");
 
                 if (id_Horario <= 0)
                 {
@@ -130,11 +128,11 @@ namespace EjemploProyecto.Pages.ADM_Horarios
                 // Eliminar horario en BD
                 await _horariosService.DeleteHorarioAsync(id_Horario);
 
-                // 🔹 **Cargar horarios actualizados**
+                // Cargar horarios actualizados
                 var horariosActualizados = await _horariosService.Obtener_Horario_UsuarioAsync(IdentificacionUsuario);
+                
                 Horarios = horariosActualizados?.ToList() ?? new List<Horarios>();
 
-                Console.WriteLine($"🔹 Horarios después de eliminar: {Horarios.Count}");
 
                 // Limpiar panel de detalles si eliminamos el horario seleccionado
                 if (HorarioSeleccionadoId == id_Horario)
@@ -148,7 +146,7 @@ namespace EjemploProyecto.Pages.ADM_Horarios
                 ModalTitle = "Éxito";
                 ModalMessage = "El horario fue eliminado correctamente.";
 
-                // 🔹 **AGREGAR ESTO**: Pasar los datos del modal al ViewData
+                // Pasar los datos del modal al ViewData
                 ViewData["ModalType"] = ModalType;
                 ViewData["ModalTitle"] = ModalTitle;
                 ViewData["ModalMessage"] = ModalMessage;
@@ -157,7 +155,6 @@ namespace EjemploProyecto.Pages.ADM_Horarios
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ Error eliminando horario: {ex.Message}");
 
                 ModalType = "error";
                 ModalTitle = "Error";
