@@ -28,9 +28,8 @@
                 <td>@item.Apellido_1</td>
                 <td>@item.Apellido_2</td>
                 <td>
-                    <a asp-page="Cambio_Clave" asp-route-id="@item.Identificacion">Cambio de clave</a> |
-                    <a asp-page="Delete" asp-route-id="@item.Identificacion">Eliminar</a>
-                    <a asp-page="/ADM_Horarios/Detalle_Horarios" asp-route-id="@item.Identificacion">Administración de horarios</a>
+                    <a class="btn btn-info btn-sm" asp-page="Cambio_Clave" asp-route-id="@item.Identificacion">Cambio de clave</a>
+                    <a class="btn btn-warning btn-sm" asp-page="/ADM_Horarios/Detalle_Horarios" asp-route-id="@item.Identificacion">Administración de horarios</a>
                 </td>
             </tr>
         }

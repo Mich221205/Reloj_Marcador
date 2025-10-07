@@ -10,7 +10,7 @@ namespace EjemploCoreWeb.Services.Abstract
     public interface IMotivos_Ausencia
     {
 
-        //Motivos de inconsistencias
+        //Motivos de Ausencia
 
         Task<IEnumerable<Motivos_Ausencia>> CargarMotivosAsync();
         Task<Motivos_Ausencia?> Cargar_Motivo_X_IDAsync(int idMotivo);
