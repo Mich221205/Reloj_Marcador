@@ -11,8 +11,8 @@ builder.Services.AddRazorPages();
 builder.Services.AddSingleton<IDbConnectionFactory, DbConnectionFactory>();
 
 //Ejemplo del profe
-builder.Services.AddScoped<PersonaRepository>(); //cada solicitud crea un personaRepository
-builder.Services.AddScoped<IPersonaService, PersonaService>();
+//builder.Services.AddScoped<PersonaRepository>(); //cada solicitud crea un personaRepository
+//builder.Services.AddScoped<IPersonaService, PersonaService>();
 
 builder.Services.AddScoped<IInconsistenciaRepository, InconsistenciaRepository>();
 builder.Services.AddScoped<IInconsistenciaService, InconsistenciaService>();

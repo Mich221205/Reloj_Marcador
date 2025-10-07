@@ -50,6 +50,8 @@ namespace EjemploProyecto.Pages.ADM_Horarios
             var horarios = await _horariosService.Obtener_Horario_UsuarioAsync(id);
             Horarios = horarios?.ToList() ?? new List<Horarios>();
 
+            await _bitacoraService.Registrar(1, 4, "El usuario consulta administracion de horarios", "CONSULTA");
+
             return Page();
         }
 
@@ -58,6 +60,7 @@ namespace EjemploProyecto.Pages.ADM_Horarios
             HorarioSeleccionadoId = id;
             MostrarFormulario = true;
             Detalles = (await _horariosService.Obtener_Detalles_HorarioAsync(id)).ToList();
+            await _bitacoraService.Registrar(1, 4, "El usuario consulta detalle de horarios", "CONSULTA");
             return Partial("_DetallesPanel", this);
         }
 
