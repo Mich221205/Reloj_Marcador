@@ -31,14 +31,9 @@ namespace EjemploCoreWeb.Services
         // INSERTS
         public async Task<int> InsertHorarioAsync(Horarios horario)
         {
-            Console.WriteLine($"🔹 Service: InsertHorarioAsync iniciado");
-            Console.WriteLine($"🔹 Service - Identificación: {horario.Identificacion}");
-            Console.WriteLine($"🔹 Service - ID_Area: {horario.ID_Area}");
-            Console.WriteLine($"🔹 Service - Codigo_Area: {horario.Codigo_Area}");
-
+           
             var result = await _admHorariosRepository.InsertHorarioAsync(horario);
 
-            Console.WriteLine($"🔹 Service: InsertHorarioAsync completado. Resultado: {result}");
             return result;
         }
 
