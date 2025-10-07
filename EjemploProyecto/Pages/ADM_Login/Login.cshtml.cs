@@ -20,7 +20,11 @@ namespace EjemploProyecto.Pages.ADM_Login
         private static readonly string AesKey = "12345678901234567890123456789012"; // 32 caracteres = 256 bits
         private static readonly string AesIV = "1234567890123456"; // 16 caracteres = 128 bits
 
-        public void OnGet() { }
+        public IActionResult OnGet(string? expired)
+        {
+            ViewData["Expired"] = expired == "1";
+            return Page();
+        }
 
         public IActionResult OnPost()
         {

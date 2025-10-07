@@ -1,6 +1,7 @@
 using EjemploCoreWeb.Repository;
 using EjemploCoreWeb.Services;
 using EjemploCoreWeb.Services.Abstract;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -39,6 +40,26 @@ builder.Services.AddScoped<IRolService, RolService>();
 builder.Services.AddScoped<IdentificacionRepository>();
 builder.Services.AddScoped<ITipoIdentificacionService, TipoIdentificacionService>();
 
+// Autenticación por cookies
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/ADM_Login/Login"; // login temporal
+        options.AccessDeniedPath = "/ADM_Login/Login";
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(5); // expira tras 5 min de inactividad
+        options.SlidingExpiration = true; // se renueva si hay actividad
+    });
+
+builder.Services.AddAuthorization();
+
+// Vencimiento de sesión (middleware de session)
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(5);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 
 // ---------------------------
 // Configuración de sesiones
@@ -65,6 +86,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseStaticFiles();
 app.UseRouting();
+app.UseAuthentication();
 
 app.UseSession();
 

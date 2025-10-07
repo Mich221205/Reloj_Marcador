@@ -23,6 +23,38 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
 </head>
 
+<script>
+    (function () {
+        //const INACTIVITY_TIME = 5 * 60 * 1000; // 5 minutos
+        const INACTIVITY_TIME = 10 * 1000; // 5 minutos
+        let timer;
+
+        function resetTimer() {
+            clearTimeout(timer);
+            timer = setTimeout(showSessionExpiredModal, INACTIVITY_TIME);
+        }
+
+        function showSessionExpiredModal() {
+            const modalElement = document.getElementById('sessionExpiredModal');
+            const modal = new bootstrap.Modal(modalElement);
+            modal.show();
+
+            // Cuando el usuario presione el botón, redirigir al login
+            const redirectButton = document.getElementById('redirectLoginBtn');
+            redirectButton.addEventListener('click', function () {
+                window.location.href = '/ADM_Login/Login?expired=1';
+            });
+        }
+
+        // Escuchar actividad del usuario para reiniciar el contador
+        ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(event =>
+            document.addEventListener(event, resetTimer, true)
+        );
+
+        resetTimer();
+    })();
+</script>
+
 <body>
     <!-- Encabezado superior -->
     <header class="header">
@@ -87,6 +119,24 @@
             <i class="bi bi-box-arrow-left"></i> Cerrar Sesión
         </a>
     </aside>
+
+    <!-- Modal de sesión vencida -->
+    <div class="modal fade" id="sessionExpiredModal" tabindex="-1" aria-labelledby="sessionExpiredLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-danger shadow-lg">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="sessionExpiredLabel">Sesión vencida</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    Tu sesión ha expirado por inactividad.<br />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" id="redirectLoginBtn">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
     <!-- Contenido principal -->

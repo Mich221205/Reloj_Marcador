@@ -12,7 +12,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>@ViewData["Title"]</title>
     <meta name="description" content="Panel de ingreso para empleados y clientes de Siempre Puntuales S.A." />
-    <link rel="stylesheet" href="~/css/login.css" />
+    <link rel="stylesheet" href="~/css/Login.css" />
 </head>
 <body>
     <main class="container" role="main">
@@ -28,6 +28,11 @@
 
             <h1>Bienvenido</h1>
             <h1>Accede a tu cuenta</h1>
+
+            @if ((bool)(ViewData["Expired"] ?? false))
+            {
+                <div class="alert alert-warning">Tu sesión ha expirado por inactividad. Por favor inicia sesión</div>
+            }
         </section>
 
         <aside class="card" aria-label="Formulario de inicio de sesión">

@@ -1,2 +1,266 @@
-﻿body {
+﻿:root {
+    --bg: #f4f7fb;
+    --card: #ffffff;
+    --brand: #0066cc; /* azul corporativo */
+    --accent: #ff8800; /* acento cálido */
+    --muted: #6b7280;
+    --radius: 12px;
+    font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+}
+
+* {
+    box-sizing: border-box
+}
+
+html, body {
+    height: 100%
+}
+
+body {
+    margin: 0;
+    background: linear-gradient(180deg, var(--bg) 0%, #eef4ff 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    color: #0f172a;
+}
+
+.container {
+    width: 100%;
+    max-width: 980px;
+    display: grid;
+    grid-template-columns: 1fr 460px;
+    gap: 28px;
+    align-items: center;
+}
+
+/* left marketing */
+.hero {
+    padding: 36px;
+    border-radius: var(--radius);
+    background: linear-gradient(135deg, rgba(0,102,204,0.06), rgba(255,136,0,0.03));
+    box-shadow: 0 8px 30px rgba(8,15,35,0.06);
+    min-height: 380px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 18px;
+}
+
+.logo {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.logo-mark {
+    width: 56px;
+    height: 56px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    font-weight: 700;
+    color: white;
+    background: linear-gradient(135deg,var(--brand),#004a99);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    flex-shrink: 0;
+}
+
+h1 {
+    font-size: 28px;
+    margin: 0
+}
+
+p.lead {
+    margin: 0;
+    color: var(--muted);
+    max-width: 48ch
+}
+
+/* right card */
+.card {
+    background: var(--card);
+    padding: 28px;
+    border-radius: var(--radius);
+    box-shadow: 0 10px 30px rgba(9,20,40,0.08);
+}
+
+    .card h2 {
+        margin: 0 0 8px 0;
+        font-size: 20px
+    }
+
+    .card p {
+        margin: 0 0 18px 0;
+        color: var(--muted)
+    }
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px
+}
+
+label {
+    font-size: 13px;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 6px
+}
+
+/* * ESTE ES EL CÓDIGO CORREGIDO 
+* Aplica el estilo al control ASP.NET 'form-control'
+*/
+.form-control:not([type="checkbox"]) {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid #e6edf6;
+    background: #fbfdff;
+    font-size: 15px;
+    outline: none;
+    transition: box-shadow .15s,border-color .15s;
+    box-sizing: border-box; /* Asegura el correcto cálculo de tamaño */
+}
+
+/* El focus se aplica a la misma clase */
+.form-control:focus {
+    box-shadow: 0 4px 12px rgba(0,102,204,0.08);
+    border-color: var(--brand)
+}
+
+/* El selector original de password se mantiene si usas TextMode="Password" */
+input[type="password"] {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid #e6edf6;
+    background: #fbfdff;
+    font-size: 15px;
+    outline: none;
+    transition: box-shadow .15s,border-color .15s;
+}
+
+.row {
+    display: flex;
+    gap: 10px;
+    align-items: center
+}
+
+    .row.space {
+        justify-content: space-between
+    }
+
+.checkbox {
+    display: flex;
+    gap: 8px;
+    align-items: center
+}
+
+    .checkbox input {
+        width: 16px;
+        height: 16px
+    }
+
+.actions {
+    display: flex;
+    gap: 12px;
+    flex-direction: column;
+    margin-top: 6px
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 0;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: linear-gradient(90deg,var(--brand),#154fb8);
+    color: white;
+    box-shadow: 0 8px 20px rgba(6,50,100,0.12)
+}
+
+.btn-ghost {
+    background: transparent;
+    border: 1px solid #e6eefc;
+    color: var(--brand)
+}
+
+.meta {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 13px;
+    color: var(--muted)
+}
+
+a.link {
+    color: var(--brand);
+    text-decoration: none
+}
+
+.help {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 12px
+}
+
+/* responsive */
+@media (max-width:920px) {
+    .container {
+        grid-template-columns: 1fr;
+        max-width: 680px
+    }
+
+    .hero {
+        order: 2
+    }
+}
+
+@media (max-width:520px) {
+    .logo-mark {
+        width: 48px;
+        height: 48px
+    }
+
+    h1 {
+        font-size: 22px
+    }
+}
+
+/* small error message style */
+.error {
+    color: #b00020;
+    font-size: 13px;
+    padding: 6px 8px;
+    border-radius: 8px;
+    background: #fff1f2;
+    border: 1px solid rgba(176,0,32,0.08)
+}
+
+/* show/hide password */
+.pwd-wrapper {
+    position: relative
+}
+
+.pwd-toggle {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: 0;
+    font-size: 13px;
+    color: var(--muted);
+    cursor: pointer;
+    padding: 6px
 }
