@@ -11,4 +11,9 @@
     <ProjectReference Include="..\EjemploCoreWeb.Services\EjemploCoreWeb.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Pages\TiposIdentificacion\" />
+    <Folder Include="Pages\Roles\" />
+  </ItemGroup>
+
 </Project>
