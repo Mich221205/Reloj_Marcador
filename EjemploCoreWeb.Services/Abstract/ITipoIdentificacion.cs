@@ -1,12 +1,13 @@
-﻿using System;
+﻿using EjemploCoreWeb.Entities;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EjemploCoreWeb.Services.Abstract
 {
-    public interface ITipoIdentificacion
+    public interface ITipoIdentificacionService
     {
+        IEnumerable<TipoIdentificacion> ObtenerTodos();
+        void Crear(TipoIdentificacion tipo);
+        void Actualizar(TipoIdentificacion tipo);
+        void Eliminar(int idTipo);
     }
 }
