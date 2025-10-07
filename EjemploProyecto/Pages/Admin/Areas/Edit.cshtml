@@ -1,0 +1,30 @@
+﻿@page "{id:int}"
+@model EjemploProyecto.Pages.Admin.Areas.EditModel
+@{
+    ViewData["Title"] = "Editar área";
+}
+
+<h2>Editar área</h2>
+
+<form method="post">
+    <input type="hidden" asp-for="Input.ID_Area" />
+
+    <div class="mb-3">
+        <label class="form-label">Nombre del área</label>
+        <input asp-for="Input.Nombre_Area" class="form-control" />
+        <span asp-validation-for="Input.Nombre_Area" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Jefe del área</label>
+        <select asp-for="Input.Jefe_Area" asp-items="Model.Jefes" class="form-select"></select>
+        <span asp-validation-for="Input.Jefe_Area" class="text-danger"></span>
+    </div>
+
+    <button class="btn btn-primary" type="submit">Guardar</button>
+    <a asp-page="Index" class="btn btn-secondary">Cancelar</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MySql.Data" Version="9.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\EjemploCoreWeb.Entities\EjemploCoreWeb.Entities.csproj" />
     <ProjectReference Include="..\EjemploCoreWeb.Repository\EjemploCoreWeb.Repository.csproj" />
   </ItemGroup>

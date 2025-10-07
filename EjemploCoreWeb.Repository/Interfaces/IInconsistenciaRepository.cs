@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace EjemploCoreWeb.Repository
+namespace EjemploCoreWeb.Repository.Interfaces
 {
     public interface IInconsistenciaRepository
     {

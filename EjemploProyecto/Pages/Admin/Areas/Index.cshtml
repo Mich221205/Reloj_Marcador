@@ -1,0 +1,52 @@
+﻿@page
+@model EjemploProyecto.Pages.Admin.Areas.IndexModel
+@{
+    ViewData["Title"] = "Áreas";
+}
+
+<h2>Áreas</h2>
+
+<form method="get" class="row g-2 mb-3">
+    <div class="col-auto">
+        <input class="form-control" name="Q" value="@Model.Q" placeholder="Buscar..." />
+    </div>
+    <div class="col-auto">
+        <button class="btn btn-primary" type="submit">Buscar</button>
+    </div>
+    <div class="col-auto">
+        <a asp-page="Create" class="btn btn-success">Nueva</a>
+    </div>
+</form>
+
+@if (TempData["Error"] is string err)
+{
+    <div class="alert alert-danger">@err</div>
+}
+
+<table class="table table-striped align-middle">
+    <thead>
+        <tr>
+            <th>Nombre del área</th>
+            <th>Jefe</th>
+            <th style="width:220px">Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var a in Model.Lista)
+        {
+            <tr>
+                <td>@a.Nombre_Area</td>
+                <td>@(a.Jefe_Nombre ?? a.Jefe_Area.ToString())</td>
+                <td>
+                    <a asp-page="Edit" asp-route-id="@a.ID_Area" class="btn btn-primary btn-sm">Editar</a>
+                    <form method="post" asp-page-handler="Delete" asp-route-id="@a.ID_Area" class="d-inline">
+                        <button type="submit" class="btn btn-danger btn-sm"
+                                onclick="return confirm('¿Eliminar área?');">
+                            Eliminar
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

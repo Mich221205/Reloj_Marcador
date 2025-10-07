@@ -1,8 +1,16 @@
 using EjemploCoreWeb.Repository;
+using EjemploCoreWeb.Repository.Interfaces;
 using EjemploCoreWeb.Services;
 using EjemploCoreWeb.Services.Abstract;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Data;
+using EjemploCoreWeb.Repository.Repositories;
+
+// Aliases ya usados
+using PersonaAbstr = EjemploCoreWeb.Services.Abstract;
+using PersonaImpl = EjemploCoreWeb.Services;
+using SvcIf = EjemploCoreWeb.Services.Interfaces;
+using SvcImpl = EjemploCoreWeb.Services.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,12 +21,12 @@ builder.Services.AddRazorPages();
 builder.Services.AddHttpContextAccessor();
 
 // ---------------------------
-// Conexión a base de datos
+// ConexiÃ³n a base de datos
 // ---------------------------
 builder.Services.AddSingleton<IDbConnectionFactory, DbConnectionFactory>();
 
 // ---------------------------
-// Inyección de dependencias (repositories y services)
+// InyecciÃ³n de dependencias (DE ELLOS)
 // ---------------------------
 builder.Services.AddScoped<IInconsistenciaRepository, InconsistenciaRepository>();
 builder.Services.AddScoped<IInconsistenciaService, InconsistenciaService>();
@@ -40,19 +48,35 @@ builder.Services.AddScoped<IRolService, RolService>();
 builder.Services.AddScoped<IdentificacionRepository>();
 builder.Services.AddScoped<ITipoIdentificacionService, TipoIdentificacionService>();
 
-// Autenticación por cookies
+// ---------------------------
+// HU7 / HU8 / HU9 â€” Repos
+// ---------------------------
+builder.Services.AddScoped<IAreaRepository, AreaRepository>();
+builder.Services.AddScoped<IUsuarioAreaRepository, UsuarioAreaRepository>();
+
+// ---------------------------
+// HU7 / HU8 / HU9 â€” Services
+// ---------------------------
+builder.Services.AddScoped<SvcIf.IAreaService, SvcImpl.AreaService>();
+builder.Services.AddScoped<SvcIf.IUsuarioAreaService, SvcImpl.UsuarioAreaService>();
+
+// â›” IMPORTANTE: no agregar mapeos extra para IUsuarioService (Interfaces) aquÃ­,
+// porque tu UsuarioService implementa la interfaz de Abstract y ya estÃ¡ registrada.
+
+// ---------------------------
+// AutenticaciÃ³n por cookies
+// ---------------------------
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
         options.LoginPath = "/ADM_Login/Login"; // login temporal
         options.AccessDeniedPath = "/ADM_Login/Login";
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(5); // expira tras 5 min de inactividad
-        options.SlidingExpiration = true; // se renueva si hay actividad
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+        options.SlidingExpiration = true;
     });
 
 builder.Services.AddAuthorization();
 
-// Vencimiento de sesión (middleware de session)
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(5);
@@ -60,24 +84,21 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-
-// ---------------------------
-// Configuración de sesiones
-// ---------------------------
+// (Segundo bloque de sesiÃ³n se respeta)
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30); // Tiempo de expiración
-    options.Cookie.HttpOnly = true;                 // Solo accesible vía HTTP
-    options.Cookie.IsEssential = true;              // Necesario para GDPR
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
 });
 
 // ---------------------------
-// Construcción del app
+// ConstrucciÃ³n del app
 // ---------------------------
 var app = builder.Build();
 
 // ---------------------------
-//  Configuración del pipeline HTTP
+// Pipeline
 // ---------------------------
 if (!app.Environment.IsDevelopment())
 {
@@ -87,26 +108,14 @@ if (!app.Environment.IsDevelopment())
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
-
 app.UseSession();
-
 app.UseAuthorization();
 
-// ---------------------------
-// Redirección inicial (ruta de pruebas)
-// ---------------------------
 app.MapGet("/", context =>
 {
     context.Response.Redirect("/ADM_Login/Login");
     return Task.CompletedTask;
 });
 
-// ---------------------------
-// Razor Pages
-// ---------------------------
 app.MapRazorPages();
-
-// ---------------------------
-// Ejecutar la app
-// ---------------------------
 app.Run();

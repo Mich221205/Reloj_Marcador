@@ -1,0 +1,74 @@
+﻿@page
+@model EjemploProyecto.Pages.Admin.Usuarios.IndexModel
+@{
+    ViewData["Title"] = "Funcionarios / Usuarios";
+}
+<h2>Funcionarios / Usuarios</h2>
+
+@if (TempData["Ok"] is string ok)
+{
+    <div class="alert alert-success">@ok</div>
+}
+@if (TempData["Error"] is string err)
+{
+    <div class="alert alert-danger">@err</div>
+}
+
+<form method="get" class="row g-2 mb-3">
+    <div class="col-auto">
+        <input class="form-control" name="Q" value="@Model.Q" placeholder="Buscar..." />
+    </div>
+    <div class="col-auto">
+        <button class="btn btn-primary" type="submit">Buscar</button>
+        <a class="btn btn-success" asp-page="Create">Nuevo</a>
+    </div>
+</form>
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Identificación</th>
+            <th>Nombre</th>
+            <th>Correo</th>
+            <th>Rol</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var f in Model.Lista)
+        {
+            var rol = Model.Roles.FirstOrDefault(r => r.ID_Rol_Usuario == f.Id_Rol_Usuario)?.Nombre_Rol ?? f.Id_Rol_Usuario.ToString();
+            <tr>
+                <td>@f.Identificacion</td>
+                <td>@($"{f.Nombre} {f.Apellido_1} {f.Apellido_2}")</td>
+                <td>@f.Correo</td>
+                <td>@rol</td>
+                <td>@f.Estado</td>
+                <td class="d-flex gap-2">
+                    <a class="btn btn-sm btn-primary" asp-page="Edit" asp-route-id="@f.Id_Usuario">Editar</a>
+                    <form method="post" asp-page-handler="Delete" asp-route-id="@f.Id_Usuario" onsubmit="return confirm('¿Eliminar usuario?')">
+                        <button class="btn btn-sm btn-danger" type="submit">Eliminar</button>
+                    </form>
+                    <a class="btn btn-sm btn-secondary" asp-page="Areas" asp-route-id="@f.Id_Usuario">Áreas</a>
+                    <a class="btn btn-sm btn-outline-secondary" asp-page="/Admin/CambioClave/Index" asp-route-id="@f.Id_Usuario">Cambio de clave</a>
+                    <a class="btn btn-sm btn-outline-secondary" asp-page="/Admin/Horarios/Index" asp-route-id="@f.Id_Usuario">Horarios</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (Model.TotalPages > 1)
+{
+    <nav>
+        <ul class="pagination">
+            @for (var p = 1; p <= Model.TotalPages; p++)
+            {
+                <li class="page-item @(p == Model.Page ? "active" : "")">
+                    <a class="page-link" asp-route-Page="@p" asp-route-Q="@Model.Q">@p</a>
+                </li>
+            }
+        </ul>
+    </nav>
+}

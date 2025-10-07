@@ -1,5 +1,5 @@
 ﻿using EjemploCoreWeb.Entities;
-using EjemploCoreWeb.Repository;
+using EjemploCoreWeb.Repository.Interfaces;
 using EjemploCoreWeb.Services.Abstract;
 using System.Collections.Generic;
 using System.Threading.Tasks;

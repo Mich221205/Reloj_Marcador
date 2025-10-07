@@ -1,12 +1,52 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using EjemploCoreWeb.Entities;
+using EjemploCoreWeb.Repository.Interfaces;
+using EjemploCoreWeb.Services.Interfaces;
 
-namespace EjemploCoreWeb.Services
+namespace EjemploCoreWeb.Services.Services;
+
+public class UsuarioAreaService : IUsuarioAreaService
 {
-    internal class UsuarioAreaService
+    private readonly IUsuarioAreaRepository _repo;
+    private readonly IServiceProvider _sp;
+
+    public UsuarioAreaService(IUsuarioAreaRepository repo, IServiceProvider sp)
     {
+        _repo = repo;
+        _sp = sp;
+    }
+
+    private async Task TryLogAsync(string accion, object data)
+    {
+        try
+        {
+            var t = Type.GetType("EjemploCoreWeb.Services.Abstract.IBitacoraService, EjemploCoreWeb.Services");
+            if (t != null)
+            {
+                dynamic? bit = _sp.GetService(t);
+                if (bit != null) await bit.RegistrarAsync(accion, data);
+            }
+        }
+        catch { }
+    }
+
+    public Task<IEnumerable<UsuarioArea>> ListarPorUsuarioAsync(int idUsuario)
+        => _repo.ListarPorUsuarioAsync(idUsuario);
+
+    public Task<IEnumerable<Area>> ListarNoAsociadasAsync(int idUsuario)
+        => _repo.ListarNoAsociadasAsync(idUsuario);
+
+    public async Task<bool> AsociarAsync(int idUsuario, int idArea)
+    {
+        var ok = await _repo.AsociarAsync(idUsuario, idArea);
+        if (ok) await TryLogAsync("Asociar Área a Usuario", new { ID_Usuario = idUsuario, ID_Area = idArea });
+        return ok;
+    }
+
+    public async Task<bool> DesasociarAsync(int idUsuario, int idArea)
+    {
+        var ok = await _repo.DesasociarAsync(idUsuario, idArea);
+        await TryLogAsync(ok ? "Desasociar Área de Usuario" : "Desasociar Área (bloqueado por FK)",
+                          new { ID_Usuario = idUsuario, ID_Area = idArea, Ok = ok });
+        return ok;
     }
 }

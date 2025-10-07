@@ -16,7 +16,7 @@ namespace EjemploProyecto.Pages.Inconsistencias
         public IEnumerable<Inconsistencia> Inconsistencias { get; set; } = new List<Inconsistencia>();
         public int TotalRegistros { get; set; }
         public int PaginaActual { get; set; } = 1;
-        public int TamañoPagina { get; set; } = 10;
+        public int TamaÃ±oPagina { get; set; } = 10;
 
         public IndexModel(IInconsistenciaService service, IBitacoraService bitacoraService)
         {
@@ -29,16 +29,16 @@ namespace EjemploProyecto.Pages.Inconsistencias
             try
             {
                 PaginaActual = pagina;
-                Inconsistencias = await _service.Listar(PaginaActual, TamañoPagina);
+                Inconsistencias = await _service.Listar(PaginaActual, TamaÃ±oPagina);
                 TotalRegistros = await _service.Contar();
 
-                await _bitacoraService.Registrar(1, 4, "El usuario consultó Inconsistencias", "CONSULTA");
+                await _bitacoraService.Registrar(1, 4, "El usuario consultï¿½ Inconsistencias", "CONSULTA");
 
                 // Mensajes pasados desde Create/Edit/Delete
                 if (TempData.ContainsKey("SuccessMessage"))
                 {
                     TempData["ModalType"] = "success";
-                    TempData["ModalTitle"] = "Éxito";
+                    TempData["ModalTitle"] = "ï¿½xito";
                     TempData["ModalMessage"] = TempData["SuccessMessage"];
                 }
                 else if (TempData.ContainsKey("ErrorMessage"))
@@ -55,16 +55,16 @@ namespace EjemploProyecto.Pages.Inconsistencias
 
                 TempData["ModalType"] = "error";
                 TempData["ModalTitle"] = "Error de Base de Datos";
-                TempData["ModalMessage"] = "Ocurrió un problema al consultar las inconsistencias. Verifique los datos o contacte al administrador.";
+                TempData["ModalMessage"] = "Ocurriï¿½ un problema al consultar las inconsistencias. Verifique los datos o contacte al administrador.";
             }
             catch (Exception ex)
             {
                 // Cualquier otro tipo de error
-                await _bitacoraService.Registrar(1, 4, $"Excepción general: {ex.Message}", "ERROR");
+                await _bitacoraService.Registrar(1, 4, $"Excepciï¿½n general: {ex.Message}", "ERROR");
 
                 TempData["ModalType"] = "error";
                 TempData["ModalTitle"] = "Error inesperado";
-                TempData["ModalMessage"] = "Ocurrió un error inesperado al cargar la información.";
+                TempData["ModalMessage"] = "Ocurriï¿½ un error inesperado al cargar la informaciï¿½n.";
             }
         }
     }

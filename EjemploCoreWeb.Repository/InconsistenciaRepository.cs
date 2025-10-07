@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using EjemploCoreWeb.Entities;
+using EjemploCoreWeb.Repository.Interfaces;
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;

@@ -1,0 +1,44 @@
+﻿@page
+@model EjemploProyecto.Pages.Admin.Areas.CreateModel
+@{
+    ViewData["Title"] = "Nueva área";
+}
+
+<h2>Nueva área</h2>
+
+<form method="post" novalidate>
+    <div class="mb-3">
+        <label class="form-label">Nombre del área</label>
+        <input asp-for="Input.Nombre_Area"
+               class="form-control"
+               maxlength="40"
+               pattern="^[A-Za-zÁÉÍÓÚáéíóúñÑ ]+$"
+               title="El nombre del área no debe ser mayor a 40 caracteres y solo debe tener letras y espacios." />
+        <span asp-validation-for="Input.Nombre_Area" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">ID del área</label>
+        <input asp-for="Input.Codigo_Area"
+               class="form-control"
+               maxlength="15"
+               pattern="^[A-Za-z0-9_-]{1,15}$"
+               title="El código del área es obligatorio, máximo 15 caracteres, puede incluir letras, números, guion (-) y guion bajo (_)." />
+        <span asp-validation-for="Input.Codigo_Area" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Jefe del área</label>
+        <select asp-for="Input.Jefe_Area" asp-items="Model.Jefes" class="form-select">
+            <option value="">-- Seleccione --</option>
+        </select>
+        <span asp-validation-for="Input.Jefe_Area" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">Guardar</button>
+    <a asp-page="Index" class="btn btn-secondary">Cancelar</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
