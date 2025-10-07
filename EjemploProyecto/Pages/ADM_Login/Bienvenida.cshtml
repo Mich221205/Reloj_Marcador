@@ -1,0 +1,21 @@
+﻿@page
+@model EjemploProyecto.Pages.ADM_Bienvenida.BienvenidaModel
+@{
+    ViewData["Title"] = "Bienvenida";
+}
+
+<link rel="stylesheet" href="~/css/Estilos.css">
+
+<div class="welcome-container">
+    <div class="welcome-header">
+        <h2>¡Bienvenido @Model.NombreCompleto!</h2>
+        <div class="user-info">
+            <span class="user-role">@Model.RolUsuario</span>
+        </div>
+    </div>
+
+    <div class="welcome-content">
+        <p class="welcome-text">Este es el panel principal del sistema <strong>Siempre Puntuales S.A.</strong></p>
+        <p class="welcome-text">Utiliza el menú lateral para acceder a las funciones disponibles según tu rol.</p>
+    </div>
+</div>

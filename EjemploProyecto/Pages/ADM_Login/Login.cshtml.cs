@@ -69,7 +69,7 @@ namespace EjemploProyecto.Pages.ADM_Login
                                     HttpContext.Session.SetString("RolUsuario", "Administrador");
                                     HttpContext.Session.SetString("AvatarUrl", "/images/avatar-default.png");
 
-                                    return RedirectToPage("/ADM_Bienvenida/Bienvenida");
+                                    return RedirectToPage("/ADM_Login/Bienvenida");
                                 }
                                 else
                                 {
