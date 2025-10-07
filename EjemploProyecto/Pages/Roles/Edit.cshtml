@@ -1,4 +1,70 @@
-﻿@page
+﻿@page "{id:int}"
 @model EjemploProyecto.Pages.Roles.EditModel
-@{
+
+<h2>Editar Rol</h2>
+
+<form method="post">
+    <input type="hidden" asp-for="Rol.ID_Rol_Usuario" />
+    <div class="mb-3">
+        <label class="form-label">Nombre del Rol</label>
+        <input asp-for="Rol.Nombre_Rol" class="form-control" />
+        <span asp-validation-for="Rol.Nombre_Rol" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+    <a asp-page="Index" class="btn btn-secondary">Volver</a>
+</form>
+
+<!-- Modal general -->
+<div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" id="modalHeader">
+                <h5 class="modal-title" id="messageModalLabel">@ViewData["ModalTitle"]</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                @Html.Raw(ViewData["ModalMessage"])
+            </div>
+            <div class="modal-footer">
+                @if ((string)ViewData["ModalType"] == "success")
+                {
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal"
+                            onclick="window.location.href='@Url.Page((string)ViewData["RedirectPage"] ?? "Index")'">
+                        Aceptar
+                    </button>
+                }
+                else
+                {
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var msg = '@Html.Raw(ViewData["ModalMessage"])';
+            var type = '@ViewData["ModalType"]';
+
+            if (msg && msg !== '') {
+                var modalHeader = document.getElementById("modalHeader");
+
+                if (type === "success") {
+                    modalHeader.classList.add("bg-success", "text-white");
+                } else if (type === "error") {
+                    modalHeader.classList.add("bg-danger", "text-white");
+                } else if (type === "warning") {
+                    modalHeader.classList.add("bg-warning", "text-dark");
+                } else {
+                    modalHeader.classList.add("bg-info", "text-white");
+                }
+
+                var messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
+                messageModal.show();
+            }
+        });
+    </script>
 }
