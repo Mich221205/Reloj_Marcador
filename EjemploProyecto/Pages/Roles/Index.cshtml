@@ -1,4 +1,28 @@
 ﻿@page
 @model EjemploProyecto.Pages.Roles.IndexModel
-@{
-}
+
+<h2>Administración de Roles</h2>
+<a asp-page="Create" class="btn btn-primary mb-3">Nuevo</a>
+
+<table class="table table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Nombre Rol</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var rol in Model.Roles)
+        {
+            <tr>
+                <td>@rol.ID_Rol_Usuario</td>
+                <td>@rol.Nombre_Rol</td>
+                <td>
+                    <a asp-page="Edit" asp-route-id="@rol.ID_Rol_Usuario" class="btn btn-warning btn-sm"> Editar</a>
+                    <a asp-page="Delete" asp-route-id="@rol.ID_Rol_Usuario" class="btn btn-danger btn-sm"> Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
