@@ -75,7 +75,7 @@ app.UseAuthorization();
 // ---------------------------
 app.MapGet("/", context =>
 {
-    context.Response.Redirect("/InconsistenciasM/Index");
+    context.Response.Redirect("/ADM_Login/Login");
     return Task.CompletedTask;
 });
 

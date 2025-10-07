@@ -1,0 +1,90 @@
+﻿@page
+@model EjemploProyecto.Pages.ADM_Login.LoginModel
+@{
+    ViewData["Title"] = "Iniciar sesión · Siempre Puntuales S.A.";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>@ViewData["Title"]</title>
+    <meta name="description" content="Panel de ingreso para empleados y clientes de Siempre Puntuales S.A." />
+    <link rel="stylesheet" href="~/css/login.css" />
+</head>
+<body>
+    <main class="container" role="main">
+        <section class="hero" aria-hidden="false">
+            <div class="logo" aria-hidden="false">
+                <div class="logo-mark" aria-hidden="true">
+                    <img src="~/images/LOGO.ico" alt="Logo Siempre Puntuales" style="width:64px;height:64px;" />
+                </div>
+                <div>
+                    <div style="font-weight:700">Siempre Puntuales S.A.</div>
+                </div>
+            </div>
+
+            <h1>Bienvenido</h1>
+            <h1>Accede a tu cuenta</h1>
+        </section>
+
+        <aside class="card" aria-label="Formulario de inicio de sesión">
+            <h2>Iniciar sesión</h2>
+
+            <form method="post">
+                <div>
+                    <input asp-for="Identificacion" class="form-control" placeholder="Identificación" required />
+                </div>
+
+                <div>
+                    <div class="pwd-wrapper">
+                        <input asp-for="Password" class="form-control" placeholder="Contraseña" type="password" required id="pwdInput" />
+                        <button type="button" class="pwd-toggle" aria-label="Mostrar contraseña" id="pwdToggle">Mostrar</button>
+                    </div>
+                </div>
+
+                <div class="row space">
+                    <label class="checkbox">
+                        <input asp-for="Recordarme" type="checkbox" />
+                        <span>Recordarme</span>
+                    </label>
+                    <a href="#" class="link">¿Olvidaste tu contraseña?</a>
+                </div>
+
+                <div class="actions">
+                    <button type="submit" class="btn btn-primary">Entrar</button>
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.Mensaje))
+                {
+                    <div id="msg" role="status" aria-live="polite" style="margin-top:10px">
+                        <span>@Model.Mensaje</span>
+                    </div>
+                }
+
+                <div class="help">
+                    ¿No tienes cuenta?
+                    <a asp-page="/ADM_Registro/Registro" class="link">Solicitar acceso</a>
+                </div>
+
+                <div style="margin-top:14px;font-size:12px;color:var(--muted)">
+                    © Siempre Puntuales S.A. — Todos los derechos reservados
+                </div>
+            </form>
+        </aside>
+    </main>
+
+    <script>
+        const pwd = document.getElementById('pwdInput');
+        const toggle = document.getElementById('pwdToggle');
+        toggle.addEventListener('click', () => {
+            const isPwd = pwd.getAttribute('type') === 'password';
+            pwd.setAttribute('type', isPwd ? 'text' : 'password');
+            toggle.textContent = isPwd ? 'Ocultar' : 'Mostrar';
+            toggle.setAttribute('aria-pressed', isPwd ? 'true' : 'false');
+        });
+    </script>
+</body>
+</html>
