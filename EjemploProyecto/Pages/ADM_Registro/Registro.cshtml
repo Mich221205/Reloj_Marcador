@@ -1,0 +1,98 @@
+﻿@page
+@model EjemploProyecto.Pages.ADM_Registro.RegistroModel
+@{
+    ViewData["Title"] = "Registro de Usuario";
+    Layout = null;
+}
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>@ViewData["Title"]</title>
+    <meta name="description" content="Registro de nuevos usuarios para Siempre Puntuales S.A." />
+    <link rel="stylesheet" href="~/css/login.css" />
+</head>
+
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card shadow-lg rounded-4 border-0">
+                    <div class="card-header bg-primary text-white text-center py-3 rounded-top-4">
+                        <h4>Registro de Nuevo Usuario</h4>
+                    </div>
+                    <div class="card-body p-4">
+
+                        @if (!string.IsNullOrEmpty(Model.Mensaje))
+                        {
+                            <div class="alert alert-info text-center">@Model.Mensaje</div>
+                        }
+
+                        <form method="post">
+
+                            <div class="mb-3">
+                                <label class="form-label">Tipo de Identificación</label>
+                                <select class="form-select" asp-for="ID_Tipo_Identificacion" required>
+                                    <option value="">Seleccione...</option>
+                                    <option value="1">Cédula Nacional</option>
+                                    <option value="2">Dimex</option>
+                                    <option value="3">Pasaporte</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Identificación</label>
+                                <input asp-for="Identificacion" class="form-control" placeholder="Ej: 1-2345-6789" required />
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Nombre</label>
+                                    <input asp-for="Nombre" class="form-control" placeholder="Nombre" required />
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Primer Apellido</label>
+                                    <input asp-for="Apellido1" class="form-control" placeholder="Apellido 1" required />
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Segundo Apellido</label>
+                                <input asp-for="Apellido2" class="form-control" placeholder="Apellido 2" required />
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Correo Electrónico</label>
+                                <input asp-for="Correo" type="email" class="form-control" placeholder="correo@ejemplo.com" required />
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Teléfono</label>
+                                <input asp-for="Telefono" class="form-control" placeholder="8888-8888" />
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Rol de Usuario</label>
+                                <select class="form-select" asp-for="ID_Rol_Usuario" required>
+                                    <option value="">Seleccione...</option>
+                                    <option value="1">Administrador</option>
+                                    <option value="2">Usuario</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Contraseña</label>
+                                <input asp-for="Password" type="password" class="form-control" placeholder="********" required />
+                            </div>
+
+                            <div class="text-center mt-4">
+                                <button type="submit" class="btn btn-primary px-4 py-2">Registrar</button>
+                                <a asp-page="/ADM_Login/Login" class="btn btn-outline-secondary ms-2 px-4 py-2">Volver</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
