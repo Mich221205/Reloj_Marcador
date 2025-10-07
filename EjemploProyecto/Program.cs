@@ -25,6 +25,13 @@ builder.Services.AddScoped<IMotivos_Ausencia, Motivos_Services>();
 builder.Services.AddScoped<AdmHorariosRepository>();
 builder.Services.AddScoped<IHorarios, HorariosServices>();
 
+builder.Services.AddScoped<RolRepository>();
+builder.Services.AddScoped<IRolService, RolService>();
+
+
+builder.Services.AddScoped<IdentificacionRepository>();
+builder.Services.AddScoped<ITipoIdentificacionService, TipoIdentificacionService>();
+
 //SE LLAMA INYECCION DE DEPENDENCIAS BROTHER
 
 // servicio de bitácora
