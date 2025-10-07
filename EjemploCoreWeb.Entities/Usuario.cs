@@ -55,4 +55,4 @@ namespace EjemploCoreWeb.Entities
         public string Tipo_Identificacion { get; set; }
     }
 
-}
+
