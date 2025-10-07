@@ -2,6 +2,8 @@ using EjemploCoreWeb.Entities;
 using EjemploCoreWeb.Services.Abstract;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using MySql.Data.MySqlClient;
+using System;
 using System.Threading.Tasks;
 
 namespace EjemploProyecto.Pages.Inconsistencias
@@ -12,7 +14,7 @@ namespace EjemploProyecto.Pages.Inconsistencias
         private readonly IBitacoraService _bitacoraService;
 
         [BindProperty]
-        public Inconsistencia Inconsistencia { get; set; }
+        public Inconsistencia Inconsistencia { get; set; } = new Inconsistencia();
 
         public EditModel(IInconsistenciaService service, IBitacoraService bitacoraService)
         {
@@ -22,9 +24,19 @@ namespace EjemploProyecto.Pages.Inconsistencias
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            Inconsistencia = await _service.ObtenerPorId(id);
-            if (Inconsistencia == null)
+            try
+            {
+                Inconsistencia = await _service.ObtenerPorId(id);
+                if (Inconsistencia == null)
+                    return RedirectToPage("Index");
+            }
+            catch (Exception ex)
+            {
+                await _bitacoraService.Registrar(1, 2, $"Error al obtener inconsistencia ID {id}: {ex.Message}", "ERROR");
+                TempData["ErrorMessage"] = "No se pudo cargar la inconsistencia seleccionada.";
                 return RedirectToPage("Index");
+            }
+
             return Page();
         }
 
@@ -33,15 +45,26 @@ namespace EjemploProyecto.Pages.Inconsistencias
             if (!ModelState.IsValid)
                 return Page();
 
-            var anterior = await _service.ObtenerPorId(Inconsistencia.ID_Inconsistencia);
+            try
+            {
+                var anterior = await _service.ObtenerPorId(Inconsistencia.ID_Inconsistencia);
+                await _service.Actualizar(Inconsistencia);
 
-            await _service.Actualizar(Inconsistencia);
+                await _bitacoraService.Registrar(1, 2, new { Antes = anterior, Despues = Inconsistencia }, "UPDATE");
+                TempData["SuccessMessage"] = "Inconsistencia actualizada correctamente.";
+            }
+            catch (MySqlException ex)
+            {
+                await _bitacoraService.Registrar(1, 2, $"Error MySQL: {ex.Message}", "ERROR");
+                TempData["ErrorMessage"] = "Error al actualizar la inconsistencia. Verifique los datos.";
+            }
+            catch (Exception ex)
+            {
+                await _bitacoraService.Registrar(1, 2, $"Error general: {ex.Message}", "ERROR");
+                TempData["ErrorMessage"] = "Ocurrió un error inesperado al actualizar la inconsistencia.";
+            }
 
-            await _bitacoraService.Registrar(1, 2, new { Antes = anterior, Despues = Inconsistencia }, "UPDATE");
-
-            TempData["SuccessMessage"] = "Inconsistencia actualizada correctamente.";
             return RedirectToPage("Index");
         }
     }
 }
-
