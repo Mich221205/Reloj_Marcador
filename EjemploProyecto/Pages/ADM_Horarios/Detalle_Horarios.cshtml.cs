@@ -1,4 +1,5 @@
 ﻿using EjemploCoreWeb.Entities;
+using EjemploCoreWeb.Services;
 using EjemploCoreWeb.Services.Abstract;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -9,12 +10,15 @@ namespace EjemploProyecto.Pages.ADM_Horarios
     {
         private readonly IHorarios _horariosService;
 
-        public Detalle_HorariosModel(IHorarios horariosService)
+        private readonly IBitacoraService _bitacoraService;
+
+        public Detalle_HorariosModel(IHorarios horariosService, IBitacoraService bitacoraService)
         {
             _horariosService = horariosService;
             Horarios = new List<Horarios>();
             Detalles = new List<Detalle_Horarios>();
             DetalleHorario = new Detalle_Horarios();
+            _bitacoraService = bitacoraService;
         }
 
         [BindProperty]
