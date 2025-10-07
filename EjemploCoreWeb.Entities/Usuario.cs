@@ -30,29 +30,4 @@ namespace EjemploCoreWeb.Entities
     }
 
 
-
-    public class Rol { 
-        
-        public int ID_Rol_Usuario { get; set; }
-        
-        [Required(ErrorMessage = "El nombre del rol es obligatorio.")]
-        [StringLength(40, ErrorMessage = "El nombre del rol no puede exceder los 40 caracteres.")]
-        [RegularExpression("^[A-Za-zÁÉÍÓÚáéíóúñÑ ]+$", ErrorMessage = "El nombre del rol solo puede contener letras y espacios.")]
-        public string Nombre_Rol { get; set; }  
-
-
-    }
-
-
-    public class TipoIdentificacion
-    {
-        public int ID_Tipo_Identificacion { get; set; }
-
-        [Required(ErrorMessage = "El tipo de identificación es obligatorio.")]
-        [StringLength(40, ErrorMessage = "El nombre del tipo no puede exceder los 40 caracteres.")]
-        [RegularExpression("^[A-Za-zÁÉÍÓÚáéíóúñÑ ]+$", ErrorMessage = "El nombre solo puede contener letras y espacios.")]
-        public string Tipo_Identificacion { get; set; }
-    }
-
 }
-
