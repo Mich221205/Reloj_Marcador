@@ -56,4 +56,3 @@ namespace EjemploCoreWeb.Entities
 
 }
 
-
