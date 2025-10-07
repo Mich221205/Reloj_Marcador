@@ -25,8 +25,8 @@
                 <td>@item.ID_Motivo</td>
                 <td>@item.Nombre_Motivo</td>
                 <td>
-                    <a asp-page="Edit" asp-route-id="@item.ID_Motivo">Editar</a> |
-                    <a asp-page="Delete" asp-route-id="@item.ID_Motivo">Eliminar</a>
+                    <a class="btn btn-warning btn-sm" asp-page="Edit" asp-route-id="@item.ID_Motivo">Editar</a>
+                    <a class="btn btn-danger btn-sm" asp-page="Delete" asp-route-id="@item.ID_Motivo">Eliminar</a>
                 </td>
             </tr>
         }
