@@ -4,7 +4,9 @@
     ViewData["Title"] = "Administración de Horarios";
 }
 
-<h1>Horarios del usuario</h1>
+<link rel="stylesheet" href="~/css/Estilos.css">
+
+<h2>Horarios del Usuario</h2>
 
 <!-- mensajes de éxito/error -->
 @if (TempData["SuccessMessage"] != null)
@@ -23,19 +25,13 @@
     </div>
 }
 
-<p>
-    <a class="btn btn-primary" asp-page="Create_Horario" asp-route-id="@Model.IdentificacionUsuario">
-        Nuevo
-    </a>
-    <a class="btn btn-outline-secondary" asp-page="/ADM_Usuarios/Index">
-        Regresar al listado
-    </a>
-</p>
+<div class="mb-3">
+    <a class="btn btn-primary" asp-page="Create_Horario" asp-route-id="@Model.IdentificacionUsuario">Nuevo Horario</a>
+    <a class="btn btn-secondary" asp-page="/ADM_Usuarios/Index">Volver al Listado</a>
+</div>
 
 <form id="__af" method="post" style="display:none">
     @Html.AntiForgeryToken()
-    
-    <!-- Campo hidden para mantener la identificación -->
     <input type="hidden" name="IdentificacionUsuario" value="@Model.IdentificacionUsuario" />
 </form>
 
@@ -53,18 +49,13 @@
     }
 </div>
 
-<!-- Modales globales -->
-@await Html.PartialAsync("_ModalesGenerales")
-
 <!-- Modal de Confirmación para Eliminar -->
 <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content border-danger">
+        <div class="modal-content">
             <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title" id="confirmDeleteLabel">
-                    <i class="bi bi-exclamation-triangle-fill"></i> Confirmar eliminación
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                <h5 class="modal-title" id="confirmDeleteLabel">Confirmar eliminación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
             <div class="modal-body text-center">
                 ¿Realmente desea eliminar el elemento seleccionado?
@@ -72,6 +63,31 @@
             <div class="modal-footer justify-content-center">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
                 <button id="btnConfirmDelete" type="button" class="btn btn-danger">Sí</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal General -->
+<div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" id="modalHeader">
+                <h5 class="modal-title" id="messageModalLabel">@ViewData["ModalTitle"]</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                @ViewData["ModalMessage"]
+            </div>
+            <div class="modal-footer">
+                @if ((string)ViewData["ModalType"] == "success")
+                {
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">Aceptar</button>
+                }
+                else
+                {
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                }
             </div>
         </div>
     </div>
@@ -88,7 +104,7 @@
             return document.querySelector('input[name="__RequestVerificationToken"]')?.value || '';
         }
 
-        // Configurar el modal de confirmación una sola vez
+        // Configurar el modal de confirmación
         document.addEventListener('DOMContentLoaded', function() {
             document.querySelector("#btnConfirmDelete").addEventListener("click", async function () {
                 const modal = bootstrap.Modal.getInstance(document.getElementById("confirmDeleteModal"));
@@ -166,13 +182,12 @@
             mostrarModalDesdeServidor(html);
         }
 
-                // --- Eliminar horario ---
-                async function eliminarHorario(id_Horario) {
+        // --- Eliminar horario ---
+        async function eliminarHorario(id_Horario) {
             const data = new FormData();
             data.append('id_Horario', id_Horario);
             data.append('__RequestVerificationToken', getToken());
 
-            // Enviar la identificación del usuario
             const identificacionUsuario = document.querySelector('input[name="IdentificacionUsuario"]')?.value;
             if (identificacionUsuario) {
                 data.append('IdentificacionUsuario', identificacionUsuario);
@@ -186,14 +201,9 @@
                 });
 
                 const html = await res.text();
-
-                // lista de horarios
                 document.getElementById('contenedorHorarios').innerHTML = html;
-
-                // panel de detalles
                 document.getElementById('contenedorDetalles').innerHTML = '';
 
-                // Buscar y mostrar el modal dentro del HTML actualizado
                 const modalElement = document.getElementById('messageModal');
                 if (modalElement) {
                     const modal = new bootstrap.Modal(modalElement);
@@ -201,8 +211,6 @@
                 }
 
             } catch (error) {
-                
-               
                 alert('Error al eliminar el horario: ' + error.message);
             }
         }

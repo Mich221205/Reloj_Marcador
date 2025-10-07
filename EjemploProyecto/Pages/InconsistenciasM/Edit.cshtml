@@ -1,23 +1,21 @@
 ﻿@page "{id:int}"
 @model EjemploProyecto.Pages.Inconsistencias.EditModel
 
-<div class="d-flex justify-content-center align-items-center vh-100">
-    <div class="card shadow-lg p-4" style="width: 30rem;">
-        <h3 class="text-center mb-4">Editar Inconsistencia</h3>
+<link rel="stylesheet" href="~/css/Estilos.css">
 
-        <form method="post">
-            <input type="hidden" asp-for="Inconsistencia.ID_Inconsistencia" />
+<h2>Editar Inconsistencia</h2>
 
-            <div class="mb-3">
-                <label class="form-label">Nombre</label>
-                <input asp-for="Inconsistencia.Nombre_Inconsistencia" class="form-control" maxlength="40" required pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]+" />
-                <span asp-validation-for="Inconsistencia.Nombre_Inconsistencia" class="text-danger"></span>
-            </div>
+<form method="post">
+    <input type="hidden" asp-for="Inconsistencia.ID_Inconsistencia" />
 
-            <div class="d-flex justify-content-between">
-                <a asp-page="Index" class="btn btn-secondary">Cancelar</a>
-                <button type="submit" class="btn btn-primary">Actualizar</button>
-            </div>
-        </form>
+    <div class="form-group mb-3">
+        <label class="control-label">Nombre</label>
+        <input asp-for="Inconsistencia.Nombre_Inconsistencia" class="form-control" maxlength="40" required pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]+" />
+        <span asp-validation-for="Inconsistencia.Nombre_Inconsistencia" class="text-danger"></span>
     </div>
-</div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Actualizar</button>
+        <a asp-page="Index" class="btn btn-secondary">Cancelar</a>
+    </div>
+</form>

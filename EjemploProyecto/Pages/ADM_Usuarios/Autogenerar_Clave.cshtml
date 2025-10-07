@@ -1,38 +1,37 @@
 ﻿@page
 @model EjemploProyecto.Pages.ADM_Usuarios.Autogenerar_ClaveModel
 @{
-    ViewData["Title"] = "Autogenerar";
+    ViewData["Title"] = "Autogenerar Clave";
 }
 
-<h1>Clave autogenerada</h1>
+<link rel="stylesheet" href="~/css/Estilos.css">
 
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div class="form-group">
-                <label asp-for="Usuario.Identificacion" class="control-label"></label>
-                <input asp-for="Usuario.Identificacion" class="form-control" readonly />
-                <input type="hidden" asp-for="Usuario.Identificacion" />
-                <span asp-validation-for="Usuario.Identificacion" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Usuario.Nombre" class="control-label"></label>
-                <input asp-for="Usuario.Nombre" class="form-control" readonly />
-                <span asp-validation-for="Usuario.Nombre" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Usuario.Contrasena" class="control-label"></label>
-                <input asp-for="Usuario.Contrasena" class="form-control" readonly />
-                <span asp-validation-for="Usuario.Contrasena" class="text-danger"></span>
-            </div>
-            <div class="form-group mt-3 d-flex gap-2">
-                <button type="submit" class="btn btn-success">Aceptar</button>
-                <a asp-page="Cambio_Clave" asp-route-id="@Model.Usuario.Identificacion" class="btn btn-secondary">Cancelar</a>
-            </div>
-        </form>
+<h2>Clave Autogenerada</h2>
+
+<form method="post">
+    <div class="form-group mb-3">
+        <label class="control-label">Identificación</label>
+        <input asp-for="Usuario.Identificacion" class="form-control" readonly />
+        <input type="hidden" asp-for="Usuario.Identificacion" />
+        <span asp-validation-for="Usuario.Identificacion" class="text-danger"></span>
     </div>
-</div>
+    <div class="form-group mb-3">
+        <label class="control-label">Nombre</label>
+        <input asp-for="Usuario.Nombre" class="form-control" readonly />
+        <span asp-validation-for="Usuario.Nombre" class="text-danger"></span>
+    </div>
+    <div class="form-group mb-3">
+        <label class="control-label">Contraseña Generada</label>
+        <input asp-for="Usuario.Contrasena" class="form-control" readonly />
+        <span asp-validation-for="Usuario.Contrasena" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Aceptar</button>
+        <a asp-page="Cambio_Clave" asp-route-id="@Model.Usuario.Identificacion" class="btn btn-secondary">Cancelar</a>
+    </div>
+</form>
 
+<!-- Modal General -->
 <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">

@@ -1,39 +1,23 @@
 ﻿@page "{id:int}"
 @model EjemploProyecto.Pages.Roles.DeleteModel
 
+<link rel="stylesheet" href="~/css/Estilos.css">
+
 <h2>Eliminar Rol</h2>
 
-
-<div class="text-center mt-4">
-    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
-        Eliminar Rol @Model.Rol?.Nombre_Rol
-    </button>
-    <a asp-page="Index" class="btn btn-secondary">Cancelar</a>
+<div class="mb-3">
+    <p>¿Seguro que desea eliminar el rol <strong class="text-danger">@Model.Rol?.Nombre_Rol</strong>?</p>
 </div>
 
-<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-danger">
-            <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title" id="confirmDeleteLabel">Confirmar eliminación</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-            </div>
-            <div class="modal-body text-center">
-                <p>¿Realmente deseas eliminar el rol <strong>@Model.Rol?.Nombre_Rol</strong>?</p>
-
-            </div>
-            <div class="modal-footer justify-content-center">
-                <form method="post">
-                    <input type="hidden" asp-for="Rol.ID_Rol_Usuario" />
-                    <button type="submit" class="btn btn-danger px-4">Sí</button>
-                    <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">No</button>
-                </form>
-            </div>
-        </div>
+<form method="post">
+    <input type="hidden" asp-for="Rol.ID_Rol_Usuario" />
+    <div class="form-group">
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+        <a asp-page="Index" class="btn btn-secondary">Cancelar</a>
     </div>
-</div>
+</form>
 
-
+<!-- Modal general para mensajes -->
 <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">

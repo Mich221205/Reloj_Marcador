@@ -1,9 +1,12 @@
 ﻿@page
 @model Reloj_Marcador.Pages.ADM_Usuarios.IndexModel
 @{
+    ViewData["Title"] = "Administración de Usuarios";
 }
 
-<h1>SIMULACIÓN ADM7</h1>
+<link rel="stylesheet" href="~/css/Estilos.css">
+
+<h1>Administración de Usuarios</h1>
 
 <p>
     <a class="btn btn-primary" asp-page="Create">Nuevo</a>
@@ -12,11 +15,11 @@
 <table class="table table-striped table-bordered">
     <thead>
         <tr>
-            <th>Identificacion</th>
+            <th>Identificación</th>
             <th>Nombre</th>
             <th>Apellido1</th>
             <th>Apellido2</th>
-            <th></th>
+            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>

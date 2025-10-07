@@ -2,7 +2,7 @@
 
 @if (Model.Horarios != null && Model.Horarios.Any())
 {
-    <table class="table table-striped">
+    <table class="table table-striped table-bordered">
         <thead>
             <tr>
                 <th>ID Horario</th>
@@ -19,12 +19,8 @@
                     <td>@h.Codigo_Area</td>
                     <td>@h.Nombre_Area</td>
                     <td>
-                        <button class="btn btn-primary btn-sm" onclick="seleccionarHorario(@h.ID_Horario)">
-                            Seleccionar
-                        </button>
-                        <button class="btn btn-danger btn-sm" onclick="confirmarEliminarHorario(@h.ID_Horario)">
-                            Eliminar
-                        </button>
+                        <button class="btn btn-primary btn-sm" onclick="seleccionarHorario(@h.ID_Horario)">Seleccionar</button>
+                        <button class="btn btn-danger btn-sm" onclick="confirmarEliminarHorario(@h.ID_Horario)">Eliminar</button>
                     </td>
                 </tr>
             }
@@ -36,33 +32,4 @@ else
     <div class="alert alert-info">
         <p>No se encontraron horarios para este usuario.</p>
     </div>
-}
-
-<!-- Modal incluido en el partial view -->
-@if (!string.IsNullOrEmpty(Model.ModalMessage))
-{
-    <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header @(Model.ModalType == "success" ? "bg-success text-white" : Model.ModalType == "error" ? "bg-danger text-white" : "bg-info text-white")">
-                    <h5 class="modal-title" id="messageModalLabel">@Model.ModalTitle</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                </div>
-                <div class="modal-body">
-                    @Model.ModalMessage
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Mostrar el modal automáticamente cuando se carga el partial
-        document.addEventListener('DOMContentLoaded', function() {
-            const modal = new bootstrap.Modal(document.getElementById('messageModal'));
-            modal.show();
-        });
-    </script>
 }

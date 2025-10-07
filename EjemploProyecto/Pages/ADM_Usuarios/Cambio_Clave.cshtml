@@ -1,47 +1,41 @@
 ﻿@page
 @model EjemploProyecto.Pages.ADM_Usuarios.Cambio_ClaveModel
 @{
-    ViewData["Title"] = "Cambio Clave";
+    ViewData["Title"] = "Cambio de Clave";
 }
 
-<h1>Cambio Clave</h1>
+<link rel="stylesheet" href="~/css/Estilos.css">
+
+<h2>Cambio de Clave</h2>
 
 <div class="mb-3">
-    <a asp-page="Index" class="btn btn-outline-secondary btn-sm">
-        <i class="bi bi-arrow-left"></i> Regresar al listado
-    </a>
+    <a asp-page="Index" class="btn btn-secondary btn-sm">Volver al listado</a>
 </div>
 
-<h4>Usuario</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div class="form-group">
-                <label asp-for="Usuario.Identificacion" class="control-label"></label>
-                <input asp-for="Usuario.Identificacion" class="form-control" readonly />
-                <input type="hidden" asp-for="Usuario.Identificacion" />
-                <span asp-validation-for="Usuario.Identificacion" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Usuario.Nombre" class="control-label"></label>
-                <input asp-for="Usuario.Nombre" class="form-control" readonly />
-                <span asp-validation-for="Usuario.Nombre" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label for="Contrasena" class="control-label">Digite su nueva contraseña:</label>
-                <input id="Contrasena" name="Usuario.Contrasena" type="password" class="form-control" value="" />
-                <span asp-validation-for="Usuario.Contrasena" class="text-danger"></span>
-            </div>
-            <div class="form-group mt-3 d-flex gap-2">
-                <button type="submit" asp-page-handler="Aceptar" class="btn btn-primary">Aceptar</button>
-                <a asp-page="Autogenerar_Clave" asp-route-id="@Model.Usuario.Identificacion" class="btn btn-secondary">Autogenerar</a>
-            </div>
-        </form>
+<form method="post">
+    <div class="form-group mb-3">
+        <label class="control-label">Identificación</label>
+        <input asp-for="Usuario.Identificacion" class="form-control" readonly />
+        <input type="hidden" asp-for="Usuario.Identificacion" />
+        <span asp-validation-for="Usuario.Identificacion" class="text-danger"></span>
     </div>
-</div>
+    <div class="form-group mb-3">
+        <label class="control-label">Nombre</label>
+        <input asp-for="Usuario.Nombre" class="form-control" readonly />
+        <span asp-validation-for="Usuario.Nombre" class="text-danger"></span>
+    </div>
+    <div class="form-group mb-3">
+        <label class="control-label">Nueva Contraseña</label>
+        <input id="Contrasena" name="Usuario.Contrasena" type="password" class="form-control" value="" />
+        <span asp-validation-for="Usuario.Contrasena" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <button type="submit" asp-page-handler="Aceptar" class="btn btn-primary">Aceptar</button>
+        <a asp-page="Autogenerar_Clave" asp-route-id="@Model.Usuario.Identificacion" class="btn btn-info">Autogenerar</a>
+    </div>
+</form>
 
-<!-- 🔹 Modal genérico -->
+<!-- Modal General -->
 <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">

@@ -4,10 +4,10 @@
     ViewData["Title"] = "Crear Horario";
 }
 
-<h1>Crear Nuevo Horario</h1>
-<hr />
+<link rel="stylesheet" href="~/css/Estilos.css">
 
-<!-- Mostrar mensajes -->
+<h2>Crear Nuevo Horario</h2>
+
 @if (TempData["SuccessMessage"] != null)
 {
     <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -24,56 +24,48 @@
     </div>
 }
 
-<div class="row">
-    <div class="col-md-5">
-        <form method="post" id="horarioForm">
-            
-            <!-- Identificación del usuario -->
-            <div class="form-group mb-3">
-                <label asp-for="Horario.Identificacion" class="control-label">Identificación del Usuario</label>
-                <input asp-for="Horario.Identificacion" class="form-control" readonly />
-                <span asp-validation-for="Horario.Identificacion" class="text-danger"></span>
-            </div>
-
-            <!-- áreas -->
-            <div class="form-group mb-3">
-                <label class="control-label">Área en la que trabaja</label>
-                <select id="selectArea" asp-for="Horario.ID_Area" class="form-select" onchange="actualizarCodigoArea()">
-                    <option value="">Seleccione un área</option>
-                    @if (Model.AreasDisponibles != null && Model.AreasDisponibles.Any())
-                    {
-                        foreach (var area in Model.AreasDisponibles)
-                        {
-                            <option value="@area.ID_Area" data-codigo="@area.Codigo_Area" data-nombre="@area.Nombre_Area">
-                                @area.Nombre_Area
-                            </option>
-                        }
-                    }
-                </select>
-                <span asp-validation-for="Horario.ID_Area" class="text-danger"></span>
-            </div>
-
-            <!-- Código de área -->
-            <div class="form-group mb-3">
-                <label asp-for="Horario.Codigo_Area" class="control-label">Código del Área</label>
-                <input asp-for="Horario.Codigo_Area" class="form-control" id="codigoArea" readonly />
-                <span asp-validation-for="Horario.Codigo_Area" class="text-danger"></span>
-            </div>
-
-            <!-- Campo hidden para Nombre_Area -->
-            <input type="hidden" asp-for="Horario.Nombre_Area" id="nombreArea" />
-
-            <!-- Botón crear -->
-            <div class="form-group mt-4">
-                <input type="submit" value="Crear Horario" class="btn btn-primary" id="btnSubmit" />
-            </div>
-        </form>
+<form method="post" id="horarioForm">
+    <!-- Identificación del usuario -->
+    <div class="form-group mb-3">
+        <label class="control-label">Identificación del Usuario</label>
+        <input asp-for="Horario.Identificacion" class="form-control" readonly />
+        <span asp-validation-for="Horario.Identificacion" class="text-danger"></span>
     </div>
-</div>
 
-<div class="mt-3">
-    <a asp-page="/ADM_Horarios/Detalle_Horarios" asp-route-id="@Model.Horario.Identificacion">Volver a la lista</a>
-</div>
+    <!-- áreas -->
+    <div class="form-group mb-3">
+        <label class="control-label">Área en la que trabaja</label>
+        <select id="selectArea" asp-for="Horario.ID_Area" class="form-control" onchange="actualizarCodigoArea()">
+            <option value="">Seleccione un área</option>
+            @if (Model.AreasDisponibles != null && Model.AreasDisponibles.Any())
+            {
+                foreach (var area in Model.AreasDisponibles)
+                {
+                    <option value="@area.ID_Area" data-codigo="@area.Codigo_Area" data-nombre="@area.Nombre_Area">
+                        @area.Nombre_Area
+                    </option>
+                }
+            }
+        </select>
+        <span asp-validation-for="Horario.ID_Area" class="text-danger"></span>
+    </div>
+
+    <!-- Código de área -->
+    <div class="form-group mb-3">
+        <label class="control-label">Código del Área</label>
+        <input asp-for="Horario.Codigo_Area" class="form-control" id="codigoArea" readonly />
+        <span asp-validation-for="Horario.Codigo_Area" class="text-danger"></span>
+    </div>
+
+    <!-- Campo hidden para Nombre_Area -->
+    <input type="hidden" asp-for="Horario.Nombre_Area" id="nombreArea" />
+
+    <!-- Botón crear -->
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Crear Horario</button>
+        <a asp-page="/ADM_Horarios/Detalle_Horarios" asp-route-id="@Model.Horario.Identificacion" class="btn btn-secondary">Volver</a>
+    </div>
+</form>
 
 @section Scripts {
     <script>
@@ -85,14 +77,11 @@
 
             document.getElementById("codigoArea").value = codigo;
             document.getElementById("nombreArea").value = nombre;
-
         }
 
-        // Validar antes de enviar
         document.getElementById('horarioForm').addEventListener('submit', function(e) {
             const idArea = document.querySelector('[name="Horario.ID_Area"]').value;
             const nombreArea = document.getElementById('nombreArea').value;
-
 
             if (!idArea || idArea === '') {
                 alert('Por favor selecciona un área');
@@ -105,13 +94,9 @@
                 e.preventDefault();
                 return;
             }
-
         });
 
-        // Inicializar al cargar la página
         document.addEventListener('DOMContentLoaded', function() {
-           
-            // Si hay un área seleccionada por defecto, actualizar los campos
             actualizarCodigoArea();
         });
     </script>
