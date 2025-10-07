@@ -27,7 +27,7 @@ namespace EjemploCoreWeb.Services
             var wrapper = new
             {
                 Accion = nombreAccion,
-                //Detalle = detalle
+                Detalle = detalle
             };
 
             var jsonDetalle = JsonSerializer.Serialize(wrapper);

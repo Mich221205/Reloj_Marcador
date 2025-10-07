@@ -1,7 +1,7 @@
-﻿using EjemploCoreWeb.Repository;
+using EjemploCoreWeb.Repository;
 using EjemploCoreWeb.Services;
 using EjemploCoreWeb.Services.Abstract;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +10,10 @@ builder.Services.AddRazorPages();
 
 builder.Services.AddSingleton<IDbConnectionFactory, DbConnectionFactory>();
 
-// Inyecciones de dependencias
+//Ejemplo del profe
+//builder.Services.AddScoped<PersonaRepository>(); //cada solicitud crea un personaRepository
+//builder.Services.AddScoped<IPersonaService, PersonaService>();
+
 builder.Services.AddScoped<IInconsistenciaRepository, InconsistenciaRepository>();
 builder.Services.AddScoped<IInconsistenciaService, InconsistenciaService>();
 builder.Services.AddScoped<UsuarioRepository>();
@@ -24,54 +27,30 @@ builder.Services.AddScoped<IHorarios, HorariosServices>();
 
 //SE LLAMA INYECCION DE DEPENDENCIAS BROTHER
 
-// servicio de bit�cora
-builder.Services.AddScoped<RolRepository>();
-builder.Services.AddScoped<IRolService, RolService>();
-builder.Services.AddScoped<IdentificacionRepository>();
-builder.Services.AddScoped<ITipoIdentificacionService, TipoIdentificacionService>();
+// servicio de bit�cora
 builder.Services.AddScoped<IBitacoraService, BitacoraService>();
-
-// Autenticación por cookies
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options =>
-    {
-        options.LoginPath = "/PRUEBA_Usuarios/LoginPrueba"; // login temporal
-        options.AccessDeniedPath = "/PRUEBA_Usuarios/LoginPrueba";
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(5); // expira tras 5 min de inactividad
-        options.SlidingExpiration = true; // se renueva si hay actividad
-    });
-
-builder.Services.AddAuthorization();
-
-// Vencimiento de sesión (middleware de session)
-builder.Services.AddSession(options =>
-{
-    options.IdleTimeout = TimeSpan.FromMinutes(5);
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
-});
 
 var app = builder.Build();
 
-// Middleware
+// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
 }
-
 app.UseStaticFiles();
+
 app.UseRouting();
 
-app.UseSession(); // importante: antes de auth
-app.UseAuthentication();
 app.UseAuthorization();
 
-// Redirección inicial al login
+
+//LEVANTAMIENTO DE PAGINA INDEX PARA PRUEBAS
 app.MapGet("/", context =>
 {
-    context.Response.Redirect("/PRUEBA_Usuarios/LoginPrueba");
+    context.Response.Redirect("/InconsistenciasM/Index");
     return Task.CompletedTask;
 });
+
 
 app.MapRazorPages();
 

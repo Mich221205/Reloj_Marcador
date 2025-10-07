@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,7 +30,7 @@ namespace EjemploCoreWeb.Entities
     }
 
 
-}
+
     public class Rol { 
         
         public int ID_Rol_Usuario { get; set; }
@@ -54,5 +53,7 @@ namespace EjemploCoreWeb.Entities
         [RegularExpression("^[A-Za-zÁÉÍÓÚáéíóúñÑ ]+$", ErrorMessage = "El nombre solo puede contener letras y espacios.")]
         public string Tipo_Identificacion { get; set; }
     }
+
+}
 
 

@@ -8,28 +8,6 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/EjemploProyecto.styles.css" asp-append-version="true" />
 </head>
-
-<script>
-    (function() {
-        const INACTIVITY_TIME = 5 * 60 * 1000; // 5 minutos 
-        let timer;
-
-        function resetTimer() {
-            clearTimeout(timer);
-            timer = setTimeout(() => {
-                alert("Tu sesión ha expirado por inactividad.");
-                window.location.href = '/PRUEBA_Usuarios/LoginPrueba?expired=1';
-            }, INACTIVITY_TIME);
-        }
-
-        ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(e =>
-            document.addEventListener(e, resetTimer, true)
-        );
-
-        resetTimer();
-    })();
-</script>
-
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
@@ -53,13 +31,6 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/ADM_Ausencias/Index">Motivos Ausencias</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Roles/Index">Administración de roles</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/TiposIdentificacion/Index">Administracion de identificación</a>
-
                     </ul>
                 </div>
             </div>
