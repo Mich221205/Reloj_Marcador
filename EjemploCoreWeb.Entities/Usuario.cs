@@ -15,9 +15,8 @@ namespace EjemploCoreWeb.Entities
         public string Apellido_2 { get; set; } = string.Empty;
         public string Correo { get; set; } = string.Empty;
         public string Telefono { get; set; }
-        public int IdRolUsuario { get; set; }
+        public int Id_Rol_Usuario { get; set; }
         public string Contrasena { get; set; } = string.Empty;
-        public DateTime FechaCreacion { get; set; }
         public bool Estado { get; set; }
 
     }
