@@ -1,12 +1,13 @@
-﻿using System;
+﻿using EjemploCoreWeb.Entities;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EjemploCoreWeb.Services.Abstract
 {
-    internal interface IRolService
+    public interface IRolService
     {
+        IEnumerable<Rol> ObtenerRoles();
+        void CrearRol(Rol rol);
+        void ActualizarRol(Rol rol);
+        void EliminarRol(int idRol);
     }
 }
