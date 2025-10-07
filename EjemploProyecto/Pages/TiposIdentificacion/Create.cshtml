@@ -1,4 +1,66 @@
 ﻿@page
-@model EjemploProyecto.Pages.TiposIdentificacion.CreateModel
-@{
+@model EjemploProyecto.Pages.ADM_Identificacion.CreateModel
+
+<h2>Crear Tipo de Identificación</h2>
+
+<form method="post">
+    <div class="mb-3">
+        <label class="form-label">Nombre del Tipo</label>
+        <input asp-for="Tipo.Tipo_Identificacion" class="form-control" />
+        <span asp-validation-for="Tipo.Tipo_Identificacion" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-success"> Guardar</button>
+    <a asp-page="Index" class="btn btn-secondary"> Volver</a>
+</form>
+
+<!-- Modal General -->
+<div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" id="modalHeader">
+                <h5 class="modal-title" id="messageModalLabel">@ViewData["ModalTitle"]</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                @ViewData["ModalMessage"]
+            </div>
+            <div class="modal-footer">
+                @if ((string)ViewData["ModalType"] == "success")
+                {
+                    <a asp-page="Index" class="btn btn-success">Aceptar</a>
+                }
+                else
+                {
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var msg = '@ViewData["ModalMessage"]';
+            var type = '@ViewData["ModalType"]';
+
+            if (msg && msg !== '') {
+                var modalHeader = document.getElementById("modalHeader");
+
+                // Cambiar color según tipo
+                if (type === "success") {
+                    modalHeader.classList.add("bg-success", "text-white");
+                } else if (type === "error") {
+                    modalHeader.classList.add("bg-danger", "text-white");
+                } else if (type === "warning") {
+                    modalHeader.classList.add("bg-warning", "text-dark");
+                } else {
+                    modalHeader.classList.add("bg-info", "text-white");
+                }
+
+                var messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
+                messageModal.show();
+            }
+        });
+    </script>
 }
