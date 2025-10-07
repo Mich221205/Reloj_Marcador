@@ -1,0 +1,29 @@
+﻿@page
+@model EjemploProyecto.Pages.ADM_Identificacion.IndexModel
+
+
+<h2>Administración de Tipos de Identificación</h2>
+<a asp-page="Create" class="btn btn-primary mb-3"> Nuevo</a>
+
+<table class="table table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Nombre del Tipo</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var tipo in Model.Tipos)
+        {
+            <tr>
+                <td>@tipo.ID_Tipo_Identificacion</td>
+                <td>@tipo.Tipo_Identificacion</td>
+                <td>
+                    <a asp-page="Edit" asp-route-id="@tipo.ID_Tipo_Identificacion" class="btn btn-warning btn-sm"> Editar</a>
+                    <a asp-page="Delete" asp-route-id="@tipo.ID_Tipo_Identificacion" class="btn btn-danger btn-sm">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
