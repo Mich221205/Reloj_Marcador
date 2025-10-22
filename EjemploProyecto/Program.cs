@@ -26,13 +26,14 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<IDbConnectionFactory, DbConnectionFactory>();
 
 // ---------------------------
-// Inyección de dependencias (DE ELLOS)
+// Servicios existentes del equipo
 // ---------------------------
 builder.Services.AddScoped<IInconsistenciaRepository, InconsistenciaRepository>();
 builder.Services.AddScoped<IInconsistenciaService, InconsistenciaService>();
 
 builder.Services.AddScoped<UsuarioRepository>();
-builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+// ⇨ Servicio “viejo” para Login/Cambio de clave (mantener).
+builder.Services.AddScoped<PersonaAbstr.IUsuarioService, PersonaImpl.UsuarioService>();
 
 builder.Services.AddScoped<IBitacoraService, BitacoraService>();
 
@@ -49,19 +50,26 @@ builder.Services.AddScoped<IdentificacionRepository>();
 builder.Services.AddScoped<ITipoIdentificacionService, TipoIdentificacionService>();
 
 // ---------------------------
-// HU7 / HU8 / HU9 — Repos
+// HU7 / HU8 / HU9 — Repositorios y servicios ADMIN
 // ---------------------------
+
+// Repositorio ADMIN para CRUD de usuarios (1 sola vez; elimina duplicados)
+builder.Services.AddScoped<
+    EjemploCoreWeb.Repository.Interfaces.IUsuarioRepository,
+    EjemploCoreWeb.Repository.Repositories.AdminUsuarioRepository>();
+
+// Servicio ADMIN de usuarios (CRUD, paginación, etc.)
+builder.Services.AddScoped<
+    SvcIf.IUsuarioService,
+    SvcImpl.AdminUsuarioService>();
+
+// Áreas
 builder.Services.AddScoped<IAreaRepository, AreaRepository>();
-builder.Services.AddScoped<IUsuarioAreaRepository, UsuarioAreaRepository>();
-
-// ---------------------------
-// HU7 / HU8 / HU9 — Services
-// ---------------------------
 builder.Services.AddScoped<SvcIf.IAreaService, SvcImpl.AreaService>();
-builder.Services.AddScoped<SvcIf.IUsuarioAreaService, SvcImpl.UsuarioAreaService>();
 
-// ⛔ IMPORTANTE: no agregar mapeos extra para IUsuarioService (Interfaces) aquí,
-// porque tu UsuarioService implementa la interfaz de Abstract y ya está registrada.
+// Usuario–Área
+builder.Services.AddScoped<IUsuarioAreaRepository, UsuarioAreaRepository>();
+builder.Services.AddScoped<SvcIf.IUsuarioAreaService, SvcImpl.UsuarioAreaService>();
 
 // ---------------------------
 // Autenticación por cookies
@@ -69,7 +77,7 @@ builder.Services.AddScoped<SvcIf.IUsuarioAreaService, SvcImpl.UsuarioAreaService
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/ADM_Login/Login"; // login temporal
+        options.LoginPath = "/ADM_Login/Login";           // login temporal
         options.AccessDeniedPath = "/ADM_Login/Login";
         options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
         options.SlidingExpiration = true;
@@ -77,6 +85,9 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 builder.Services.AddAuthorization();
 
+// ---------------------------
+// Sesión (dejamos ambos bloques tal como estaban)
+// ---------------------------
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(5);
@@ -84,7 +95,6 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-// (Segundo bloque de sesión se respeta)
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(30);
@@ -106,7 +116,9 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseStaticFiles();
+
 app.UseRouting();
+
 app.UseAuthentication();
 app.UseSession();
 app.UseAuthorization();
@@ -118,4 +130,5 @@ app.MapGet("/", context =>
 });
 
 app.MapRazorPages();
+
 app.Run();

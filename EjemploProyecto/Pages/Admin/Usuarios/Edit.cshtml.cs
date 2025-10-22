@@ -1,5 +1,5 @@
 using EjemploCoreWeb.Entities;
-using EjemploCoreWeb.Services.Interfaces;
+using EjemploCoreWeb.Services.Interfaces;      // IUsuarioService
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -18,7 +18,7 @@ namespace EjemploProyecto.Pages.Admin.Usuarios
         public class VM
         {
             [Required] public int ID_Usuario { get; set; }
-            [Required] public int ID_Tipo_Identificacion { get; set; } // UI-only (no se persiste)
+            [Required] public int ID_Tipo_Identificacion { get; set; }   // UI-only
 
             [Required, StringLength(30)]
             public string Identificacion { get; set; } = "";
@@ -40,14 +40,10 @@ namespace EjemploProyecto.Pages.Admin.Usuarios
             [Required]
             public int ID_Rol_Usuario { get; set; }
 
-            // UI-only: tus vistas pueden mostrarlo, pero la entidad no lo tiene
-            public string Nom_Usuario { get; set; } = "";
+            public string Nom_Usuario { get; set; } = "";     // UI-only
+            public string? Password { get; set; }             // opcional
 
-            public string? Password { get; set; } // opcional
-
-            // ⚠️ En la entidad es bool, así que acá debe ser bool
-            [Required]
-            public bool Estado { get; set; } = true;
+            [Required] public bool Estado { get; set; } = true;
         }
 
         [BindProperty] public VM Input { get; set; } = new();
@@ -74,9 +70,8 @@ namespace EjemploProyecto.Pages.Admin.Usuarios
                 Correo = u.Correo,
                 Telefono = u.Telefono,
                 ID_Rol_Usuario = u.Id_Rol_Usuario,
-                // La entidad no tiene Nom_Usuario; usamos Nombre para mostrar algo en UI si hace falta
                 Nom_Usuario = u.Nombre,
-                Estado = u.Estado // bool -> bool
+                Estado = u.Estado
             };
 
             return Page();
@@ -91,7 +86,6 @@ namespace EjemploProyecto.Pages.Admin.Usuarios
 
                 TiposSelectList = new SelectList(await _svc.ListarTiposAsync(),
                     "ID_Tipo_Identificacion", "Tipo_Identificacion");
-
                 return Page();
             }
 
@@ -104,14 +98,13 @@ namespace EjemploProyecto.Pages.Admin.Usuarios
                 Apellido_2 = Input.Apellido_2,
                 Correo = Input.Correo,
                 Telefono = Input.Telefono,
-                // ⚠️ entidad usa Id_Rol_Usuario (no ID_Rol_Usuario)
                 Id_Rol_Usuario = Input.ID_Rol_Usuario,
-                // La entidad NO tiene Nom_Usuario, no se asigna
-                Estado = Input.Estado // bool -> bool
+                Estado = Input.Estado
             };
 
             var ok = await _svc.ActualizarAsync(
                 u,
+                Input.ID_Tipo_Identificacion,
                 string.IsNullOrWhiteSpace(Input.Password) ? null : Input.Password
             );
 

@@ -25,8 +25,8 @@
 
 <script>
     (function () {
-        //const INACTIVITY_TIME = 5 * 60 * 1000; // 5 minutos
-        const INACTIVITY_TIME = 10 * 1000; // 5 minutos
+        const INACTIVITY_TIME = 5 * 60 * 1000; // 5 minutos
+
         let timer;
 
         function resetTimer() {
@@ -59,7 +59,7 @@
     <!-- Encabezado superior -->
     <header class="header">
         <div class="header-left">
-            <img src="~/images/LOGO.ico" alt="Logo de Siempre Puntuales S.A." class="header-logo" />
+            <img src="~/images/logo.ico" alt="Logo de Siempre Puntuales S.A." class="header-logo" />
             <strong>Siempre Puntuales S.A.</strong>
         </div>
 
@@ -81,9 +81,9 @@
                 </a>
             </li>
 
-
+            <!-- ✅ Usuarios: apunta al nuevo módulo -->
             <li>
-                <a class="sidebar-link" asp-page="/ADM_Usuarios/Index">
+                <a class="sidebar-link" asp-page="/Admin/Usuarios/Index">
                     <i class="bi bi-people"></i> Usuarios
                 </a>
             </li>
@@ -103,6 +103,19 @@
             <li>
                 <a class="sidebar-link" asp-page="/TiposIdentificacion/Index">
                     <i class="bi bi-card-list"></i> Tipos Identificación
+                </a>
+            </li>
+
+            <!-- ✅ Áreas -->
+            <li>
+                <a class="sidebar-link" asp-page="/Admin/Areas/Index">
+                    <i class="bi bi-diagram-3"></i> Áreas
+                </a>
+            </li>
+
+            <li>
+                <a class="sidebar-link" asp-page="/ADM_Horarios/Detalle_Horarios">
+                    <i class="bi bi-clock-history"></i> Administración de horarios
                 </a>
             </li>
 
@@ -137,7 +150,6 @@
             </div>
         </div>
     </div>
-
 
     <!-- Contenido principal -->
     <main class="main-content">

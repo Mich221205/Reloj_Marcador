@@ -1,5 +1,5 @@
 using EjemploCoreWeb.Entities;
-using EjemploCoreWeb.Services.Interfaces;
+using EjemploCoreWeb.Services.Interfaces;      // IUsuarioService
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -25,13 +25,16 @@ public class IndexModel : PageModel
         TotalPages = (int)Math.Ceiling(total / (double)PageSize);
         Roles = await _svc.ListarRolesAsync();
     }
-
     public async Task<IActionResult> OnPostDeleteAsync(int id)
     {
         var ok = await _svc.EliminarAsync(id);
-        TempData[ok ? "Ok" : "Error"] = ok
-            ? "Usuario eliminado."
-            : "No se puede eliminar un registro con datos relacionados.";
-        return RedirectToPage(new { Q, Page });
+
+        if (ok)
+            TempData["Ok"] = "Usuario eliminado.";
+        else
+            TempData["Error"] = "No se puede eliminar un registro con datos relacionados.";
+
+        return RedirectToPage("Index", new { Q, Page, PageSize });
     }
+
 }

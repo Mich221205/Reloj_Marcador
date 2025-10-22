@@ -1,9 +1,16 @@
-﻿namespace EjemploCoreWeb.Entities;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-public record class UsuarioArea
+namespace EjemploCoreWeb.Entities
 {
-    public int ID_Usuario { get; set; }
-    public int ID_Area { get; set; }
-    public string Nombre_Area { get; set; } = "";
-}
+    public class UsuarioArea
+    {
+        public int ID_Usuario { get; set; }
+        public int ID_Area { get; set; }
 
+        [NotMapped]
+        public string Nombre_Area { get; set; } = string.Empty;
+
+        [NotMapped]
+        public string? Codigo_Area { get; set; }
+    }
+}

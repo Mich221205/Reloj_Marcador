@@ -21,7 +21,12 @@ namespace EjemploProyecto.Pages.ADM_Registro
 
         public string Mensaje { get; set; } = string.Empty;
 
-        private readonly string connectionString = "Server=localhost;Database=reloj_marcador;Uid=reloj_user;Pwd=RELOJ123;";
+        private readonly string connectionString =
+            "Server=127.0.0.1;Port=3306;Database=reloj_marcador;" +
+            "Uid=reloj_user;Pwd=RELOJ123;Protocol=Tcp;AllowPublicKeyRetrieval=True;SslMode=None;";
+
+
+
 
         // 🔐 Clave AES-256 (32 caracteres) y IV (16 caracteres)
         private static readonly string AES_KEY = "12345678901234567890123456789012";

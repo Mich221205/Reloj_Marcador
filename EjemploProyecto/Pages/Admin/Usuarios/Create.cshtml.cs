@@ -1,5 +1,5 @@
 using EjemploCoreWeb.Entities;
-using EjemploCoreWeb.Services.Interfaces;
+using EjemploCoreWeb.Services.Interfaces;      // IUsuarioService
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -17,18 +17,22 @@ namespace EjemploProyecto.Pages.Admin.Usuarios
 
         public class VM
         {
-            [Required] public int ID_Tipo_Identificacion { get; set; } // UI-only
+            [Required(ErrorMessage = "El tipo de identificación es obligatorio.")]
+            public int ID_Tipo_Identificacion { get; set; }   // UI-only, se pasa como parámetro
 
             [Required, StringLength(30)]
             public string Identificacion { get; set; } = "";
 
-            [Required, StringLength(50), RegularExpression("^[A-Za-zÁÉÍÓÚáéíóúñÑ ]+$")]
+            [Required, StringLength(50), RegularExpression("^[A-Za-zÁÉÍÓÚáéíóúñÑ ]+$",
+                ErrorMessage = "El nombre solo puede contener letras y espacios y máx. 50 caracteres.")]
             public string Nombre { get; set; } = "";
 
-            [Required, StringLength(50), RegularExpression("^[A-Za-zÁÉÍÓÚáéíóúñÑ ]+$")]
+            [Required, StringLength(50), RegularExpression("^[A-Za-zÁÉÍÓÚáéíóúñÑ ]+$",
+                ErrorMessage = "El primer apellido solo puede contener letras y espacios y máx. 50 caracteres.")]
             public string Apellido_1 { get; set; } = "";
 
-            [Required, StringLength(50), RegularExpression("^[A-Za-zÁÉÍÓÚáéíóúñÑ ]+$")]
+            [Required, StringLength(50), RegularExpression("^[A-Za-zÁÉÍÓÚáéíóúñÑ ]+$",
+                ErrorMessage = "El segundo apellido solo puede contener letras y espacios y máx. 50 caracteres.")]
             public string Apellido_2 { get; set; } = "";
 
             [Required, EmailAddress]
@@ -39,17 +43,14 @@ namespace EjemploProyecto.Pages.Admin.Usuarios
             [Required]
             public int ID_Rol_Usuario { get; set; }
 
-            // UI-only para formularios; la entidad no tiene esta propiedad
-            public string Nom_Usuario { get; set; } = "";
+            public string Nom_Usuario { get; set; } = "";     // UI-only
 
             [Required, StringLength(100, MinimumLength = 6)]
             [RegularExpression(@"^(?=.*\d)(?=.*[^\w\s]).{6,}$",
                 ErrorMessage = "La contraseña debe contener números y al menos un símbolo.")]
             public string Password { get; set; } = "";
 
-            // ⚠️ En la entidad es bool
-            [Required]
-            public bool Estado { get; set; } = true;
+            [Required] public bool Estado { get; set; } = true;   // en la entidad es bool
         }
 
         [BindProperty] public VM Input { get; set; } = new();
@@ -67,7 +68,7 @@ namespace EjemploProyecto.Pages.Admin.Usuarios
         {
             if (!ModelState.IsValid)
             {
-                await OnGetAsync(); // recargar combos
+                await OnGetAsync();
                 return Page();
             }
 
@@ -79,13 +80,13 @@ namespace EjemploProyecto.Pages.Admin.Usuarios
                 Apellido_2 = Input.Apellido_2,
                 Correo = Input.Correo,
                 Telefono = Input.Telefono,
-                // ⚠️ entidad usa Id_Rol_Usuario
                 Id_Rol_Usuario = Input.ID_Rol_Usuario,
-                // La entidad NO tiene Nom_Usuario
-                Estado = Input.Estado // bool -> bool
+                Estado = Input.Estado
             };
 
-            await _svc.CrearAsync(u, Input.Password);
+            // OJO: la interfaz debe tener CrearAsync(Usuario u, int tipoId, string plainPassword)
+            await _svc.CrearAsync(u, Input.ID_Tipo_Identificacion, Input.Password);
+
             TempData["Ok"] = "Usuario creado correctamente.";
             return RedirectToPage("Index");
         }

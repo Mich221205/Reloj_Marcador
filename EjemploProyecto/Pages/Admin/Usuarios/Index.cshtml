@@ -3,15 +3,12 @@
 @{
     ViewData["Title"] = "Funcionarios / Usuarios";
 }
+
 <h2>Funcionarios / Usuarios</h2>
 
 @if (TempData["Ok"] is string ok)
 {
     <div class="alert alert-success">@ok</div>
-}
-@if (TempData["Error"] is string err)
-{
-    <div class="alert alert-danger">@err</div>
 }
 
 <form method="get" class="row g-2 mb-3">
@@ -32,27 +29,56 @@
             <th>Correo</th>
             <th>Rol</th>
             <th>Estado</th>
-            <th>Acciones</th>
+            <th style="width:1%;">Acciones</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var f in Model.Lista)
         {
-            var rol = Model.Roles.FirstOrDefault(r => r.ID_Rol_Usuario == f.Id_Rol_Usuario)?.Nombre_Rol ?? f.Id_Rol_Usuario.ToString();
+            var rol = Model.Roles.FirstOrDefault(r => r.ID_Rol_Usuario == f.Id_Rol_Usuario)?.Nombre_Rol
+            ?? f.Id_Rol_Usuario.ToString();
+
             <tr>
                 <td>@f.Identificacion</td>
                 <td>@($"{f.Nombre} {f.Apellido_1} {f.Apellido_2}")</td>
                 <td>@f.Correo</td>
                 <td>@rol</td>
-                <td>@f.Estado</td>
-                <td class="d-flex gap-2">
-                    <a class="btn btn-sm btn-primary" asp-page="Edit" asp-route-id="@f.Id_Usuario">Editar</a>
-                    <form method="post" asp-page-handler="Delete" asp-route-id="@f.Id_Usuario" onsubmit="return confirm('¿Eliminar usuario?')">
-                        <button class="btn btn-sm btn-danger" type="submit">Eliminar</button>
-                    </form>
-                    <a class="btn btn-sm btn-secondary" asp-page="Areas" asp-route-id="@f.Id_Usuario">Áreas</a>
-                    <a class="btn btn-sm btn-outline-secondary" asp-page="/Admin/CambioClave/Index" asp-route-id="@f.Id_Usuario">Cambio de clave</a>
-                    <a class="btn btn-sm btn-outline-secondary" asp-page="/Admin/Horarios/Index" asp-route-id="@f.Id_Usuario">Horarios</a>
+                <td>@(f.Estado ? "Activo" : "Inactivo")</td>
+
+                <td class="text-nowrap">
+                    <div class="d-flex flex-wrap gap-2">
+
+                        <a class="btn btn-sm btn-primary"
+                           asp-page="Edit"
+                           asp-route-id="@f.Id_Usuario">
+                            Editar
+                        </a>
+
+                        <button type="button"
+                                class="btn btn-sm btn-danger"
+                                data-bs-toggle="modal"
+                                data-bs-target="#confirmDeleteModal"
+                                data-id="@f.Id_Usuario"
+                                data-nombre="@($"{f.Nombre} {f.Apellido_1} {f.Apellido_2}")">
+                            Eliminar
+                        </button>
+
+                        <a class="btn btn-sm btn-outline-dark"
+                           href="~/ADM_Usuarios/Cambio_Clave?id=@f.Identificacion">
+                            Cambio de clave
+                        </a>
+
+                        <a class="btn btn-sm btn-outline-secondary"
+                           asp-page="/Admin/Usuarios/Areas"
+                           asp-route-id="@f.Id_Usuario">
+                            Administración de áreas
+                        </a>
+
+                        <a class="btn btn-sm btn-warning"
+                           href="~/ADM_Horarios/Detalle_Horarios?id=@f.Identificacion">
+                            Administración de horarios
+                        </a>
+                    </div>
                 </td>
             </tr>
         }
@@ -61,14 +87,80 @@
 
 @if (Model.TotalPages > 1)
 {
-    <nav>
+    <nav aria-label="Usuarios paginación">
         <ul class="pagination">
             @for (var p = 1; p <= Model.TotalPages; p++)
             {
                 <li class="page-item @(p == Model.Page ? "active" : "")">
-                    <a class="page-link" asp-route-Page="@p" asp-route-Q="@Model.Q">@p</a>
+                    <a class="page-link"
+                       asp-route-Page="@p"
+                       asp-route-Q="@Model.Q">@p</a>
                 </li>
             }
         </ul>
     </nav>
+}
+
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content border-danger">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="confirmDeleteLabel">Confirmar eliminación</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <p id="confirmDeleteText">¿Realmente deseas eliminar este usuario?</p>
+            </div>
+            <div class="modal-footer">
+                <form method="post" asp-page-handler="Delete" id="deleteForm" class="d-inline">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" id="deleteId" value="" />
+                    <button type="submit" class="btn btn-danger">Sí</button>
+                </form>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content border-danger">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="errorLabel">Error</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                @((TempData["Error"] as string) ?? "No se puede eliminar un registro con datos relacionados.")
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+
+        const confirmModal = document.getElementById('confirmDeleteModal');
+        confirmModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            const id = button.getAttribute('data-id');
+            const nombre = button.getAttribute('data-nombre');
+
+            document.getElementById('deleteId').value = id;
+            const txt = document.getElementById('confirmDeleteText');
+            txt.textContent = `¿Realmente deseas eliminar al usuario ${nombre}?`;
+        });
+
+        @if (TempData["Error"] is string)
+        {
+                <text>
+                    const errModal = new bootstrap.Modal(document.getElementById('errorModal'));
+                    errModal.show();
+                </text>
+        }
+    </script>
 }

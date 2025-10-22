@@ -6,6 +6,11 @@
 
 <h2>Áreas</h2>
 
+@if (TempData["Ok"] is string ok)
+{
+    <div class="alert alert-success">@ok</div>
+}
+
 <form method="get" class="row g-2 mb-3">
     <div class="col-auto">
         <input class="form-control" name="Q" value="@Model.Q" placeholder="Buscar..." />
@@ -17,11 +22,6 @@
         <a asp-page="Create" class="btn btn-success">Nueva</a>
     </div>
 </form>
-
-@if (TempData["Error"] is string err)
-{
-    <div class="alert alert-danger">@err</div>
-}
 
 <table class="table table-striped align-middle">
     <thead>
@@ -36,17 +36,88 @@
         {
             <tr>
                 <td>@a.Nombre_Area</td>
-                <td>@(a.Jefe_Nombre ?? a.Jefe_Area.ToString())</td>
+                <td>@(string.IsNullOrWhiteSpace(a.Jefe_Nombre) ? a.Jefe_Area.ToString() : a.Jefe_Nombre)</td>
                 <td>
-                    <a asp-page="Edit" asp-route-id="@a.ID_Area" class="btn btn-primary btn-sm">Editar</a>
-                    <form method="post" asp-page-handler="Delete" asp-route-id="@a.ID_Area" class="d-inline">
-                        <button type="submit" class="btn btn-danger btn-sm"
-                                onclick="return confirm('¿Eliminar área?');">
-                            Eliminar
-                        </button>
-                    </form>
+                    <a asp-page="Edit" asp-route-id="@a.ID_Area" asp-route-Q="@Model.Q" class="btn btn-primary btn-sm">Editar</a>
+
+                    <button type="button"
+                            class="btn btn-danger btn-sm"
+                            data-bs-toggle="modal"
+                            data-bs-target="#confirmDeleteAreaModal"
+                            data-id="@a.ID_Area"
+                            data-nombre="@a.Nombre_Area"
+                            data-q="@Model.Q">
+                        Eliminar
+                    </button>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+<div class="modal fade" id="confirmDeleteAreaModal" tabindex="-1" aria-labelledby="confirmDeleteAreaLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content border-danger">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="confirmDeleteAreaLabel">Confirmar eliminación</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <p id="confirmDeleteAreaText">¿Realmente deseas eliminar esta área?</p>
+            </div>
+            <div class="modal-footer">
+                <form method="post" asp-page-handler="Delete" id="deleteAreaForm" class="d-inline">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" id="deleteAreaId" value="" />
+                    <input type="hidden" name="Q" id="deleteAreaQ" value="@Model.Q" />
+                    <button type="submit" class="btn btn-danger">Sí</button>
+                </form>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="errorAreaModal" tabindex="-1" aria-labelledby="errorAreaLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content border-danger">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="errorAreaLabel">Error</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                @((TempData["Error"] as string) ?? "No se puede eliminar un registro con datos relacionados.")
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+
+        const areaModal = document.getElementById('confirmDeleteAreaModal');
+        areaModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            const id = button.getAttribute('data-id');
+            const nombre = button.getAttribute('data-nombre');
+            const q = button.getAttribute('data-q') || '';
+
+            document.getElementById('deleteAreaId').value = id;
+            document.getElementById('deleteAreaQ').value = q;
+
+            const txt = document.getElementById('confirmDeleteAreaText');
+            txt.textContent = `¿Realmente deseas eliminar el área "${nombre}"?`;
+        });
+
+        @if (TempData["Error"] is string)
+        {
+                <text>
+                    const errModal = new bootstrap.Modal(document.getElementById('errorAreaModal'));
+                    errModal.show();
+                </text>
+        }
+    </script>
+}

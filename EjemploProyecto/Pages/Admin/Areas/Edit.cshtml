@@ -6,23 +6,40 @@
 
 <h2>Editar área</h2>
 
-<form method="post">
+<form method="post" novalidate>
     <input type="hidden" asp-for="Input.ID_Area" />
+    <input type="hidden" name="Q" value="@Model.Q" />
 
     <div class="mb-3">
         <label class="form-label">Nombre del área</label>
-        <input asp-for="Input.Nombre_Area" class="form-control" />
+        <input asp-for="Input.Nombre_Area"
+               class="form-control"
+               maxlength="40"
+               pattern="^[A-Za-zÁÉÍÓÚáéíóúñÑ ]+$"
+               title="Solo letras y espacios, máximo 40 caracteres." />
         <span asp-validation-for="Input.Nombre_Area" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
+        <label class="form-label">ID del área</label>
+        <input asp-for="Input.Codigo_Area"
+               class="form-control"
+               maxlength="15"
+               pattern="^[A-Za-z0-9_-]{1,15}$"
+               title="Máximo 15 caracteres: letras, números, guion (-) y guion bajo (_)." />
+        <span asp-validation-for="Input.Codigo_Area" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
         <label class="form-label">Jefe del área</label>
-        <select asp-for="Input.Jefe_Area" asp-items="Model.Jefes" class="form-select"></select>
+        <select asp-for="Input.Jefe_Area" asp-items="Model.Jefes" class="form-select">
+            <option value="">-- Seleccione --</option>
+        </select>
         <span asp-validation-for="Input.Jefe_Area" class="text-danger"></span>
     </div>
 
     <button class="btn btn-primary" type="submit">Guardar</button>
-    <a asp-page="Index" class="btn btn-secondary">Cancelar</a>
+    <a asp-page="Index" asp-route-Q="@Model.Q" class="btn btn-secondary">Cancelar</a>
 </form>
 
 @section Scripts {

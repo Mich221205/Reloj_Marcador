@@ -1,6 +1,11 @@
 ﻿@page "{id:int}"
 @model EjemploProyecto.Pages.Admin.Usuarios.EditModel
-<h2>Editar usuario</h2>
+@{
+    ViewData["Title"] = "Editar usuario";
+}
+<h2 class="mb-3">Editar usuario</h2>
+
+<partial name="_ValidationScriptsPartial" />
 
 @if (TempData["Error"] is string err)
 {
@@ -8,34 +13,78 @@
 }
 
 <form method="post" class="mt-3">
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
     <input type="hidden" asp-for="Input.ID_Usuario" />
 
     <div class="mb-2">
-        <label class="form-label">Tipo de identificación</label>
+        <label asp-for="Input.ID_Tipo_Identificacion" class="form-label"></label>
         <select class="form-select" asp-for="Input.ID_Tipo_Identificacion" asp-items="Model.TiposSelectList"></select>
+        <span class="text-danger" asp-validation-for="Input.ID_Tipo_Identificacion"></span>
     </div>
-
-    <div class="mb-2"><label class="form-label">Identificación</label><input class="form-control" asp-for="Input.Identificacion" /></div>
-    <div class="mb-2"><label class="form-label">Nombre</label><input class="form-control" asp-for="Input.Nombre" /></div>
-    <div class="mb-2"><label class="form-label">Primer apellido</label><input class="form-control" asp-for="Input.Apellido_1" /></div>
-    <div class="mb-2"><label class="form-label">Segundo apellido</label><input class="form-control" asp-for="Input.Apellido_2" /></div>
-    <div class="mb-2"><label class="form-label">Correo</label><input class="form-control" asp-for="Input.Correo" /></div>
-    <div class="mb-2"><label class="form-label">Teléfono</label><input class="form-control" asp-for="Input.Telefono" /></div>
 
     <div class="mb-2">
-        <label class="form-label">Rol</label>
-        <select class="form-select" asp-for="Input.ID_Rol_Usuario" asp-items="Model.RolesSelectList"></select>
+        <label asp-for="Input.Identificacion" class="form-label"></label>
+        <input class="form-control" asp-for="Input.Identificacion" />
+        <span class="text-danger" asp-validation-for="Input.Identificacion"></span>
     </div>
 
-    <div class="mb-2"><label class="form-label">Usuario</label><input class="form-control" asp-for="Input.Nom_Usuario" /></div>
-    <div class="mb-2"><label class="form-label">Nueva contraseña (opcional)</label><input class="form-control" asp-for="Input.Password" type="password" /></div>
+    <div class="mb-2">
+        <label asp-for="Input.Nombre" class="form-label"></label>
+        <input class="form-control" asp-for="Input.Nombre" />
+        <span class="text-danger" asp-validation-for="Input.Nombre"></span>
+    </div>
+
+    <div class="mb-2">
+        <label asp-for="Input.Apellido_1" class="form-label"></label>
+        <input class="form-control" asp-for="Input.Apellido_1" />
+        <span class="text-danger" asp-validation-for="Input.Apellido_1"></span>
+    </div>
+
+    <div class="mb-2">
+        <label asp-for="Input.Apellido_2" class="form-label"></label>
+        <input class="form-control" asp-for="Input.Apellido_2" />
+        <span class="text-danger" asp-validation-for="Input.Apellido_2"></span>
+    </div>
+
+    <div class="mb-2">
+        <label asp-for="Input.Correo" class="form-label"></label>
+        <input class="form-control" asp-for="Input.Correo" />
+        <span class="text-danger" asp-validation-for="Input.Correo"></span>
+    </div>
+
+    <div class="mb-2">
+        <label asp-for="Input.Telefono" class="form-label"></label>
+        <input class="form-control" asp-for="Input.Telefono" />
+        <span class="text-danger" asp-validation-for="Input.Telefono"></span>
+    </div>
+
+    <div class="mb-2">
+        <label asp-for="Input.ID_Rol_Usuario" class="form-label"></label>
+        <select class="form-select" asp-for="Input.ID_Rol_Usuario" asp-items="Model.RolesSelectList"></select>
+        <span class="text-danger" asp-validation-for="Input.ID_Rol_Usuario"></span>
+    </div>
+
+    <div class="mb-2">
+        <label asp-for="Input.Nom_Usuario" class="form-label"></label>
+        <input class="form-control" asp-for="Input.Nom_Usuario" />
+        <span class="text-danger" asp-validation-for="Input.Nom_Usuario"></span>
+    </div>
+
+    <div class="mb-2">
+        <label asp-for="Input.Password" class="form-label">Nueva contraseña (opcional)</label>
+        <input class="form-control" asp-for="Input.Password" type="password" />
+        <span class="text-danger" asp-validation-for="Input.Password"></span>
+    </div>
 
     <div class="mb-3">
-        <label class="form-label">Estado</label>
+        <label asp-for="Input.Estado" class="form-label"></label>
+        <!-- bool: usar valores true/false -->
         <select class="form-select" asp-for="Input.Estado">
-            <option>Activo</option>
-            <option>Inactivo</option>
+            <option value="true">Activo</option>
+            <option value="false">Inactivo</option>
         </select>
+        <span class="text-danger" asp-validation-for="Input.Estado"></span>
     </div>
 
     <button class="btn btn-primary" type="submit">Guardar</button>

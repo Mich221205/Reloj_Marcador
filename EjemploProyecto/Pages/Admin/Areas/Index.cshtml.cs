@@ -24,8 +24,11 @@ public class IndexModel : PageModel
     public async Task<IActionResult> OnPostDeleteAsync(int id)
     {
         var ok = await _areas.EliminarAsync(id);
-        if (!ok)
+        if (ok)
+            TempData["Ok"] = "Área eliminada correctamente.";
+        else
             TempData["Error"] = "No se puede eliminar un registro con datos relacionados.";
-        return RedirectToPage();
+        // preserva el filtro actual
+        return RedirectToPage(new { Q });
     }
 }

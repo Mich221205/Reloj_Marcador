@@ -1,73 +1,79 @@
 ﻿@page
 @model EjemploProyecto.Pages.Admin.Usuarios.CreateModel
-<h2>Nuevo usuario</h2>
+@{
+    ViewData["Title"] = "Nuevo usuario";
+}
+<h2 class="mb-3">Nuevo usuario</h2>
 
 <form method="post" class="mt-3">
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
     <div class="mb-2">
-        <label class="form-label">Tipo de identificación</label>
+        <label asp-for="Input.ID_Tipo_Identificacion" class="form-label"></label>
         <select class="form-select" asp-for="Input.ID_Tipo_Identificacion" asp-items="Model.TiposSelectList"></select>
         <span asp-validation-for="Input.ID_Tipo_Identificacion" class="text-danger"></span>
     </div>
 
     <div class="mb-2">
-        <label class="form-label">Identificación</label>
+        <label asp-for="Input.Identificacion" class="form-label"></label>
         <input class="form-control" asp-for="Input.Identificacion" />
         <span asp-validation-for="Input.Identificacion" class="text-danger"></span>
     </div>
 
     <div class="mb-2">
-        <label class="form-label">Nombre</label>
+        <label asp-for="Input.Nombre" class="form-label"></label>
         <input class="form-control" asp-for="Input.Nombre" />
         <span asp-validation-for="Input.Nombre" class="text-danger"></span>
     </div>
 
     <div class="mb-2">
-        <label class="form-label">Primer apellido</label>
+        <label asp-for="Input.Apellido_1" class="form-label"></label>
         <input class="form-control" asp-for="Input.Apellido_1" />
         <span asp-validation-for="Input.Apellido_1" class="text-danger"></span>
     </div>
 
     <div class="mb-2">
-        <label class="form-label">Segundo apellido</label>
+        <label asp-for="Input.Apellido_2" class="form-label"></label>
         <input class="form-control" asp-for="Input.Apellido_2" />
         <span asp-validation-for="Input.Apellido_2" class="text-danger"></span>
     </div>
 
     <div class="mb-2">
-        <label class="form-label">Correo</label>
+        <label asp-for="Input.Correo" class="form-label"></label>
         <input class="form-control" asp-for="Input.Correo" />
         <span asp-validation-for="Input.Correo" class="text-danger"></span>
     </div>
 
     <div class="mb-2">
-        <label class="form-label">Teléfono</label>
+        <label asp-for="Input.Telefono" class="form-label"></label>
         <input class="form-control" asp-for="Input.Telefono" />
         <span asp-validation-for="Input.Telefono" class="text-danger"></span>
     </div>
 
     <div class="mb-2">
-        <label class="form-label">Rol</label>
+        <label asp-for="Input.ID_Rol_Usuario" class="form-label"></label>
         <select class="form-select" asp-for="Input.ID_Rol_Usuario" asp-items="Model.RolesSelectList"></select>
         <span asp-validation-for="Input.ID_Rol_Usuario" class="text-danger"></span>
     </div>
 
     <div class="mb-2">
-        <label class="form-label">Usuario</label>
+        <label asp-for="Input.Nom_Usuario" class="form-label"></label>
         <input class="form-control" asp-for="Input.Nom_Usuario" />
         <span asp-validation-for="Input.Nom_Usuario" class="text-danger"></span>
     </div>
 
     <div class="mb-2">
-        <label class="form-label">Contraseña</label>
+        <label asp-for="Input.Password" class="form-label"></label>
         <input class="form-control" asp-for="Input.Password" type="password" />
         <span asp-validation-for="Input.Password" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
-        <label class="form-label">Estado</label>
+        <label asp-for="Input.Estado" class="form-label"></label>
+        <!-- bool: usa true/false -->
         <select class="form-select" asp-for="Input.Estado">
-            <option>Activo</option>
-            <option>Inactivo</option>
+            <option value="true">Activo</option>
+            <option value="false">Inactivo</option>
         </select>
         <span asp-validation-for="Input.Estado" class="text-danger"></span>
     </div>
