@@ -45,10 +45,16 @@ namespace EjemploProyecto.Pages.Inconsistencias
             try
             {
                 var eliminado = await _service.ObtenerPorId(Inconsistencia.ID_Inconsistencia);
-                await _service.Eliminar(Inconsistencia.ID_Inconsistencia);
-
-                await _bitacoraService.Registrar(1, 3, eliminado, "DELETE");
-                TempData["SuccessMessage"] = "Inconsistencia eliminada correctamente.";
+                if (eliminado != null)
+                {
+                    await _service.Eliminar(Inconsistencia.ID_Inconsistencia);
+                    await _bitacoraService.Registrar(1, 3, eliminado, "DELETE");
+                    TempData["SuccessMessage"] = "Inconsistencia eliminada correctamente.";
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "No se encontró la inconsistencia a eliminar.";
+                }
             }
             catch (MySqlException ex)
             {

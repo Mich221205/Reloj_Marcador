@@ -47,7 +47,7 @@ namespace EjemploProyecto.Pages.ADM_Identificacion
                 _service.Crear(Tipo);
 
                 ViewData["ModalType"] = "success";
-                ViewData["ModalTitle"] = "Éxito";
+                ViewData["ModalTitle"] = "Exito";
                 ViewData["ModalMessage"] = "Tipo de identificación creado correctamente.";
                 ViewData["RedirectPage"] = "Index"; // redirige 
             }

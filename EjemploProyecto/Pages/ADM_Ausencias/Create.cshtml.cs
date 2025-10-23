@@ -41,7 +41,7 @@ namespace EjemploProyecto.Pages.ADM_Ausencias
                 await _bitacoraService.Registrar(1, 1, Motivos, "INSERT");
                 
                 ViewData["ModalType"] = "success";
-                ViewData["ModalTitle"] = "Éxito";
+                ViewData["ModalTitle"] = "Exito";
                 ViewData["ModalMessage"] = "Motivo creado exitosamente.";
             }
             catch (InvalidOperationException ex)
