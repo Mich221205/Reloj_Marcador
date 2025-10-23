@@ -52,7 +52,7 @@ namespace EjemploProyecto.Pages.Roles
 
 
                 ViewData["ModalType"] = "success";
-                ViewData["ModalTitle"] = "Éxito";
+                ViewData["ModalTitle"] = "Exito";
                 ViewData["ModalMessage"] = "Rol creado correctamente.";
                 ViewData["RedirectPage"] = "Index";
             }

@@ -6,14 +6,49 @@
 <h2>Eliminar Inconsistencia</h2>
 
 <div class="mb-3">
-    <p>¿Seguro que desea eliminar el registro <strong class="text-danger">@Model.Inconsistencia.Nombre_Inconsistencia</strong>?</p>
+    <p>
+        ¿Seguro que desea eliminar el registro
+        <strong class="text-danger">@Model.Inconsistencia.Nombre_Inconsistencia</strong>?
+    </p>
 </div>
 
-<form method="post">
+<form id="deleteForm" method="post">
     <input type="hidden" asp-for="Inconsistencia.ID_Inconsistencia" />
 
     <div class="form-group">
-        <button type="submit" class="btn btn-danger">Eliminar</button>
+        <button type="button" class="btn btn-danger" onclick="mostrarConfirmacion()">Eliminar</button>
         <a asp-page="Index" class="btn btn-secondary">Cancelar</a>
     </div>
 </form>
+
+<!-- Modal de confirmación -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="confirmDeleteLabel">Confirmar eliminación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                ¿Realmente desea eliminar el elemento seleccionado?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                <button type="button" class="btn btn-danger" onclick="confirmarEliminacion()">Sí</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function mostrarConfirmacion() {
+            const modal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+            modal.show();
+        }
+
+        function confirmarEliminacion() {
+            document.getElementById('deleteForm').submit();
+        }
+    </script>
+}

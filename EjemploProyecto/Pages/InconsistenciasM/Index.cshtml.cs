@@ -2,6 +2,7 @@ using EjemploCoreWeb.Entities;
 using EjemploCoreWeb.Services.Abstract;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -32,13 +33,13 @@ namespace EjemploProyecto.Pages.Inconsistencias
                 Inconsistencias = await _service.Listar(PaginaActual, TamañoPagina);
                 TotalRegistros = await _service.Contar();
 
-                await _bitacoraService.Registrar(1, 4, "El usuario consult� Inconsistencias", "CONSULTA");
+                await _bitacoraService.Registrar(1, 4, "El usuario consulta Inconsistencias", "CONSULTA");
 
-                // Mensajes pasados desde Create/Edit/Delete
+                // Mensajes de retroalimentación
                 if (TempData.ContainsKey("SuccessMessage"))
                 {
                     TempData["ModalType"] = "success";
-                    TempData["ModalTitle"] = "�xito";
+                    TempData["ModalTitle"] = "Éxito";
                     TempData["ModalMessage"] = TempData["SuccessMessage"];
                 }
                 else if (TempData.ContainsKey("ErrorMessage"))
@@ -48,25 +49,51 @@ namespace EjemploProyecto.Pages.Inconsistencias
                     TempData["ModalMessage"] = TempData["ErrorMessage"];
                 }
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (MySqlException ex)
             {
-                // Error de base de datos (como el Check constraint)
                 await _bitacoraService.Registrar(1, 4, $"Error MySQL: {ex.Message}", "ERROR");
-
                 TempData["ModalType"] = "error";
                 TempData["ModalTitle"] = "Error de Base de Datos";
-                TempData["ModalMessage"] = "Ocurri� un problema al consultar las inconsistencias. Verifique los datos o contacte al administrador.";
+                TempData["ModalMessage"] = "Ocurrió un problema al consultar las inconsistencias.";
             }
             catch (Exception ex)
             {
-                // Cualquier otro tipo de error
-                await _bitacoraService.Registrar(1, 4, $"Excepci�n general: {ex.Message}", "ERROR");
-
+                await _bitacoraService.Registrar(1, 4, $"Error general: {ex.Message}", "ERROR");
                 TempData["ModalType"] = "error";
                 TempData["ModalTitle"] = "Error inesperado";
-                TempData["ModalMessage"] = "Ocurri� un error inesperado al cargar la informaci�n.";
+                TempData["ModalMessage"] = "Ocurrió un error inesperado al cargar la información.";
             }
+        }
+
+        // 🔥 Acción POST para eliminar desde el modal
+        public async Task<IActionResult> OnPostAsync(int id)
+        {
+            try
+            {
+                var inconsistencia = await _service.ObtenerPorId(id);
+                if (inconsistencia != null)
+                {
+                    await _service.Eliminar(id);
+                    await _bitacoraService.Registrar(1, 3, inconsistencia, "DELETE");
+                    TempData["SuccessMessage"] = "Inconsistencia eliminada correctamente.";
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "No se encontró la inconsistencia a eliminar.";
+                }
+            }
+            catch (MySqlException ex)
+            {
+                await _bitacoraService.Registrar(1, 3, $"Error MySQL: {ex.Message}", "ERROR");
+                TempData["ErrorMessage"] = "No se pudo eliminar la inconsistencia. Puede estar relacionada con otros registros.";
+            }
+            catch (Exception ex)
+            {
+                await _bitacoraService.Registrar(1, 3, $"Error general: {ex.Message}", "ERROR");
+                TempData["ErrorMessage"] = "Ocurrió un error inesperado al intentar eliminar la inconsistencia.";
+            }
+
+            return RedirectToPage("Index");
         }
     }
 }
-

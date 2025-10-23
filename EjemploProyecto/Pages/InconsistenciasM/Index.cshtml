@@ -29,7 +29,10 @@
                     <td>@item.Nombre_Inconsistencia</td>
                     <td>
                         <a asp-page="Edit" asp-route-id="@item.ID_Inconsistencia" class="btn btn-warning btn-sm">Editar</a>
-                        <a asp-page="Delete" asp-route-id="@item.ID_Inconsistencia" class="btn btn-danger btn-sm">Eliminar</a>
+                        <button type="button" class="btn btn-danger btn-sm"
+                                onclick="mostrarConfirmacion(@item.ID_Inconsistencia, '@item.Nombre_Inconsistencia')">
+                            Eliminar
+                        </button>
                     </td>
                 </tr>
             }
@@ -43,7 +46,51 @@
     </tbody>
 </table>
 
-<!-- Modal General -->
+@if (Model.TotalRegistros > Model.TamañoPagina)
+{
+    var totalPaginas = (int)Math.Ceiling((double)Model.TotalRegistros / Model.TamañoPagina);
+
+    <nav aria-label="Paginación de inconsistencias">
+        <ul class="pagination justify-content-center">
+            <li class="page-item @(Model.PaginaActual == 1 ? "disabled" : "")">
+                <a class="page-link" asp-page="Index" asp-route-pagina="@(Model.PaginaActual - 1)">Anterior</a>
+            </li>
+            @for (int i = 1; i <= totalPaginas; i++)
+            {
+                <li class="page-item @(i == Model.PaginaActual ? "active" : "")">
+                    <a class="page-link" asp-page="Index" asp-route-pagina="@i">@i</a>
+                </li>
+            }
+            <li class="page-item @(Model.PaginaActual == totalPaginas ? "disabled" : "")">
+                <a class="page-link" asp-page="Index" asp-route-pagina="@(Model.PaginaActual + 1)">Siguiente</a>
+            </li>
+        </ul>
+    </nav>
+}
+
+<!-- Modal Confirmación de Eliminación -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="confirmDeleteLabel">Confirmar eliminación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <p id="deleteMessage">¿Realmente desea eliminar el elemento seleccionado?</p>
+            </div>
+            <div class="modal-footer">
+                <form id="deleteForm" method="post">
+                    <input type="hidden" name="id" id="deleteId" />
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                    <button type="submit" class="btn btn-danger">Sí</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal General de Mensajes -->
 <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -62,6 +109,7 @@
 </div>
 
 <script>
+    // Mostrar modal de feedback
     document.addEventListener("DOMContentLoaded", function () {
         var msg = '@TempData["ModalMessage"]';
         var type = '@TempData["ModalType"]';
@@ -70,18 +118,22 @@
             var modalHeader = document.getElementById("modalHeader");
             modalHeader.className = "modal-header";
 
-            if (type === "success") {
-                modalHeader.classList.add("bg-success", "text-white");
-            } else if (type === "error") {
-                modalHeader.classList.add("bg-danger", "text-white");
-            } else if (type === "warning") {
-                modalHeader.classList.add("bg-warning", "text-dark");
-            } else {
-                modalHeader.classList.add("bg-info", "text-white");
-            }
+            if (type === "success") modalHeader.classList.add("bg-success", "text-white");
+            else if (type === "error") modalHeader.classList.add("bg-danger", "text-white");
+            else if (type === "warning") modalHeader.classList.add("bg-warning", "text-dark");
+            else modalHeader.classList.add("bg-info", "text-white");
 
             const messageModal = new bootstrap.Modal(document.getElementById("messageModal"));
             messageModal.show();
         }
     });
+
+    // Modal de confirmación
+    function mostrarConfirmacion(id, nombre) {
+        document.getElementById("deleteId").value = id;
+        document.getElementById("deleteMessage").textContent = `¿Realmente desea eliminar el elemento seleccionado?`;
+        const modal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+        modal.show();
+    }
 </script>
+

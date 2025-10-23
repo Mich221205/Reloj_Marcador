@@ -85,7 +85,7 @@ namespace EjemploProyecto.Pages.ADM_Horarios
                     await _horariosService.InsertDetalleHorarioAsync(DetalleHorario);
                     Detalles = (await _horariosService.Obtener_Detalles_HorarioAsync(HorarioSeleccionadoId)).ToList();
                     ModalType = "success";
-                    ModalTitle = "Éxito";
+                    ModalTitle = "Exito";
                     ModalMessage = "Detalle agregado correctamente.";
                 }
             }
@@ -150,7 +150,7 @@ namespace EjemploProyecto.Pages.ADM_Horarios
                 }
 
                 ModalType = "success";
-                ModalTitle = "Éxito";
+                ModalTitle = "Exito";
                 ModalMessage = "El horario fue eliminado correctamente.";
 
                 // Pasar los datos del modal al ViewData
@@ -201,7 +201,7 @@ namespace EjemploProyecto.Pages.ADM_Horarios
                 await _horariosService.DeleteDetalleHorarioAsync(idDetalle);
                 Detalles = (await _horariosService.Obtener_Detalles_HorarioAsync(HorarioSeleccionadoId)).ToList();
                 ModalType = "success";
-                ModalTitle = "Éxito";
+                ModalTitle = "Exito";
                 ModalMessage = "El detalle fue eliminado correctamente.";
             }
             catch (Exception ex)

@@ -48,7 +48,7 @@ namespace EjemploProyecto.Pages.ADM_Usuarios
                 if (rows > 0)
                 {
                     ViewData["ModalType"] = "success";
-                    ViewData["ModalTitle"] = "Éxito";
+                    ViewData["ModalTitle"] = "Exito";
                     ViewData["ModalMessage"] = "Contraseña cambiada correctamente.";
                 }
                 else
