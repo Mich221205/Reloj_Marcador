@@ -25,8 +25,6 @@ namespace EjemploCoreWeb.Repository
                 return await connection.QueryAsync<Usuario>("SELECT Nombre,Identificacion, Apellido_1 , Apellido_2 FROM Usuario WHERE ID_ROL_USUARIO = 2");
             }
         }
-
-        //Seleccionar Usuario por ID
         public async Task<Usuario> Obtener_Usuario_X_Identificacion(string id)
         {
             using (var connection = _dbConnectionFactory.CreateConnection())
@@ -35,8 +33,6 @@ namespace EjemploCoreWeb.Repository
             }
         }
 
-
-        //CAMBIO DE CONTRASEÑA DEL USUARIO
 
         public async Task<int> Cambiar_Clave(Usuario usuario)
         {

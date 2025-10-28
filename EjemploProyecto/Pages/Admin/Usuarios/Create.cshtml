@@ -3,83 +3,79 @@
 @{
     ViewData["Title"] = "Nuevo usuario";
 }
-<h2 class="mb-3">Nuevo usuario</h2>
 
-<form method="post" class="mt-3">
-    <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+<h2>Nuevo usuario</h2>
 
-    <div class="mb-2">
+@if (TempData["Error"] is string err)
+{
+    <div class="alert alert-danger">@err</div>
+}
+
+<form method="post" class="row g-3">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="col-md-6">
         <label asp-for="Input.ID_Tipo_Identificacion" class="form-label"></label>
-        <select class="form-select" asp-for="Input.ID_Tipo_Identificacion" asp-items="Model.TiposSelectList"></select>
+        <select asp-for="Input.ID_Tipo_Identificacion"
+                asp-items="Model.TiposSelectList" class="form-select">
+            <option value="">-- Seleccione --</option>
+        </select>
         <span asp-validation-for="Input.ID_Tipo_Identificacion" class="text-danger"></span>
     </div>
 
-    <div class="mb-2">
+    <div class="col-md-6">
         <label asp-for="Input.Identificacion" class="form-label"></label>
-        <input class="form-control" asp-for="Input.Identificacion" />
+        <input asp-for="Input.Identificacion" class="form-control" />
+        <span class="form-text">Este valor será su nombre de usuario.</span>
         <span asp-validation-for="Input.Identificacion" class="text-danger"></span>
     </div>
 
-    <div class="mb-2">
+    <div class="col-md-6">
         <label asp-for="Input.Nombre" class="form-label"></label>
-        <input class="form-control" asp-for="Input.Nombre" />
+        <input asp-for="Input.Nombre" class="form-control" />
         <span asp-validation-for="Input.Nombre" class="text-danger"></span>
     </div>
 
-    <div class="mb-2">
-        <label asp-for="Input.Apellido_1" class="form-label"></label>
-        <input class="form-control" asp-for="Input.Apellido_1" />
-        <span asp-validation-for="Input.Apellido_1" class="text-danger"></span>
+    <div class="col-md-6">
+        <label asp-for="Input.Apellido" class="form-label"></label>
+        <input asp-for="Input.Apellido" class="form-control" />
+        <span asp-validation-for="Input.Apellido" class="text-danger"></span>
     </div>
 
-    <div class="mb-2">
-        <label asp-for="Input.Apellido_2" class="form-label"></label>
-        <input class="form-control" asp-for="Input.Apellido_2" />
-        <span asp-validation-for="Input.Apellido_2" class="text-danger"></span>
-    </div>
-
-    <div class="mb-2">
+    <div class="col-md-6">
         <label asp-for="Input.Correo" class="form-label"></label>
-        <input class="form-control" asp-for="Input.Correo" />
+        <input asp-for="Input.Correo" class="form-control" />
         <span asp-validation-for="Input.Correo" class="text-danger"></span>
     </div>
 
-    <div class="mb-2">
-        <label asp-for="Input.Telefono" class="form-label"></label>
-        <input class="form-control" asp-for="Input.Telefono" />
-        <span asp-validation-for="Input.Telefono" class="text-danger"></span>
-    </div>
-
-    <div class="mb-2">
-        <label asp-for="Input.ID_Rol_Usuario" class="form-label"></label>
-        <select class="form-select" asp-for="Input.ID_Rol_Usuario" asp-items="Model.RolesSelectList"></select>
-        <span asp-validation-for="Input.ID_Rol_Usuario" class="text-danger"></span>
-    </div>
-
-    <div class="mb-2">
-        <label asp-for="Input.Nom_Usuario" class="form-label"></label>
-        <input class="form-control" asp-for="Input.Nom_Usuario" />
-        <span asp-validation-for="Input.Nom_Usuario" class="text-danger"></span>
-    </div>
-
-    <div class="mb-2">
+    <div class="col-md-6">
         <label asp-for="Input.Password" class="form-label"></label>
-        <input class="form-control" asp-for="Input.Password" type="password" />
+        <input asp-for="Input.Password" type="password" class="form-control" />
         <span asp-validation-for="Input.Password" class="text-danger"></span>
     </div>
 
-    <div class="mb-3">
+    <div class="col-md-6">
+        <label asp-for="Input.ID_Rol_Usuario" class="form-label"></label>
+        <select asp-for="Input.ID_Rol_Usuario"
+                asp-items="Model.RolesSelectList" class="form-select">
+            <option value="">-- Seleccione --</option>
+        </select>
+        <span asp-validation-for="Input.ID_Rol_Usuario" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-6">
         <label asp-for="Input.Estado" class="form-label"></label>
-        <!-- bool: usa true/false -->
-        <select class="form-select" asp-for="Input.Estado">
+        <select asp-for="Input.Estado" class="form-select">
             <option value="true">Activo</option>
             <option value="false">Inactivo</option>
         </select>
         <span asp-validation-for="Input.Estado" class="text-danger"></span>
     </div>
 
-    <button class="btn btn-primary" type="submit">Guardar</button>
-    <a class="btn btn-secondary" asp-page="Index">Cancelar</a>
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <a asp-page="Index" class="btn btn-secondary">Cancelar</a>
+    </div>
 </form>
 
 @section Scripts {
