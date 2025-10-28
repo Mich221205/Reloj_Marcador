@@ -11,4 +11,13 @@ namespace EjemploCoreWeb.Entities
         public int ID_Inconsistencia { get; set; }
         public string Nombre_Inconsistencia { get; set; }
     }
+
+    public class Reporte_Inconsistencia : Usuario
+    {
+        public int ID_Inconsistencia_Usuario { get; set; }
+        public string Identificacion { get; set; }
+        public string Nombre_Inconsistencia { get; set; }
+        public DateTime Fecha_Inconsistencia { get; set; }
+    
+    }
 }

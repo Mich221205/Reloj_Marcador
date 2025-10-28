@@ -88,5 +88,78 @@ namespace EjemploCoreWeb.Repository
             string sql = "SELECT COUNT(*) FROM Inconsistencia";
             return await connection.ExecuteScalarAsync<int>(sql);
         }
+
+
+
+        //Jocsan
+        //Reportes de inconsistencias ADM 15
+        public async Task<IEnumerable<Reporte_Inconsistencia>> Reporte_Inconsistencias(int page, int pageSize)
+        {
+            using var connection = _connectionFactory.CreateConnection();
+            string sql = @"
+                        SELECT 
+                            iu.ID_Inconsistencia_Usuario,
+                            iu.Identificacion,  
+                            CONCAT(u.Nombre, ' ', u.Apellido_1, ' ', u.Apellido_2) as Nombre,
+                            i.Nombre_Inconsistencia, 
+                            iu.Fecha_Inconsistencia
+                        FROM inconsistencias_usuario iu
+                        JOIN usuario u ON iu.Identificacion = u.Identificacion
+                        JOIN inconsistencia i ON iu.ID_Inconsistencia = i.ID_Inconsistencia
+                        ORDER BY iu.Fecha_Inconsistencia DESC
+                        LIMIT @PageSize OFFSET @Offset";
+
+            return await connection.QueryAsync<Reporte_Inconsistencia>(sql, new
+            {
+                PageSize = pageSize,
+                Offset = (page - 1) * pageSize
+            });
+        }
+
+        public async Task<int> Contar_Reportes()
+        {
+            using var connection = _connectionFactory.CreateConnection();
+            string sql = "SELECT COUNT(*) FROM inconsistencias_usuario";
+            return await connection.ExecuteScalarAsync<int>(sql);
+        }
+
+        public async Task<IEnumerable<Reporte_Inconsistencia>> Reporte_Inconsistencias_Filtros(
+        int page,
+        int pageSize,
+        string? identificacion = null,
+        DateTime? fecha = null)
+
+        {
+            using var connection = _connectionFactory.CreateConnection();
+
+            string sql = @"
+        SELECT 
+            iu.ID_Inconsistencia_Usuario,
+            iu.Identificacion,  
+            CONCAT(u.Nombre, ' ', u.Apellido_1, ' ', u.Apellido_2) AS Nombre,
+            i.Nombre_Inconsistencia, 
+            iu.Fecha_Inconsistencia
+        FROM inconsistencias_usuario iu
+        JOIN usuario u 
+            ON iu.Identificacion = u.Identificacion
+        JOIN inconsistencia i 
+            ON iu.ID_Inconsistencia = i.ID_Inconsistencia
+        WHERE
+            (@Identificacion IS NULL OR iu.Identificacion = @Identificacion)
+            AND (@Fecha IS NULL OR DATE(iu.Fecha_Inconsistencia) = @Fecha)
+        ORDER BY iu.Fecha_Inconsistencia DESC
+        LIMIT @PageSize OFFSET @Offset;
+    ";
+
+            return await connection.QueryAsync<Reporte_Inconsistencia>(sql, new
+            {
+                PageSize = pageSize,
+                Offset = (page - 1) * pageSize,
+                Identificacion = identificacion,
+                Fecha = fecha?.Date
+            });
+        }
+
+
     }
 }
