@@ -25,7 +25,7 @@ html, body {
     overflow: hidden;
 }
 
-/*  Header */
+/* Header */
 .header {
     background-color: var(--brand-primary);
     color: white;
@@ -75,7 +75,7 @@ html, body {
         border: 2px solid white;
     }
 
-/*  Sidebar */
+/* Sidebar */
 .sidebar {
     background-color: #1e2a38;
     color: #f8f9fa;
@@ -106,7 +106,7 @@ html, body {
         margin: 10px 0;
     }
 
-/*  Enlaces del menú lateral */
+/* Enlaces del menú lateral */
 .sidebar-link {
     color: #e0e0e0 !important;
     text-decoration: none;
@@ -131,7 +131,7 @@ html, body {
         color: #ffffff !important;
     }
 
-    /* Enlace activo (opcional) */
+    /* Enlace activo */
     .sidebar-link.active {
         background-color: rgba(255, 255, 255, 0.2);
         color: #ffffff;
@@ -144,7 +144,7 @@ html, body {
         color: #ffffff !important;
     }
 
-/*  Contenido principal */
+/* Contenido principal */
 .main-content {
     margin-left: var(--sidebar-width);
     margin-top: var(--header-height);
@@ -153,6 +153,38 @@ html, body {
     height: calc(100vh - var(--header-height));
     transition: margin-left 0.3s ease-out;
 }
+
+/* Estilos para la sección de Reportes */
+.menu-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%);
+    margin: 1.5rem 1rem;
+}
+
+.menu-section-title {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #94a3b8;
+    padding: 0.5rem 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.reportes-link {
+    background: rgba(16, 185, 129, 0.1);
+    border-left: 3px solid #10b981;
+    margin: 0.25rem 1rem;
+}
+
+    .reportes-link:hover {
+        background: rgba(16, 185, 129, 0.2);
+        border-left-color: #34d399;
+    }
+
+    .reportes-link i {
+        color: #10b981 !important;
+    }
 
 /* Responsive */
 @media (max-width: 768px) {
