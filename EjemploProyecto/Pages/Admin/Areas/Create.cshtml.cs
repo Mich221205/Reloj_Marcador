@@ -32,9 +32,12 @@ namespace EjemploProyecto.Pages.Admin.Areas
                 ErrorMessage = "El código del área puede incluir letras, números, guion (-) y guion bajo (_).")]
             public string Codigo_Area { get; set; } = "";
 
-            [Required(ErrorMessage = "Seleccione el jefe del área.")]
-            public int Jefe_Area { get; set; }
+            [Display(Name = "Jefe del área")]
+            [Required(ErrorMessage = "Debe seleccionar un jefe de área.")]
+            [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar un jefe de área.")]
+            public int? Jefe_Area { get; set; }
         }
+
 
         [BindProperty] public VM Input { get; set; } = new();
 
@@ -55,8 +58,9 @@ namespace EjemploProyecto.Pages.Admin.Areas
             {
                 Nombre_Area = Input.Nombre_Area,
                 Codigo_Area = Input.Codigo_Area,
-                Jefe_Area = Input.Jefe_Area
+                Jefe_Area = Input.Jefe_Area!.Value
             };
+
 
             await _areas.CrearAsync(a);
             TempData["Ok"] = "Área creada correctamente.";
