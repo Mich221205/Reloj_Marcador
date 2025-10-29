@@ -14,19 +14,19 @@ namespace EjemploCoreWeb.Services.Abstract
         Task<int> Contar();
 
 
-        //Reportes
-        Task<IEnumerable<Reporte_Inconsistencia>> Reporte_Inconsistencias(int page, int pageSize);
+        //Jocsan
+        //Reportes de Inconsistencias ADM 15
 
-        Task<int> ContarReporteInconsistencias();
-
-        Task<IEnumerable<Reporte_Inconsistencia>> Reporte_Inconsistencias_Filtros(int page,
+        Task<IEnumerable<Reporte_Inconsistencia>> Reporte_Inconsistencias(
+        int page,
         int pageSize,
-        string? identificacion = null,
-        DateTime? fecha = null);
+        string? identificacion,
+        DateTime? fecha);
 
-
-
-
+        Task<int> ContarReporteInconsistencias(
+        string? identificacion,
+        DateTime? fecha);
     }
+
 }
 

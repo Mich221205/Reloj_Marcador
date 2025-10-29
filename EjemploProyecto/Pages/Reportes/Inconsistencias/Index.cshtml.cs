@@ -33,53 +33,54 @@ namespace EjemploProyecto.Pages.Reportes.Inconsistencias
             try
             {
                 PaginaActual = pagina;
-                Reporte = await _service.Reporte_Inconsistencias(PaginaActual, TamañoPagina);
-                
-                Reporte = await _service.Reporte_Inconsistencias_Filtros(
+
+                // Obtener datos aplicando filtros o no
+                Reporte = await _service.Reporte_Inconsistencias(
                     PaginaActual,
                     TamañoPagina,
                     Identificacion,
                     Fecha
                 );
 
-                TotalRegistros = await _service.ContarReporteInconsistencias();
+                // Contar registros con los mismos filtros
+                TotalRegistros = await _service.ContarReporteInconsistencias(
+                    Identificacion,
+                    Fecha
+                );
 
+                // Registrar en bitácora 
+                await _bitacoraService.Registrar(1, 4, "El usuario consultó reporte de inconsistencias", "CONSULTA");
 
-                await _bitacoraService.Registrar(1, 4, "El usuario consultó reporte de inconsistencias ", "CONSULTA");
-
-            // Mensajes pasados desde Create/Edit/Delete
-            if (TempData.ContainsKey("SuccessMessage"))
-            {
-                TempData["ModalType"] = "success";
-                TempData["ModalTitle"] = "Éxito";
-                TempData["ModalMessage"] = TempData["SuccessMessage"];
+                // Manejo de mensajes desde TempData
+                if (TempData.ContainsKey("SuccessMessage"))
+                {
+                    TempData["ModalType"] = "success";
+                    TempData["ModalTitle"] = "Éxito";
+                    TempData["ModalMessage"] = TempData["SuccessMessage"];
+                }
+                else if (TempData.ContainsKey("ErrorMessage"))
+                {
+                    TempData["ModalType"] = "error";
+                    TempData["ModalTitle"] = "Error";
+                    TempData["ModalMessage"] = TempData["ErrorMessage"];
+                }
             }
-            else if (TempData.ContainsKey("ErrorMessage"))
-            {
-                TempData["ModalType"] = "error";
-                TempData["ModalTitle"] = "Error";
-                TempData["ModalMessage"] = TempData["ErrorMessage"];
-            }
-        }
             catch (MySql.Data.MySqlClient.MySqlException ex)
             {
-                // Error de base de datos (como el Check constraint)
                 await _bitacoraService.Registrar(1, 4, $"Error MySQL: {ex.Message}", "ERROR");
 
-        TempData["ModalType"] = "error";
+                TempData["ModalType"] = "error";
                 TempData["ModalTitle"] = "Error de Base de Datos";
                 TempData["ModalMessage"] = "Ocurrió un problema al consultar las inconsistencias. Verifique los datos o contacte al administrador.";
             }
             catch (Exception ex)
             {
-                // Cualquier otro tipo de error
-                await _bitacoraService.Registrar(1, 4, $"Excepci�n general: {ex.Message}", "ERROR");
+                await _bitacoraService.Registrar(1, 4, $"Excepción general: {ex.Message}", "ERROR");
 
-    TempData["ModalType"] = "error";
+                TempData["ModalType"] = "error";
                 TempData["ModalTitle"] = "Error inesperado";
                 TempData["ModalMessage"] = "Ocurrió un error inesperado al cargar la información.";
             }
         }
-
     }
 }

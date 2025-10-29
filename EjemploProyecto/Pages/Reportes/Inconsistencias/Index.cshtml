@@ -29,13 +29,15 @@
 </form>
 <!-- ===================================================== -->
 
+
+<!-- ====================== TABLA CON LAS INCONSISTENCIAS ====================== -->
 <table class="table table-striped table-bordered">
     <thead>
         <tr>
-            <th>ID Inconsistencia</th>
-            <th>Identificación</th>
+            <th>ID inconsistencia</th>
+            <th>Identificación del funcionario</th>
             <th>Funcionario</th>
-            <th>Inconsistencia</th>
+            <th>Tipo de inconsistencia</th>
             <th>Fecha de la inconsistencia</th>
         </tr>
     </thead>
@@ -62,8 +64,15 @@
     </tbody>
 </table>
 
+<!-- ===================================================== -->
+
+
+<!-- ================== Lógica para la paginación de la tabla ====================== -->
 @{
-    int totalPaginas = (int)Math.Ceiling((double)Model.TotalRegistros / Model.TamañoPagina);
+    int totalPaginas = Model.TotalRegistros > 0
+    ? (int)Math.Ceiling((double)Model.TotalRegistros / Model.TamañoPagina)
+    : 0;
+
 }
 
 @if (totalPaginas > 1)
@@ -82,7 +91,8 @@
             @for (int i = 1; i <= totalPaginas; i++)
             {
                 <li class="page-item @(i == Model.PaginaActual ? "active" : "")">
-                    <a class="page-link" href="?pagina=@i&Identificacion=@Model.Identificacion&Fecha=@Model.Fecha">
+                    <a class="page-link"
+                       href="?pagina=@i@(Model.Identificacion != null ? $"&Identificacion={Model.Identificacion}" : "")@(Model.Fecha != null ? $"&Fecha={Model.Fecha:yyyy-MM-dd}" : "")">
                         @i
                     </a>
                 </li>
@@ -98,6 +108,8 @@
         </ul>
     </nav>
 }
+<!-- ===================================================== -->
+
 
 <!-- ====================== MODAL ====================== -->
 <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">

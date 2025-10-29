@@ -16,14 +16,14 @@ namespace EjemploCoreWeb.Repository.Interfaces
 
         //Jocsan
         //Reporte de Inconsistencias ADM 15
-        Task<IEnumerable<Reporte_Inconsistencia>> Reporte_Inconsistencias(int page, int pageSize);
-        Task<int> Contar_Reportes();
-
-       Task<IEnumerable<Reporte_Inconsistencia>> Reporte_Inconsistencias_Filtros(
+        
+        Task<IEnumerable<Reporte_Inconsistencia>> Reporte_Inconsistencias(
         int page,
         int pageSize,
-        string? identificacion = null,
-        DateTime? fecha = null);
+        string? identificacion,
+        DateTime? fecha);
+        
+        Task<int> Contar_Reporte(string? identificacion,DateTime? fecha);
 
 
 
