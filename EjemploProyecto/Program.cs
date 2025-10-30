@@ -71,6 +71,12 @@ builder.Services.AddScoped<SvcIf.IAreaService, SvcImpl.AreaService>();
 builder.Services.AddScoped<IUsuarioAreaRepository, UsuarioAreaRepository>();
 builder.Services.AddScoped<SvcIf.IUsuarioAreaService, SvcImpl.UsuarioAreaService>();
 
+
+// REPORTE DE MARCAS
+builder.Services.AddScoped<IMarca, MarcaRepository>();
+builder.Services.AddScoped<IMarcaService, MarcaService>();
+
+
 // ---------------------------
 // Autenticación por cookies
 // ---------------------------
