@@ -21,7 +21,7 @@ using RolCrudServiceImpl = EjemploCoreWeb.Services.RolService;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddHttpContextAccessor(); // (ya lo usas, pero asegúrate)
+builder.Services.AddHttpContextAccessor(); // (ya lo usas, pero asegï¿½rate)
 builder.Services.AddSession();
 
 builder.Services.AddRazorPages();
@@ -62,6 +62,10 @@ builder.Services.AddScoped<SvcIf.IAreaService, SvcImpl.AreaService>();
 
 builder.Services.AddScoped<IUsuarioAreaRepository, UsuarioAreaRepository>();
 builder.Services.AddScoped<SvcIf.IUsuarioAreaService, SvcImpl.UsuarioAreaService>();
+
+// REPORTE DE MARCAS
+builder.Services.AddScoped<IMarca, MarcaRepository>();
+builder.Services.AddScoped<IMarcaService, MarcaService>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>

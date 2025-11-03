@@ -12,6 +12,21 @@ namespace EjemploCoreWeb.Services.Abstract
         Task<int> Actualizar(Inconsistencia inconsistencia);
         Task<int> Eliminar(int id);
         Task<int> Contar();
+
+
+        //Jocsan
+        //Reportes de Inconsistencias ADM 15
+
+        Task<IEnumerable<Reporte_Inconsistencia>> Reporte_Inconsistencias(
+        int page,
+        int pageSize,
+        string? identificacion,
+        DateTime? fecha);
+
+        Task<int> ContarReporteInconsistencias(
+        string? identificacion,
+        DateTime? fecha);
     }
+
 }
 
