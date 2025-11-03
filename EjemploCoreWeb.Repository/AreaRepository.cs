@@ -14,7 +14,6 @@ namespace EjemploCoreWeb.Repository.Repositories
         {
             using var con = _factory.CreateConnection();
 
-            // Filtro opcional por nombre área, código, identificación y nombre del jefe
             var where = @"
 (@f IS NULL
  OR a.Nombre_Area LIKE CONCAT('%',@f,'%')
