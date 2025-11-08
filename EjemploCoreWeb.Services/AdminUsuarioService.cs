@@ -63,13 +63,13 @@ namespace EjemploCoreWeb.Services.Services
 
         public async Task<bool> ActualizarAsync(Usuario u, int tipoId, string? plainPassword)
         {
-            if (u.Id_Usuario <= 0) throw new ArgumentException("El Id_Usuario es obligatorio.");
+            if (u.ID_Usuario <= 0) throw new ArgumentException("El Id_Usuario es obligatorio.");
             ValidarUsuarioHU7(u);
             if (tipoId <= 0) throw new ArgumentException("Debe seleccionar un tipo de identificación.");
 
             await LogAsync("UPDATE", "Usuario", new
             {
-                u.Id_Usuario,
+                u.ID_Usuario,
                 u.Identificacion,
                 u.Nombre,
                 u.Apellido_1,
@@ -82,7 +82,7 @@ namespace EjemploCoreWeb.Services.Services
             });
 
             var ok = await _repo.ActualizarAsync(u, tipoId, plainPassword);
-            await LogAsync(ok ? "UPDATE-OK" : "UPDATE-FAIL", "Usuario", new { u.Id_Usuario });
+            await LogAsync(ok ? "UPDATE-OK" : "UPDATE-FAIL", "Usuario", new { u.ID_Usuario });
             return ok;
         }
 

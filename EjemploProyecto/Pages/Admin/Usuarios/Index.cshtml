@@ -50,7 +50,7 @@
 
                         <a class="btn btn-sm btn-primary"
                            asp-page="Edit"
-                           asp-route-id="@f.Id_Usuario">
+                           asp-route-id="@f.ID_Usuario">
                             Editar
                         </a>
 
@@ -58,7 +58,7 @@
                                 class="btn btn-sm btn-danger"
                                 data-bs-toggle="modal"
                                 data-bs-target="#confirmDeleteModal"
-                                data-id="@f.Id_Usuario"
+                                data-id="@f.ID_Usuario"
                                 data-nombre="@($"{f.Nombre} {f.Apellido_1} {f.Apellido_2}")">
                             Eliminar
                         </button>
@@ -70,7 +70,7 @@
 
                         <a class="btn btn-sm btn-outline-secondary"
                            asp-page="/Admin/Usuarios/Areas"
-                           asp-route-id="@f.Id_Usuario">
+                           asp-route-id="@f.ID_Usuario">
                             Administración de áreas
                         </a>
 

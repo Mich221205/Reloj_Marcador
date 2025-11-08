@@ -9,7 +9,7 @@ namespace EjemploCoreWeb.Entities
 {
     public class Usuario
     {
-        public int Id_Usuario { get; set; }
+        public int ID_Usuario { get; set; }
         public string Identificacion { get; set; } = string.Empty;
         public string Nombre { get; set; } = string.Empty;
         public string Apellido_1 { get; set; } = string.Empty;

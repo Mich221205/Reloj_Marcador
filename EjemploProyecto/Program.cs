@@ -77,6 +77,11 @@ builder.Services.AddScoped<IMarca, MarcaRepository>();
 builder.Services.AddScoped<IMarcaService, MarcaService>();
 
 
+// PROCESO DE INCONSISTENCIAS VS HORARIOS
+builder.Services.AddScoped<Proceso_Generar_Inconsistencias_Marcas>();
+builder.Services.AddScoped<Proceso_Generar_Inconsistencias_MarcasService>();
+
+
 // ---------------------------
 // Autenticación por cookies
 // ---------------------------

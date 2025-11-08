@@ -95,7 +95,7 @@ public class EditModel : PageModel
         Jefes = usuarios
             .Select(u => new SelectListItem
             {
-                Value = u.Id_Usuario.ToString(),
+                Value = u.ID_Usuario.ToString(),
                 Text = $"{u.Nombre} {u.Apellido_1} {u.Apellido_2}".Trim()
             })
             .OrderBy(i => i.Text)
