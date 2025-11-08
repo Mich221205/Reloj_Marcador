@@ -19,7 +19,9 @@ namespace EjemploCoreWeb.Entities
         public string Identificacion { get; set; }
         public string Nombre_Inconsistencia { get; set; }
         public DateTime Fecha_Inconsistencia { get; set; }
-    
+        public string Detalle { get; set; }
+        public string Referencia { get; set; }
+
     }
 
     public class ParametrosInconsistencia

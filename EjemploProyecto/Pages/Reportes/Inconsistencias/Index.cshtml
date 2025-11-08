@@ -39,6 +39,8 @@
             <th>Funcionario</th>
             <th>Tipo de inconsistencia</th>
             <th>Fecha de la inconsistencia</th>
+            <th>Detalle</th>
+            <th>Referencia</th>
         </tr>
     </thead>
     <tbody>
@@ -52,6 +54,9 @@
                     <td>@item.Nombre</td>
                     <td>@item.Nombre_Inconsistencia</td>
                     <td>@item.Fecha_Inconsistencia.ToString("dd/MM/yyyy")</td>
+                    <td>@item.Detalle</td>
+                    <td>@item.Referencia</td>
+
                 </tr>
             }
         }

@@ -4,27 +4,91 @@
     ViewData["Title"] = "Proceso de Inconsistencias";
 }
 
-<h2 class="mb-4">Generar Inconsistencias de Marcas</h2>
+<link rel="stylesheet" href="~/css/Estilos.css">
 
-<form method="post" class="card p-4 shadow-sm">
-    <div class="row g-3 align-items-end">
-        <div class="col-md-4">
-            <label class="form-label">Fecha Inicio</label>
-            <input asp-for="FechaInicio" type="date" class="form-control" />
+<div class="container">
+    <h1 class="titulo-seccion">Procesos administrativos de generación de inconsistencias</h1>
+
+    <form method="post" class="card p-4 shadow-sm mb-4" style="border-radius: var(--border-radius); box-shadow: var(--box-shadow);">
+        <div class="row g-3">
+            <div class="col-md-3">
+                <label class="form-label">Fecha inicio</label>
+                <input type="date" asp-for="FechaInicio" class="form-control" required />
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label">Fecha fin</label>
+                <input type="date" asp-for="FechaFin" class="form-control" required />
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label">Área (opcional)</label>
+                <select asp-for="AreaId" asp-items="Model.Areas" class="form-select form-control">
+                    <option value="">-- Todas --</option>
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label">Funcionario (opcional)</label>
+                <select asp-for="UsuarioId" asp-items="Model.Funcionarios" class="form-select form-control">
+                    <option value="">-- Todos --</option>
+                </select>
+            </div>
         </div>
-        <div class="col-md-4">
-            <label class="form-label">Fecha Fin</label>
-            <input asp-for="FechaFin" type="date" class="form-control" />
+
+        <div class="mt-4 text-end">
+            <button type="submit" class="btn btn-primary px-4">Ejecutar proceso</button>
         </div>
-        <div class="col-md-4">
-            <button type="submit" class="btn btn-primary w-100">Ejecutar Proceso</button>
+    </form>
+</div>
+
+
+<!-- Modal de mensajes -->
+<div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-top">
+        <div class="modal-content">
+            <div class="modal-header" id="modalHeader">
+                <h5 class="modal-title fw-semibold" id="messageModalLabel">@ViewData["ModalTitle"]</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body text-center">
+                <p class="mb-0">@ViewData["ModalMessage"]</p>
+            </div>
+            <div class="modal-footer justify-content-center">
+                @if ((string?)ViewData["ModalType"] == "success")
+                {
+                    <button type="button" class="btn btn-success px-4" data-bs-dismiss="modal">Aceptar</button>
+                }
+                else
+                {
+                    <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Cerrar</button>
+                }
+            </div>
         </div>
     </div>
-</form>
+</div>
 
-@if (!string.IsNullOrEmpty(Model.Resultado))
-{
-    <div class="alert alert-success mt-4">
-        <strong>@Model.Resultado</strong>
-    </div>
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var msg = '@ViewData["ModalMessage"]';
+            var type = '@ViewData["ModalType"]';
+
+            if (msg && msg !== '') {
+                var modalHeader = document.getElementById("modalHeader");
+
+                // Colores personalizados según el tipo
+                if (type === "success") {
+                    modalHeader.classList.add("bg-success", "text-white");
+                } else if (type === "error") {
+                    modalHeader.classList.add("bg-danger", "text-white");
+                } else {
+                    modalHeader.classList.add("bg-info", "text-white");
+                }
+
+                var messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
+                messageModal.show();
+            }
+        });
+    </script>
 }
