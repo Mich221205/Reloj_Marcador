@@ -82,6 +82,10 @@ builder.Services.AddScoped<Proceso_Generar_Inconsistencias_Marcas>();
 builder.Services.AddScoped<Proceso_Generar_Inconsistencias_MarcasService>();
 
 
+builder.Services.AddHostedService<PROC1_Automatizado>();
+
+
+
 // ---------------------------
 // Autenticación por cookies
 // ---------------------------

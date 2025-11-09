@@ -21,7 +21,6 @@ namespace EjemploProyecto.Pages.Reportes.Inconsistencias
             _areaService = areaService;
         }
 
-
         [BindProperty] public DateTime FechaInicio { get; set; } = DateTime.Now;
         [BindProperty] public DateTime FechaFin { get; set; } = DateTime.Now;
         [BindProperty] public int? AreaId { get; set; }
@@ -73,7 +72,7 @@ namespace EjemploProyecto.Pages.Reportes.Inconsistencias
                     return Page();
                 }
 
-                await _service.EjecutarAsync(FechaInicio, FechaFin, AreaId, UsuarioId);
+                await _service.PROC1_Async(FechaInicio, FechaFin, AreaId, UsuarioId);
 
                 ViewData["ModalType"] = "success";
                 ViewData["ModalTitle"] = "Proceso completado";
