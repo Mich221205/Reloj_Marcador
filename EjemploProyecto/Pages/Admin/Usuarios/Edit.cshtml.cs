@@ -61,7 +61,7 @@ namespace EjemploProyecto.Pages.Admin.Usuarios
 
             Input = new VM
             {
-                ID_Usuario = u.Id_Usuario,
+                ID_Usuario = u.ID_Usuario,
                 ID_Tipo_Identificacion = 1, // UI-only
                 Identificacion = u.Identificacion,
                 Nombre = u.Nombre,
@@ -91,7 +91,7 @@ namespace EjemploProyecto.Pages.Admin.Usuarios
 
             var u = new Usuario
             {
-                Id_Usuario = Input.ID_Usuario,
+                ID_Usuario = Input.ID_Usuario,
                 Identificacion = Input.Identificacion,
                 Nombre = Input.Nombre,
                 Apellido_1 = Input.Apellido_1,
