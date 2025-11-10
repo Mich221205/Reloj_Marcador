@@ -13,6 +13,20 @@ namespace EjemploCoreWeb.Repository.Interfaces
         Task<int> DeleteAsync(int id);
         Task<int> CountAsync();
         Task<bool> EstaAsignadoAsync(int id);
+
+        //Jocsan
+        //Reporte de Inconsistencias ADM 15
+        
+        Task<IEnumerable<Reporte_Inconsistencia>> Reporte_Inconsistencias(
+        int page,
+        int pageSize,
+        string? identificacion,
+        DateTime? fecha);
+        
+        Task<int> Contar_Reporte(string? identificacion,DateTime? fecha);
+
+
+
     }
 }
 

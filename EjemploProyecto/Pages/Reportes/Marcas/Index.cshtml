@@ -1,0 +1,160 @@
+﻿@page
+@model EjemploProyecto.Pages.Reportes.Marcas.IndexModel
+@{
+    ViewData["Title"] = "Reporte de marcas";
+}
+
+<link rel="stylesheet" href="~/css/Estilos.css">
+
+<h2>Reportes de marcas de funcionarios</h2>
+
+<!-- ====================== FILTROS ====================== -->
+<form method="get" class="row g-3 mb-3">
+
+    <div class="col-md-4">
+        <label>Identificación</label>
+        <input asp-for="Identificacion" class="form-control" />
+    </div>
+
+    <div class="col-md-4">
+        <label>Fecha</label>
+        <input asp-for="Fecha" type="date" class="form-control" />
+    </div>
+
+    <div class="col-md-4 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary me-2">Filtrar</button>
+        <a href="/Reportes/Marcas" class="btn btn-secondary">Limpiar</a>
+    </div>
+
+</form>
+<!-- ===================================================== -->
+
+<!-- ====================== TABLA CON LAS Marcas ====================== -->
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>ID marca</th>
+            <th>Identificación</th>
+            <th>Funcionario</th>
+            <th>Tipo de marca</th>
+            <th>Detalle</th>
+            <th>Fecha de la marca</th>
+            <th>Dirección IP</th>
+            <th>Latitud</th>
+            <th>Longitud</th>
+            <th>Dirección</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Reporte != null && Model.Reporte.Any())
+        {
+            foreach (var item in Model.Reporte)
+            {
+                <tr>
+                    <td>@item.ID_Marca</td>
+                    <td>@item.Identificacion</td>
+                    <td>@item.Nombre</td>
+                    <td>@item.Tipo_Marca</td>
+                    <td>@item.Detalle</td>
+                    <td>@item.Fecha_Hora.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                    <td>@item.IP_Usuario</td>
+                    <td>@item.Latitud</td>
+                    <td>@item.Longitud</td>
+                    <td>@item.Direccion</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5" class="text-center text-muted">No hay registros disponibles.</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- ===================================================== -->
+<!-- ================== Lógica para la paginación de la tabla ====================== -->
+@{
+    int totalPaginas = Model.TotalRegistros > 0
+    ? (int)Math.Ceiling((double)Model.TotalRegistros / Model.TamañoPagina)
+    : 0;
+
+}
+
+@if (totalPaginas > 1)
+{
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+
+            <!-- Botón Anterior -->
+            <li class="page-item @(Model.PaginaActual == 1 ? "disabled" : "")">
+                <a class="page-link" href="?pagina=@(Model.PaginaActual - 1)&Identificacion=@Model.Identificacion&Fecha=@Model.Fecha">
+                    Anterior
+                </a>
+            </li>
+
+            <!-- Números -->
+            @for (int i = 1; i <= totalPaginas; i++)
+            {
+                <li class="page-item @(i == Model.PaginaActual ? "active" : "")">
+                    <a class="page-link"
+                       href="?pagina=@i@(Model.Identificacion != null ? $"&Identificacion={Model.Identificacion}" : "")@(Model.Fecha != null ? $"&Fecha={Model.Fecha:yyyy-MM-dd}" : "")">
+                        @i
+                    </a>
+                </li>
+            }
+
+            <!-- Botón Siguiente -->
+            <li class="page-item @(Model.PaginaActual == totalPaginas ? "disabled" : "")">
+                <a class="page-link" href="?pagina=@(Model.PaginaActual + 1)&Identificacion=@Model.Identificacion&Fecha=@Model.Fecha">
+                    Siguiente
+                </a>
+            </li>
+
+        </ul>
+    </nav>
+}
+<!-- ===================================================== -->
+<!-- ====================== MODAL ====================== -->
+<div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" id="modalHeader">
+                <h5 class="modal-title" id="messageModalLabel">@TempData["ModalTitle"]</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <p>@TempData["ModalMessage"]</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var msg = '@TempData["ModalMessage"]';
+        var type = '@TempData["ModalType"]';
+
+        if (msg && msg !== "") {
+            var modalHeader = document.getElementById("modalHeader");
+            modalHeader.className = "modal-header";
+
+            if (type === "success") {
+                modalHeader.classList.add("bg-success", "text-white");
+            } else if (type === "error") {
+                modalHeader.classList.add("bg-danger", "text-white");
+            } else if (type === "warning") {
+                modalHeader.classList.add("bg-warning", "text-dark");
+            } else {
+                modalHeader.classList.add("bg-info", "text-white");
+            }
+
+            const messageModal = new bootstrap.Modal(document.getElementById("messageModal"));
+            messageModal.show();
+        }
+    });
+</script>

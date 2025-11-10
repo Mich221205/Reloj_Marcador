@@ -88,5 +88,51 @@ namespace EjemploCoreWeb.Repository
             string sql = "SELECT COUNT(*) FROM Inconsistencia";
             return await connection.ExecuteScalarAsync<int>(sql);
         }
+
+
+
+        //Jocsan
+        //Reportes de inconsistencias ADM 15
+
+        public async Task<IEnumerable<Reporte_Inconsistencia>> Reporte_Inconsistencias(
+            int page,
+            int pageSize,
+            string? identificacion,
+            DateTime? fecha)
+        {
+            using var connection = _connectionFactory.CreateConnection();
+
+            var result = await connection.QueryAsync<Reporte_Inconsistencia>(
+                "sp_reporte_inconsistencias_listar",
+                new
+                {
+                    p_page = page,
+                    p_pageSize = pageSize,
+                    p_identificacion = identificacion,
+                    p_fecha = fecha
+                },
+                commandType: CommandType.StoredProcedure
+            );
+
+            return result;
+        }
+
+        public async Task<int> Contar_Reporte(string? identificacion, DateTime? fecha)
+        {
+            using var connection = _connectionFactory.CreateConnection();
+
+            return await connection.ExecuteScalarAsync<int>(
+                "sp_reporte_inconsistencias_contar",
+                new
+                {
+                    p_identificacion = identificacion,
+                    p_fecha = fecha
+                },
+                commandType: CommandType.StoredProcedure
+            );
+        }
+
+
+
     }
 }

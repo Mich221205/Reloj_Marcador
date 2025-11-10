@@ -192,7 +192,7 @@ namespace EjemploCoreWeb.Repository.Repositories
                 Pwd = plainPassword,
                 Key = AES_KEY,
                 IV = AES_IV,
-                u.Id_Usuario
+                u.ID_Usuario
             });
 
             return rows > 0;

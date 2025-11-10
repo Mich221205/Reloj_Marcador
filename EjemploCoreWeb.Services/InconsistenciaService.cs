@@ -39,6 +39,24 @@ namespace EjemploCoreWeb.Services
 
         public Task<int> Contar()
             => _repository.CountAsync();
+
+        //Jocsan
+        //Reportes de Inconsistencias ADM 15
+        public Task<IEnumerable<Reporte_Inconsistencia>> Reporte_Inconsistencias(
+    int page,
+    int pageSize,
+    string? identificacion,
+    DateTime? fecha)
+    => _repository.Reporte_Inconsistencias(page, pageSize, identificacion, fecha);
+
+
+        public Task<int> ContarReporteInconsistencias(
+    string? identificacion,
+    DateTime? fecha)
+    => _repository.Contar_Reporte(identificacion, fecha);
+
+
+
     }
 }
 
