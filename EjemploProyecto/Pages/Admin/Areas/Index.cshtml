@@ -4,6 +4,8 @@
     ViewData["Title"] = "Áreas";
 }
 
+<link rel="stylesheet" href="~/css/Estilos.css">
+
 <h2>Áreas</h2>
 
 @if (TempData["Ok"] is string ok)
@@ -16,10 +18,10 @@
         <input class="form-control" name="Q" value="@Model.Q" placeholder="Buscar..." />
     </div>
     <div class="col-auto">
-        <button class="btn btn-primary" type="submit">Buscar</button>
+        <button class="btn btn-secondary" type="submit">Buscar</button>
     </div>
     <div class="col-auto">
-        <a asp-page="Create" class="btn btn-success">Nueva</a>
+        <a asp-page="Create" class="btn btn-primary">Nueva</a>
     </div>
 </form>
 
@@ -38,7 +40,7 @@
                 <td>@a.Nombre_Area</td>
                 <td>@(string.IsNullOrWhiteSpace(a.Jefe_Nombre) ? a.Jefe_Area.ToString() : a.Jefe_Nombre)</td>
                 <td>
-                    <a asp-page="Edit" asp-route-id="@a.ID_Area" asp-route-Q="@Model.Q" class="btn btn-primary btn-sm">Editar</a>
+                    <a asp-page="Edit" asp-route-id="@a.ID_Area" asp-route-Q="@Model.Q" class="btn btn-sm btn-warning">Editar</a>
 
                     <button type="button"
                             class="btn btn-danger btn-sm"
@@ -70,9 +72,9 @@
                     @Html.AntiForgeryToken()
                     <input type="hidden" name="id" id="deleteAreaId" value="" />
                     <input type="hidden" name="Q" id="deleteAreaQ" value="@Model.Q" />
-                    <button type="submit" class="btn btn-danger">Sí</button>
+                    <button type="submit" class="btn btn-danger btn-sm">Sí</button>
                 </form>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">No</button>
             </div>
         </div>
     </div>
@@ -89,7 +91,7 @@
                 @((TempData["Error"] as string) ?? "No se puede eliminar un registro con datos relacionados.")
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
@@ -97,7 +99,6 @@
 
 @section Scripts {
     <script>
-
         const areaModal = document.getElementById('confirmDeleteAreaModal');
         areaModal.addEventListener('show.bs.modal', function (event) {
             const button = event.relatedTarget;
