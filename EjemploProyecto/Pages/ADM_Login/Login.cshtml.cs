@@ -9,15 +9,38 @@ namespace EjemploProyecto.Pages.ADM_Login
 {
     public class LoginModel : PageModel
     {
+        private readonly string _connectionString;
         [BindProperty] public string Identificacion { get; set; } = string.Empty;
         [BindProperty] public string Password { get; set; } = string.Empty;
         [BindProperty] public bool Recordarme { get; set; }
         public string Mensaje { get; set; } = string.Empty;
 
-        // ❗ Ajusta si cambiaste usuario/clave del conector
-        private readonly string connectionString =
-            "Server=127.0.0.1;Port=3306;Database=reloj_marcador;" +
-            "Uid=reloj_user;Pwd=RELOJ123;Protocol=Tcp;AllowPublicKeyRetrieval=True;SslMode=None;";
+
+        //-----------------------------------------------------------------------------------------------
+
+        //NOTA JOCSAN: ME TOCÓ CORREGIR ESTA PARTE A MI YA QUE ESTABA UTILIZANDO OTRO STRING DE CONEXIÓN YA QUE BUENO
+        // PODEMOS VER COMO ESTA LA PÁGINA DE LOGIN
+        // SOLO AJUSTARÉ EL TEMA DE LA CONEXIÓN A LA BASE DE DATOS PARA PODER HOSTEAR EL SITIO EL RESTO LO DEJARÉ COMO LO REALIZARON
+
+
+        //ASI ES COMO LO HICIERON:
+
+        //// ❗ Ajusta si cambiaste usuario/clave del conector
+        //private readonly string connectionString =
+        //    "Server=127.0.0.1;Port=3306;Database=reloj_marcador;" +
+        //    "Uid=reloj_user;Pwd=RELOJ123;Protocol=Tcp;AllowPublicKeyRetrieval=True;SslMode=None;";
+
+
+        //-----------------------------------------------------------------------------------------------
+
+
+
+        public LoginModel(IConfiguration config)
+        {
+            _connectionString = config.GetConnectionString("DefaultConnection")
+                ?? throw new Exception("❌ No se encontró la cadena 'DefaultConnection'");
+        }
+
 
         // ✅ Deben coincidir con los usados al registrar
         private static readonly string AesKey = "12345678901234567890123456789012"; // 32 chars = 256 bits
@@ -39,7 +62,7 @@ namespace EjemploProyecto.Pages.ADM_Login
 
             try
             {
-                using var conexion = new MySqlConnection(connectionString);
+                using var conexion = new MySqlConnection(_connectionString);
                 conexion.Open();
 
                 // Traigo lo mínimo para validar y armar sesión
