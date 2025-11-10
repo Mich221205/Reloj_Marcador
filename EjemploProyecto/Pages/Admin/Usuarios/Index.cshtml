@@ -4,6 +4,8 @@
     ViewData["Title"] = "Funcionarios / Usuarios";
 }
 
+<link rel="stylesheet" href="~/css/Estilos.css">
+
 <h2>Funcionarios / Usuarios</h2>
 
 @if (TempData["Ok"] is string ok)
@@ -16,8 +18,8 @@
         <input class="form-control" name="Q" value="@Model.Q" placeholder="Buscar..." />
     </div>
     <div class="col-auto">
-        <button class="btn btn-primary" type="submit">Buscar</button>
-        <a class="btn btn-success" asp-page="Create">Nuevo</a>
+        <button class="btn btn-secondary" type="submit">Buscar</button>
+        <a class="btn btn-primary" asp-page="Create">Nuevo</a>
     </div>
 </form>
 
@@ -48,7 +50,7 @@
                 <td class="text-nowrap">
                     <div class="d-flex flex-wrap gap-2">
 
-                        <a class="btn btn-sm btn-primary"
+                        <a class="btn btn-sm btn-warning"
                            asp-page="Edit"
                            asp-route-id="@f.ID_Usuario">
                             Editar
@@ -63,12 +65,12 @@
                             Eliminar
                         </button>
 
-                        <a class="btn btn-sm btn-outline-dark"
+                        <a class="btn btn-sm btn-secondary"
                            href="~/ADM_Usuarios/Cambio_Clave?id=@f.Identificacion">
                             Cambio de clave
                         </a>
 
-                        <a class="btn btn-sm btn-outline-secondary"
+                        <a class="btn btn-sm btn-secondary"
                            asp-page="/Admin/Usuarios/Areas"
                            asp-route-id="@f.ID_Usuario">
                             Administración de áreas
@@ -115,14 +117,13 @@
                 <form method="post" asp-page-handler="Delete" id="deleteForm" class="d-inline">
                     @Html.AntiForgeryToken()
                     <input type="hidden" name="id" id="deleteId" value="" />
-                    <button type="submit" class="btn btn-danger">Sí</button>
+                    <button type="submit" class="btn btn-danger btn-sm">Sí</button>
                 </form>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">No</button>
             </div>
         </div>
     </div>
 </div>
-
 
 <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -135,7 +136,7 @@
                 @((TempData["Error"] as string) ?? "No se puede eliminar un registro con datos relacionados.")
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
@@ -143,7 +144,6 @@
 
 @section Scripts {
     <script>
-
         const confirmModal = document.getElementById('confirmDeleteModal');
         confirmModal.addEventListener('show.bs.modal', function (event) {
             const button = event.relatedTarget;
