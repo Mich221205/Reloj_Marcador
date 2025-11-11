@@ -79,7 +79,7 @@ SELECT LAST_INSERT_ID();";
         public async Task<bool> ActualizarAsync(Usuario u, int tipoId, string? plainPassword)
         {
             if (u is null) throw new ArgumentNullException(nameof(u));
-            if (u.Id_Usuario <= 0) throw new ArgumentException("ID inválido.");
+            if (u.ID_Usuario <= 0) throw new ArgumentException("ID inválido.");
 
             object? apellido2Db = string.IsNullOrWhiteSpace(u.Apellido_2)
                 ? DBNull.Value
@@ -100,7 +100,7 @@ WHERE ID_Usuario = @Id;";
             using var cn = _connectionFactory.CreateConnection();
             var rows = await cn.ExecuteAsync(sql, new
             {
-                Id = u.Id_Usuario,
+                Id = u.ID_Usuario,
                 Tipo = tipoId,
                 u.Identificacion,
                 u.Nombre,
@@ -114,7 +114,7 @@ WHERE ID_Usuario = @Id;";
             if (!string.IsNullOrWhiteSpace(plainPassword))
             {
                 const string sqlPwd = "UPDATE usuario SET Contrasena=@Pwd WHERE ID_Usuario=@Id;";
-                await cn.ExecuteAsync(sqlPwd, new { Id = u.Id_Usuario, Pwd = plainPassword });
+                await cn.ExecuteAsync(sqlPwd, new { Id = u.ID_Usuario, Pwd = plainPassword });
             }
 
             return rows > 0;
